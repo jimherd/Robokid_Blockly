@@ -9,7 +9,7 @@
  * List of tab names.
  * @private
  */
-var TABS_ = ['blocks', 'javascript', 'dart', 'python', 'xml'];
+var TABS_ = ['blocks', 'javascript', 'dart', 'python', 'robokid', 'xml'];
 
 var selected = 'blocks';
 
@@ -76,6 +76,8 @@ function renderContent() {
     content.innerHTML = Blockly.Generator.workspaceToCode('Dart');
   } else if (content.id == 'content_python') {
     content.innerHTML = Blockly.Generator.workspaceToCode('Python');
+  } else if (content.id == 'content_robokid') {
+    content.innerHTML = Blockly.Generator.workspaceToCode('Robokid');
   }
 }
 
@@ -321,6 +323,8 @@ function discard() {
             <td class="tabmin">&nbsp;</td>
             <td id="tab_python" class="taboff" onclick="tabClick(this.id)">Python</td>
             <td class="tabmin">&nbsp;</td>
+            <td id="tab_robokid" class="taboff" onclick="tabClick(this.id)">Robokid</td>            
+			<td class="tabmin">&nbsp;</td>
             <td id="tab_xml" class="taboff" onclick="tabClick(this.id)">XML</td>
             <td class="tabmax">
               <button onclick="discard()">Discard</button>
