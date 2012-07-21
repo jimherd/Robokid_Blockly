@@ -134,6 +134,7 @@ Blockly.Flyout.prototype.init = function(workspace, workspaceMetrics) {
   this.buttons_ = [];
 
   this.position_();
+  this.hide();
 
   // If the document resizes, reposition the toolbox.
   Blockly.bindEvent_(window, 'resize', this, this.position_);
@@ -289,7 +290,7 @@ Blockly.Flyout.prototype.show = function(names) {
  */
 Blockly.Flyout.createBlockFunc_ = function(flyout, originBlock) {
   return function(e) {
-    if (e.button == 2) {
+    if (Blockly.isRightButton(e)) {
       // Right-click.  Don't create a block, let the context menu show.
       return;
     }

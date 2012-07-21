@@ -152,6 +152,7 @@ Blockly.Block.terminateDrag_ = function(e) {
                         Blockly.BUMP_DELAY);
       // Fire an event to allow scrollbars to resize.
       Blockly.fireUiEvent(Blockly.svgDoc, window, 'resize');
+      selected.workspace.fireChangeEvent();
     }
   }
 };
@@ -313,7 +314,7 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
   Blockly.Block.terminateDrag_();
   this.select();
   Blockly.hideChaff(this.isInFlyout);
-  if (e.button == 2) {
+  if (Blockly.isRightButton(e)) {
     // Right-click.
     if (Blockly.ContextMenu) {
       this.showContextMenu_(e.clientX, e.clientY);
@@ -555,6 +556,11 @@ Blockly.Block.prototype.showContextMenu_ = function(x, y) {
     block.showHelp_();
   };
   options.push(helpOption);
+  
+  // Allow the block to add or modify options.
+  if (this.customContextMenu) {
+    this.customContextMenu(options);
+  }
 
   Blockly.ContextMenu.show(x, y, options);
 };
@@ -1078,6 +1084,7 @@ Blockly.Block.prototype.setDisabled = function(disabled) {
   }
   this.disabled = disabled;
   this.svg_.updateDisabled();
+  this.workspace.fireChangeEvent();
 };
 
 /**
