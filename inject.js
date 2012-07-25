@@ -174,7 +174,6 @@ Blockly.createDom_ = function(container) {
 
   Blockly.mainWorkspace = new Blockly.Workspace(Blockly.editable);
   svg.appendChild(Blockly.mainWorkspace.createDom());
-  Blockly.commentCanvas = Blockly.createSvgElement('g', {}, svg);
   if (Blockly.Toolbox && Blockly.editable) {
     svg.appendChild(Blockly.Toolbox.createDom());
   }
@@ -223,7 +222,7 @@ Blockly.init_ = function() {
 
   Blockly.mainWorkspace.addTrashcan(Blockly.getMainWorkspaceMetrics);
   Blockly.mainWorkspace.scrollbar = new Blockly.ScrollbarPair(
-      Blockly.mainWorkspace.getCanvas(),
+      Blockly.mainWorkspace.getBubbleCanvas(),
       Blockly.getMainWorkspaceMetrics, this.setMainWorkspaceMetrics);
 
   // Load the sounds.

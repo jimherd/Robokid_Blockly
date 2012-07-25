@@ -36,3 +36,16 @@ Blockly.JavaScript.motors_set = function() {
   return 'motors_set' + '\n';
 };
 
+Blockly.JavaScript.read_sensor = function() {
+  // Boolean values true and false.
+ var code = (this.getTitleValue('SENSOR'));
+  
+  return ['Read',0];
+};
+
+Blockly.JavaScript.comment = function() {
+  // Simple code comment which does not generate any code
+  return 'Comment' + '\n';
+};
+
+

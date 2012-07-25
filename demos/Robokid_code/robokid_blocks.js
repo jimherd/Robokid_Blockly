@@ -27,10 +27,10 @@
 if (!Blockly.Language) Blockly.Language = {};
 
  Blockly.Language.LEDS_set = {
-	category: 'Robokid',
+	category: Blockly.LANG_CATEGORY_ROBOKID,
 	helpUrl: Blockly.LANG_ROBOKID_LEDS_SET_HELPURL,
 	init: function() {
-		this.setColour(5);
+		this.setColour(210);
 		this.appendTitle('LEDS');
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
@@ -46,20 +46,68 @@ if (!Blockly.Language) Blockly.Language = {};
 		this.appendTitle('LED_D:');
 		var LED_dropdown_D = new Blockly.FieldDropdown([['on','on'], ['off','off'], ['nochange','nochange']]);
 		this.appendTitle(LED_dropdown_D, 'LED_D_mode');
+		this.setTooltip('Define state of the four LEDs on Robokid');
 	}
  };
  
   Blockly.Language.motors_set = {
-	category: 'Robokid',
+	category: Blockly.LANG_CATEGORY_ROBOKID,
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
-		this.setColour(5);
+		this.setColour(210);
 		this.appendTitle('Motors');
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 		this.setInputsInline(true);
 		this.appendInput('Left %', Blockly.INPUT_VALUE, 'Motor_left', null);
 		this.appendInput('Right %', Blockly.INPUT_VALUE, 'Motot_right', null);
+		this.setTooltip('Set power on each of the two motors as a % of full power');
 	}
+};
+
+Blockly.Language.read_sensor = {
+  // get data from one of the analogue sensors on the robot
+  category: Blockly.LANG_CATEGORY_ROBOKID,
+  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
+  init: function() {
+    this.setColour(210);
+    this.setOutput(true, Boolean);
+    var dropdown = new Blockly.FieldDropdown(this.SENSORS);
+    this.appendTitle(dropdown, 'SENSOR');
+    this.setTooltip('Read value from one of the robots 13 sensors');
+  }
+};
+	
+Blockly.Language.read_sensor.SENSORS =
+    [[Blockly.LANG_SENSOR_BATTERY_VOLTS, '0'],
+     [Blockly.LANG_SENSOR_POT_3, '1'],
+     [Blockly.LANG_SENSOR_POT_2, '2'],
+     [Blockly.LANG_SENSOR_POT_1, '3'],
+     [Blockly.LANG_SENSOR_PAD_SWL, '4'],
+     [Blockly.LANG_SENSOR_PAD_SWR, '5'],	
+     [Blockly.LANG_SENSOR_LINE_SENSOR_L, '6'],
+     [Blockly.LANG_SENSOR_LINE_SENSOR_R, '7'],	 
+     [Blockly.LANG_SENSOR_FRONT_SENSOR_L, '8'],	 
+     [Blockly.LANG_SENSOR_FRONT_SENSOR_C, '9'],
+     [Blockly.LANG_SENSOR_FRONT_SENSOR_R, '10'],
+     [Blockly.LANG_SENSOR_WHEEL_SENSOR_L, '11'],	
+     [Blockly.LANG_SENSOR_WHEEL_SENSOR_R, '12'],	
+     [Blockly.LANG_SENSOR_REAR_SENSOR, '13']		 
+	 ];
+
+Blockly.Language.comment = {
+  // get data from one of the analogue sensors on the robot
+  category: Blockly.LANG_CATEGORY_ROBOKID,
+  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
+  init: function() {
+    this.setColour(210);
+    this.appendTitle('Comment');
+	this.setPreviousStatement(true);
+	this.setNextStatement(true);
+	this.appendTitle('\u201C');
+    this.appendTitle(new Blockly.FieldTextInput('Comment here'), 'Text');
+    this.appendTitle('\u201D');
+    this.setTooltip('Comment for the code :: does not generate Robokid code');
+  }
 };
  

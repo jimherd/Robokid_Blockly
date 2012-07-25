@@ -36,3 +36,16 @@ Blockly.Robokid.motors_set = function() {
   return 'motors_set' + '\n';
 };
 
+Blockly.Robokid.read_sensor = function() {
+  // 
+  var code = (this.getTitleValue('SENSOR'));
+  
+  return ['Read', 0];
+};
+
+Blockly.Robokid.comment = function() {
+  // Simple code comment which does not generate any code
+  return 'Comment' + '\n';
+};
+
+
