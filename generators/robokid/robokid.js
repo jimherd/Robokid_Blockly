@@ -48,4 +48,31 @@ Blockly.Robokid.comment = function() {
   return 'Comment' + '\n';
 };
 
+Blockly.Robokid.ubasic_for = function() {
+  // For loop.
+  var variable0 = Blockly.JavaScript.variableDB_.getName(
+      this.getInputVariable('VAR'), Blockly.Variables.NAME_TYPE);
+  var argument0 = Blockly.JavaScript.valueToCode(this, 'FROM',
+      Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
+  var argument1 = Blockly.JavaScript.valueToCode(this, 'TO',
+      Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
+  var branch0 = Blockly.JavaScript.statementToCode(this, 'DO');
+  var code;
+  if (argument1.match(/^\w+$/)) {
+    code = '0 for ' + variable0 + '=' + argument0 + ' to ' + argument1 + 
+        '\n' + branch0 + '0 next ' + variable0 + '\n';
+  } else {
+    // The end value appears to be more complicated than a simple variable.
+    // Cache it to a variable to prevent repeated look-ups.
+    var endVar = Blockly.JavaScript.variableDB_.getDistinctName(
+        variable0 + '_end', Blockly.Variables.NAME_TYPE);
+    code = 'var ' + endVar + ' = ' + argument1 + ';\n' +
+        'for (' + variable0 + ' = ' + argument0 + '; ' +
+              variable0 + ' <= ' + endVar + '; ' +
+              variable0 + '++) {\n' +
+        branch0 + '}\n';
+  }
+  return code;
+};
+
 

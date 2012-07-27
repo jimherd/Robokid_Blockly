@@ -96,7 +96,7 @@ Blockly.Language.read_sensor.SENSORS =
 	 ];
 
 Blockly.Language.comment = {
-  // get data from one of the analogue sensors on the robot
+  // Allow user to input a comment block
   category: Blockly.LANG_CATEGORY_ROBOKID,
   helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
@@ -108,6 +108,36 @@ Blockly.Language.comment = {
     this.appendTitle(new Blockly.FieldTextInput('Comment here'), 'Text');
     this.appendTitle('\u201D');
     this.setTooltip('Comment for the code :: does not generate Robokid code');
+  }
+};
+
+Blockly.Language.ubasic_for = {
+  // For loop.
+  category: Blockly.LANG_CATEGORY_ROBOKID,
+  helpUrl: Blockly.LANG_CONTROLS_FOR_HELPURL,
+  init: function() {
+    this.setColour(210);
+    this.appendTitle(Blockly.LANG_CONTROLS_FOR_TITLE_COUNT);
+    this.appendInput(Blockly.LANG_CONTROLS_FOR_INPUT_WITH, Blockly.LOCAL_VARIABLE, 'VAR').setText(Blockly.LANG_CONTROLS_FOR_INPUT_VAR);
+    this.appendInput(Blockly.LANG_CONTROLS_FOR_INPUT_FROM, Blockly.INPUT_VALUE, 'FROM', Number);
+    this.appendInput(Blockly.LANG_CONTROLS_FOR_INPUT_TO, Blockly.INPUT_VALUE, 'TO', Number);
+    this.appendInput(Blockly.LANG_CONTROLS_FOR_INPUT_DO, Blockly.NEXT_STATEMENT, 'DO');
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setInputsInline(true);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      return Blockly.LANG_CONTROLS_FOR_TOOLTIP_1 + thisBlock.getInputVariable('VAR') + Blockly.LANG_CONTROLS_FOR_TOOLTIP_2;
+    });
+  },
+  getVars: function() {
+    return [this.getInputVariable('VAR')];
+  },
+  renameVar: function(oldName, newName) {
+    if (Blockly.Names.equals(oldName, this.getInputVariable('VAR'))) {
+      this.setInputVariable('VAR', newName);
+    }
   }
 };
  
