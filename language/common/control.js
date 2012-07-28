@@ -232,7 +232,8 @@ Blockly.Language.controls_for = {
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
-      return Blockly.LANG_CONTROLS_FOR_TOOLTIP_1 + thisBlock.getInputVariable('VAR') + Blockly.LANG_CONTROLS_FOR_TOOLTIP_2;
+      return Blockly.LANG_CONTROLS_FOR_TOOLTIP_1.replace('%1',
+          thisBlock.getInputVariable('VAR'));
     });
   },
   getVars: function() {
@@ -260,8 +261,8 @@ Blockly.Language.controls_forEach = {
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
-      return Blockly.LANG_CONTROLS_FOREACH_TOOLTIP_1 +
-          thisBlock.getInputVariable('VAR') + Blockly.LANG_CONTROLS_FOREACH_TOOLTIP_2;
+      return Blockly.LANG_CONTROLS_FOREACH_TOOLTIP_1.replace('%1',
+          thisBlock.getInputVariable('VAR'));
     });
   },
   getVars: function() {
@@ -273,7 +274,6 @@ Blockly.Language.controls_forEach = {
     }
   }
 };
-
 
 Blockly.Language.controls_flow_statements = {
   // Flow statements: continue, break.
@@ -291,11 +291,31 @@ Blockly.Language.controls_flow_statements = {
       var op = thisBlock.getTitleValue('FLOW');
       return Blockly.Language.controls_flow_statements.TOOLTIPS[op];
     });
+  },
+  onchange: function() {
+    var legal = false;
+    // Is the block nested in a control statement?
+    var block = this;
+    do {
+      if (block.type == 'controls_forEach' ||
+          block.type == 'controls_for' ||
+          block.type == 'controls_whileUntil') {
+        legal = true;
+        break;
+      }
+      block = block.getSurroundParent();
+    } while (block);
+    if (legal) {
+      this.setWarningText(null);
+    } else {
+      this.setWarningText(Blockly.LANG_CONTROLS_FLOW_STATEMENTS_WARNING);
+    }
   }
 };
 
 Blockly.Language.controls_flow_statements.OPERATORS =
-    [[Blockly.LANG_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK, 'BREAK'], [Blockly.LANG_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE, 'CONTINUE']];
+    [[Blockly.LANG_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK, 'BREAK'],
+     [Blockly.LANG_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE, 'CONTINUE']];
 
 Blockly.Language.controls_flow_statements.TOOLTIPS = {
   BREAK: Blockly.LANG_CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK,
