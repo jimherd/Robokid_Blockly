@@ -91,9 +91,42 @@ Blockly.Robokid.LEDS_set = function() {
 			' ' + LED_D_value +';\n';
 };
 
-Blockly.Robokid.motors_set = function() {
+Blockly.Robokid.set_speed = function() {
   // 
-  return 'motors_set' + '\n';
+  var argument0 = Blockly.Robokid.valueToCode(this, 'MOTOR_LEFT',
+      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+  var argument1 = Blockly.Robokid.valueToCode(this, 'MOTOR_RIGHT',
+      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+	  
+  return 'set_speed' + '\n';
+};
+
+Blockly.Robokid.motors = function() {
+  // 
+    var left_mode, right_mode;
+    switch (this.getTitleValue('left_motor')) {
+		case 'off':
+			left_mode = '0';
+			break;
+		case 'forward':
+			left_mode = '1';
+			break;
+		case 'backward':
+			left_mode = '2';
+			break;
+  }
+      switch (this.getTitleValue('right_motor')) {
+		case 'off':
+			right_mode = '0';
+			break;
+		case 'forward':
+			right_mode = '1';
+			break;
+		case 'backward':
+			right_mode = '2';
+			break;
+  }
+   return 'motors ' + left_mode  + ' ' + right_mode +';\n';
 };
 
 Blockly.Robokid.read_sensor = function() {
@@ -105,7 +138,8 @@ Blockly.Robokid.read_sensor = function() {
 
 Blockly.Robokid.comment = function() {
   // Simple code comment which does not generate any code
-  return 'Comment' + '\n';
+  var code = (this.getTitleText('TEXT'));
+  return '# ' + code + ';\n';
 };
 
 Blockly.Robokid.ubasic_for = function() {

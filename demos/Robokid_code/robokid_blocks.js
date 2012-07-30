@@ -50,7 +50,22 @@ if (!Blockly.Language) Blockly.Language = {};
 	}
  };
  
-  Blockly.Language.motors_set = {
+  Blockly.Language.set_speed = {
+	category: Blockly.LANG_CATEGORY_ROBOKID,
+	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
+	init: function() {
+		this.setColour(210);
+		this.appendTitle('Set speed');
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+		this.setInputsInline(true);
+		this.appendInput('Left %', Blockly.INPUT_VALUE, 'MOTOR_LEFT', null);
+		this.appendInput('Right %', Blockly.INPUT_VALUE, 'MOTOR_RIGHT', null);
+		this.setTooltip('Set power on each of the two motors as a % of full power');
+	}
+};
+
+  Blockly.Language.motors = {
 	category: Blockly.LANG_CATEGORY_ROBOKID,
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
@@ -58,10 +73,14 @@ if (!Blockly.Language) Blockly.Language = {};
 		this.appendTitle('Motors');
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
-		this.setInputsInline(true);
-		this.appendInput('Left %', Blockly.INPUT_VALUE, 'Motor_left', null);
-		this.appendInput('Right %', Blockly.INPUT_VALUE, 'Motot_right', null);
-		this.setTooltip('Set power on each of the two motors as a % of full power');
+		this.setInputsInline(true);	
+		this.appendTitle('Left motor :');		
+		var left_motor = new Blockly.FieldDropdown([['off','off'], ['forward','forward'], ['backward','backward']]);
+		this.appendTitle(left_motor, 'left_motor');
+		this.appendTitle('Right motor :');	
+		var right_motor = new Blockly.FieldDropdown([['off','off'], ['forward','forward'], ['backward','backward']]);
+		this.appendTitle(right_motor, 'right_motor');
+		this.setTooltip('Command motors to go or stop');
 	}
 };
 
@@ -105,7 +124,7 @@ Blockly.Language.comment = {
 	this.setPreviousStatement(true);
 	this.setNextStatement(true);
 	this.appendTitle('\u201C');
-    this.appendTitle(new Blockly.FieldTextInput('Comment here'), 'Text');
+    this.appendTitle(new Blockly.FieldTextInput('Comment here'), 'TEXT');
     this.appendTitle('\u201D');
     this.setTooltip('Comment for the code :: does not generate Robokid code');
   }
