@@ -62,7 +62,7 @@ def gen_uncompressed():
   f = open(target_filename, 'w')
   f.write(inc)
   f.close()
-  # print 'SUCCESS: ' + target_filename
+  print 'SUCCESS: ' + target_filename
 
 def gen_compressed():
   target_filename = 'demos/blockly_compressed.js'
@@ -142,4 +142,3 @@ def gen_compressed():
 if __name__ == '__main__':
   gen_uncompressed()
   gen_compressed()
-  

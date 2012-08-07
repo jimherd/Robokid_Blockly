@@ -95,10 +95,13 @@ Blockly.Robokid.set_speed = function() {
   // 
   var argument0 = Blockly.Robokid.valueToCode(this, 'MOTOR_LEFT',
       Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+	if (argument0 > 100) {
+		argument0 = '0';
+	}
   var argument1 = Blockly.Robokid.valueToCode(this, 'MOTOR_RIGHT',
       Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
 	  
-  return 'set_speed' + '\n';
+  return 'speed ' + argument0 + ' ' + argument1 + ';\n';
 };
 
 Blockly.Robokid.motors = function() {
@@ -154,7 +157,7 @@ Blockly.Robokid.ubasic_for = function() {
   var code;
   if (argument1.match(/^\w+$/)) {
     code = 'for ' + variable0 + '=' + argument0 + ' to ' + argument1 + 
-        '\n' + branch0 + '};' + '\n';
+        ' {\n' + branch0 + '};' + '\n';
   } else {
     // The end value appears to be more complicated than a simple variable.
     // Cache it to a variable to prevent repeated look-ups.
