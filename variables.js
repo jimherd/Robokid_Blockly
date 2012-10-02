@@ -71,65 +71,6 @@ Blockly.Variables.allVariables = function(opt_block) {
 };
 
 /**
- * Return a sorted list of variable names for variable dropdown menus.
- * Include a special option at the end for creating a new variable name.
- * @return {!Array.<string>} Array of variable names.
- */
-Blockly.Variables.dropdownCreate = function() {
-  var variableList = Blockly.Variables.allVariables();
-  // Ensure that the currently selected variable is an option.
-  var name = this.getText();
-  if (name && variableList.indexOf(name) == -1) {
-    variableList.push(name);
-  }
-  variableList.sort(Blockly.caseInsensitiveComparator);
-  variableList.push(Blockly.MSG_RENAME_VARIABLE);
-  variableList.push(Blockly.MSG_NEW_VARIABLE);
-  // Variables are not language-specific, use the name as both the user-facing
-  // text and the internal representation.
-  var options = [];
-  for (var x = 0; x < variableList.length; x++) {
-    options[x] = [variableList[x], variableList[x]];
-  }
-  return options;
-};
-
-/**
- * Event handler for a change in variable name.
- * Special case the 'New variable...' and 'Rename variable...' options.
- * In both of these special cases, prompt the user for a new name.
- * @param {string} text The selected dropdown menu option.
- */
-Blockly.Variables.dropdownChange = function(text) {
-  function promptName(promptText, defaultText) {
-    Blockly.hideChaff();
-    var newVar = window.prompt(promptText, defaultText);
-    // Merge runs of whitespace.  Strip leading and trailing whitespace.
-    // Beyond this, all names are legal.
-    return newVar && newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
-  }
-  if (text == Blockly.MSG_RENAME_VARIABLE) {
-    var oldVar = this.getText();
-    text = promptName(Blockly.MSG_RENAME_VARIABLE_TITLE.replace('%1', oldVar),
-                      oldVar);
-    if (text) {
-      Blockly.Variables.renameVariable(oldVar, text);
-    }
-  } else {
-    if (text == Blockly.MSG_NEW_VARIABLE) {
-      text = promptName(Blockly.MSG_NEW_VARIABLE_TITLE, '');
-      // Since variables are case-insensitive, ensure that if the new variable
-      // matches with an existing variable, the new case prevails throughout.
-      Blockly.Variables.renameVariable(text, text);
-    }
-    if (text) {
-      this.setText(text);
-    }
-  }
-  window.setTimeout(Blockly.Variables.refreshFlyoutCategory, 1);
-};
-
-/**
  * Find all instances of the specified variable and rename them.
  * @param {string} oldName Variable to rename.
  * @param {string} newName New variable name.
@@ -173,8 +114,8 @@ Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
     if (variableList[i] === null) {
       defaultVariable = (getBlock || setBlock).getVars()[0];
     } else {
-      getBlock && getBlock.setTitleText(variableList[i], 'VAR');
-      setBlock && setBlock.setTitleText(variableList[i], 'VAR');
+      getBlock && getBlock.setTitleValue(variableList[i], 'VAR');
+      setBlock && setBlock.setTitleValue(variableList[i], 'VAR');
     }
     setBlock && blocks.push(setBlock);
     getBlock && blocks.push(getBlock);
@@ -196,4 +137,53 @@ Blockly.Variables.refreshFlyoutCategory = function() {
     Blockly.Toolbox.flyout_.hide();
     Blockly.Toolbox.flyout_.show(Blockly.MSG_VARIABLE_CATEGORY);
   }
+};
+
+/**
+* Return a new variable name that is not yet being used. This will try to
+* generate single letter variable names in the range 'i' to 'z' to start with.
+* If no unique name is located it will try 'i1' to 'z1', then 'i2' to 'z2' etc.
+* @return {string} New variable name.
+*/
+Blockly.Variables.generateUniqueName = function() {
+  var variableList = Blockly.Variables.allVariables();
+  var newName = '';
+  if (variableList.length) {
+    variableList.sort(Blockly.caseInsensitiveComparator);
+    var nameSuffix = 0, potName = 'i', i = 0, inUse = false;
+    while (!newName) {
+      i = 0;
+      inUse = false;
+      while (i < variableList.length && !inUse) {
+        if (variableList[i].toLowerCase() == potName) {
+          // This potential name is already used.
+          inUse = true;
+        }
+        i++;
+      }
+      if (inUse) {
+        // Try the next potential name.
+        if (potName.charAt(0) === 'z') {
+          // Reached the end of the character sequence so back to 'i' but with a new suffix.
+          nameSuffix++;
+          potName = 'i';
+        } else {
+          potName = String.fromCharCode(potName.charCodeAt(0) + 1);
+          if (potName.charAt(0) == 'l') {
+            // Avoid using variable 'l' because of ambiguity with '1'.
+            potName = String.fromCharCode(potName.charCodeAt(0) + 1);
+          }
+        }
+        if (nameSuffix > 0) {
+          potName += nameSuffix;
+        }
+      } else {
+        // We can use the current potential name.
+        newName = potName;
+      }
+    }
+  } else {
+    newName = 'i';
+  }
+  return newName;
 };

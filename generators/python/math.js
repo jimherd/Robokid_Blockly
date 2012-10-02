@@ -24,9 +24,14 @@
 
 Blockly.Python = Blockly.Generator.get('Python');
 
+if (!Blockly.Python.RESERVED_WORDS_) {
+  Blockly.Python.RESERVED_WORDS_ = '';
+}
+Blockly.Python.RESERVED_WORDS_ += 'math,random,';
+
 Blockly.Python.math_number = function() {
   // Numeric value.
-  var code = window.parseFloat(this.getTitleText('NUM'));
+  var code = window.parseFloat(this.getTitleValue('NUM'));
   return [code, Blockly.Python.ORDER_UNARY_SIGN];
 };
 
@@ -40,6 +45,12 @@ Blockly.Python.math_arithmetic = function() {
   var argument1 = Blockly.Python.valueToCode(this, 'B', order) || '0';
   var code = argument0 + operator + argument1;
   return [code, order];
+  // In case of 'DIVIDE', division between integers returns different results 
+  // in Python 2 and 3. However, is not an issue since Blockly does not
+  // guarantee identical results in all languages.  To do otherwise would
+  // require every operator to be wrapped in a function call.  This would kill
+  // legibility of the generated code.  See:
+  // http://code.google.com/p/blockly/wiki/Language
 };
 
 Blockly.Python.math_arithmetic.OPERATORS = {
@@ -54,7 +65,7 @@ Blockly.Python.math_change = function() {
   // Add to a variable in place.
   var argument0 = Blockly.Python.valueToCode(this, 'DELTA',
       Blockly.Python.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Python.variableDB_.getName(this.getTitleText('VAR'),
+  var varName = Blockly.Python.variableDB_.getName(this.getTitleValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   return varName + ' = (' + varName + ' if type(' + varName +
       ') in (int, float) else 0) + ' + argument0 + '\n';
@@ -62,18 +73,18 @@ Blockly.Python.math_change = function() {
 
 Blockly.Python.math_single = function() {
   // Math operators with single operand.
+  var operator = this.getTitleValue('OP');
+  var code;
   if (operator == 'NEG') {
-    var argNeg = Blockly.Python.valueToCode(this, 'NUM',
+    var code = Blockly.Python.valueToCode(this, 'NUM',
         Blockly.Python.ORDER_UNARY_SIGN) || '0';
-    return ['-' + argNeg, Blockly.Python.ORDER_UNARY_SIGN];
+    return ['-' + code, Blockly.Python.ORDER_UNARY_SIGN];
   }
   Blockly.Python.definitions_['import_math'] = 'import math';
   var argNaked = Blockly.Python.valueToCode(this, 'NUM',
       Blockly.Python.ORDER_NONE) || '0';
   var argParen = Blockly.Python.valueToCode(this, 'NUM',
       Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
-  var operator = this.getTitleValue('OP');
-  var code;
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
   switch (operator) {
@@ -92,7 +103,7 @@ Blockly.Python.math_single = function() {
     case 'EXP':
       code = 'math.exp(' + argNaked + ')';
       break;
-    case '10POW':
+    case 'POW10':
       code = 'math.pow(10,' + argNaked + ')';
       break;
     case 'ROUND':
@@ -105,13 +116,13 @@ Blockly.Python.math_single = function() {
       code = 'math.floor(' + argNaked + ')';
       break;
     case 'SIN':
-      code = 'math.sin(' + argParen + ' / 180 * Math.PI)';
+      code = 'math.sin(' + argParen + ' / 180.0 * math.pi)';
       break;
     case 'COS':
-      code = 'math.cos(' + argParen + ' / 180 * Math.PI)';
+      code = 'math.cos(' + argParen + ' / 180.0 * math.pi)';
       break;
     case 'TAN':
-      code = 'math.tan(' + argParen + ' / 180 * Math.PI)';
+      code = 'math.tan(' + argParen + ' / 180.0 * math.pi)';
       break;
   }
   if (code) {
@@ -121,16 +132,16 @@ Blockly.Python.math_single = function() {
   // wrapping the code.
   switch (operator) {
     case 'ASIN':
-      code = 'math.asin(' + argNaked + ') / Math.PI * 180';
+      code = 'math.asin(' + argNaked + ') / math.pi * 180';
       break;
     case 'ACOS':
-      code = 'math.acos(' + argNaked + ') / Math.PI * 180';
+      code = 'math.acos(' + argNaked + ') / math.pi * 180';
       break;
     case 'ATAN':
-      code = 'math.atan(' + argNaked + ') / Math.PI * 180';
+      code = 'math.atan(' + argNaked + ') / math.pi * 180';
       break;
     default:
-      throw 'Unknown math operator.';
+      throw 'Unknown math operator: ' + operator;
   }
   return [code, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
@@ -158,8 +169,8 @@ Blockly.Python.math_on_list = function() {
       break;
     case 'AVERAGE':
       if (!Blockly.Python.definitions_['math_mean']) {
-        // This operation exclude null values:
-        //   math_mean([null,null,1,9]) == 5.0.
+        // This operation exclude null and values that are not int or float:
+        //   math_mean([null,null,"aString",1,9]) == 5.0.
         var functionName = Blockly.Python.variableDB_.getDistinctName(
             'math_mean', Blockly.Generator.NAME_TYPE);
         Blockly.Python.math_on_list.math_mean = functionName;
@@ -249,12 +260,11 @@ Blockly.Python.math_on_list = function() {
           '(' + list + ')';
       break;
     case 'RANDOM':
-      Blockly.Python.definitions_['import_random_choice'] =
-          'from random import choice';
-      code = 'choice(' + list + ')';
+      Blockly.Python.definitions_['import_random'] = 'import random';
+      code = 'random.choice(' + list + ')';
       break;
     default:
-      throw 'Unknown operator.';
+      throw 'Unknown operator: ' + func;
   }
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
@@ -289,7 +299,6 @@ Blockly.Python.math_random_int = function() {
   var argument1 = Blockly.Python.valueToCode(this, 'TO',
       Blockly.Python.ORDER_NONE) || '0';
   code = 'random.randint(' + argument0 + ', ' + argument1 + ')';
-  return code;
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 

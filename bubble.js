@@ -343,6 +343,18 @@ Blockly.Bubble.prototype.promote_ = function() {
 };
 
 /**
+ * Change the bubble to be enabled or disabled.
+ * @param {boolean} disabled True if disabled.
+ */
+Blockly.Bubble.prototype.setDisabled = function(disabled) {
+  if (disabled) {
+    this.bubbleGroup_.setAttribute('filter', 'url(#blocklyGrayscale)');
+  } else {
+    this.bubbleGroup_.removeAttribute('filter');
+  }
+};
+
+/**
  * Notification that the anchor has moved.
  * Update the arrow and bubble accordingly.
  * @param {number} x Absolute horizontal location.
@@ -411,7 +423,7 @@ Blockly.Bubble.prototype.setBubbleSize = function(width, height) {
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
   // Minimum size of a bubble.
   width = Math.max(width, doubleBorderWidth + 45);
-  height = Math.max(height, doubleBorderWidth + 18);
+  height = Math.max(height, doubleBorderWidth + Blockly.BlockSvg.TITLE_HEIGHT);
   this.width_ = width;
   this.height_ = height;
   this.bubbleBack_.setAttribute('width', width);
@@ -430,6 +442,11 @@ Blockly.Bubble.prototype.setBubbleSize = function(width, height) {
     }
   }
   if (this.rendered_) {
+    if (Blockly.RTL) {
+      // In RTL mode a bubble should resize to the left, not to the right.
+      // Bump the location to put it in the right place.
+      this.positionBubble_();
+    }
     this.renderArrow_();
   }
   // Fire an event to allow the contents to resize.

@@ -171,7 +171,7 @@ Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
   function populateProcedures(procedureList, templateName) {
     for (var x = 0; x < procedureList.length; x++) {
       var block = new Blockly.Block(workspace, templateName);
-      block.setTitleText(procedureList[x][0], 'NAME');
+      block.setTitleValue(procedureList[x][0], 'NAME');
       var tempIds = [];
       for (var t = 0; t < procedureList[x][1].length; t++) {
         tempIds[t] = 'ARG' + t;
@@ -231,7 +231,7 @@ Blockly.Procedures.getCallers = function(name, workspace) {
 Blockly.Procedures.destroyCallers = function(name, workspace) {
   var callers = Blockly.Procedures.getCallers(name, workspace);
   for (var x = 0; x < callers.length; x++) {
-    callers[x].destroy(true);
+    callers[x].destroy(true, false);
   }
   window.setTimeout(Blockly.Procedures.refreshFlyoutCategory, 1);
 };

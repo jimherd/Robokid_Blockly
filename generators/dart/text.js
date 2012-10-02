@@ -26,7 +26,7 @@ Blockly.Dart = Blockly.Generator.get('Dart');
 
 Blockly.Dart.text = function() {
   // Text value.
-  var code = Blockly.Dart.quote_(this.getTitleText('TEXT'));
+  var code = Blockly.Dart.quote_(this.getTitleValue('TEXT'));
   return [code, Blockly.Dart.ORDER_ATOMIC];
 };
 
@@ -55,7 +55,7 @@ Blockly.Dart.text_join = function() {
 
 Blockly.Dart.text_append = function() {
   // Append to a variable in place.
-  var varName = Blockly.Dart.variableDB_.getName(this.getTitleText('VAR'),
+  var varName = Blockly.Dart.variableDB_.getName(this.getTitleValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.Dart.valueToCode(this, 'TEXT',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
@@ -126,9 +126,9 @@ Blockly.Dart.text_charAt = function() {
   var argument0 = Blockly.Dart.valueToCode(this, 'AT',
       Blockly.Dart.ORDER_NONE) || '1';
   var argument1 = Blockly.Dart.valueToCode(this, 'VALUE',
-      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   // Blockly uses one-based arrays.
-  if (argument0.match(/^\d+$/)) {
+  if (argument0.match(/^-?\d+$/)) {
     // If the index is a naked number, decrement it right now.
     argument0 = parseInt(argument0, 10) - 1;
   } else {

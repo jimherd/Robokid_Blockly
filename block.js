@@ -155,11 +155,8 @@ Blockly.Block.terminateDrag_ = function(e) {
     Blockly.unbindEvent_(Blockly.Block.onMouseMoveWrapper_);
     Blockly.Block.onMouseMoveWrapper_ = null;
   }
-  if (Blockly.Block.dragMode_ != 0) {
-    // Terminate a drag operation that started but never finished.
-    // This should never happen, but sometimes a browser will miss a mouse-up.
-    // Touch events often do this on Android.
-    Blockly.Block.dragMode_ = 0;
+  if (Blockly.Block.dragMode_ == 2) {
+    // Terminate a drag operation.
     if (Blockly.selected) {
       var selected = Blockly.selected;
       // Update the connection locations.
@@ -177,6 +174,7 @@ Blockly.Block.terminateDrag_ = function(e) {
       selected.workspace.fireChangeEvent();
     }
   }
+  Blockly.Block.dragMode_ = 0;
 };
 
 /**
@@ -206,8 +204,9 @@ Blockly.Block.prototype.unselect = function() {
  * @param {boolean} gentle If gentle, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, destroy all
  *     children of this block.
+ * @param {boolean} animate If true, show a destroy animation and sound.
  */
-Blockly.Block.prototype.destroy = function(gentle) {
+Blockly.Block.prototype.destroy = function(gentle, animate) {
   if (this.outputConnection) {
     // Detach this block from the parent's tree.
     this.setParent(null);
@@ -231,6 +230,10 @@ Blockly.Block.prototype.destroy = function(gentle) {
         previousTarget.connect(nextTarget);
       }
     }
+  }
+
+  if (animate && this.svg_) {
+    this.svg_.destroyUiEffect();
   }
 
   //This block is now at the top of the workspace.
@@ -269,14 +272,8 @@ Blockly.Block.prototype.destroy = function(gentle) {
     this.warning.destroy();
   }
   // Destroy all inputs and their labels.
-  for (var x = 0; x < this.inputList.length; x++) {
-    var input = this.inputList[x];
-    if (input.label) {
-      input.label.destroy();
-    }
-    if (input.destroy) {
-      input.destroy();
-    }
+  for (var x = 0, input; input = this.inputList[x]; x++) {
+    input.destroy();
   }
   this.inputList = [];
   // Destroy any remaining connections (next/previous/output).
@@ -399,36 +396,32 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.Block.prototype.onMouseUp_ = function(e) {
-  /*
-  if (Blockly.Block.dragMode_ == 2) {
-    if (Blockly.selected != this) {
-      throw 'Dragging no object?';
-    }
-    this.setDragging_(false);
-    // Update the connection locations.
-    var xy = this.getRelativeToSurfaceXY();
-    var dx = xy.x - this.startDragX;
-    var dy = xy.y - this.startDragY;
-    this.moveConnections_(dx, dy);
-  }
-  */
   Blockly.Block.terminateDrag_();
   if (Blockly.selected && Blockly.highlightedConnection_) {
-    Blockly.playAudio('click');
     // Connect two blocks together.
     Blockly.localConnection_.connect(Blockly.highlightedConnection_);
+    if (this.svg_) {
+      // Trigger a connection animation.
+      // Determine which connection is inferior (lower in the source stack).
+      var inferiorConnection;
+      if (Blockly.localConnection_.isSuperior()) {
+        inferiorConnection = Blockly.highlightedConnection_;
+      } else {
+        inferiorConnection = Blockly.localConnection_;
+      }
+      inferiorConnection.sourceBlock_.svg_.connectionUiEffect();
+    }
     if (this.workspace.trashcan && this.workspace.trashcan.isOpen) {
       // Don't throw an object in the trash can if it just got connected.
       Blockly.Trashcan.close(this.workspace.trashcan);
     }
   } else if (this.workspace.trashcan && this.workspace.trashcan.isOpen) {
-    Blockly.playAudio('delete');
     var trashcan = this.workspace.trashcan;
     var closure = function() {
       Blockly.Trashcan.close(trashcan);
     };
     window.setTimeout(closure, 100);
-    Blockly.selected.destroy(false);
+    Blockly.selected.destroy(false, true);
     // Dropping a block on the trash can will usually cause the workspace to
     // resize to contain the newly positioned block.  Force a second resize now
     // that the block has been deleted.
@@ -572,8 +565,7 @@ Blockly.Block.prototype.showContextMenu_ = function(x, y) {
           Blockly.MSG_DELETE_X_BLOCKS.replace('%1', descendantCount),
       enabled: true,
       callback: function() {
-        Blockly.playAudio('delete');
-        block.destroy(true);
+        block.destroy(true, true);
       }
     };
     options.push(deleteOption);
@@ -617,9 +609,8 @@ Blockly.Block.prototype.getConnections_ = function(all) {
     }
     if (all || !this.collapsed) {
       for (var x = 0, input; input = this.inputList[x]; x++) {
-        if (input.type != Blockly.LOCAL_VARIABLE &&
-            input.type != Blockly.DUMMY_INPUT) {
-          myConnections.push(input);
+        if (input.connection) {
+          myConnections.push(input.connection);
         }
       }
     }
@@ -769,9 +760,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
   for (var x = 0; x < myConnections.length; x++) {
     var connection = myConnections[x];
     // Spider down from this block bumping all sub-blocks.
-    if (connection.targetConnection &&
-        (connection.type == Blockly.INPUT_VALUE ||
-         connection.type == Blockly.NEXT_STATEMENT)) {
+    if (connection.targetConnection && connection.isSuperior()) {
       connection.targetBlock().bumpNeighbours_();
     }
 
@@ -783,7 +772,12 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
       if (!connection.targetConnection || !otherConnection.targetConnection) {
         // Only bump blocks if they are from different tree structures.
         if (otherConnection.sourceBlock_.getRootBlock() != rootBlock) {
-          otherConnection.bumpAwayFrom_(connection);
+          // Always bump the inferior block.
+          if (connection.isSuperior()) {
+            otherConnection.bumpAwayFrom_(connection);
+          } else {
+            connection.bumpAwayFrom_(otherConnection);
+          }
         }
       }
     }
@@ -986,22 +980,11 @@ Blockly.Block.prototype.getTitle_ = function(name) {
     }
   }
   for (var x = 0, input; input = this.inputList[x]; x++) {
-    if (input.label && input.label.name === name) {
-      return input.label;
+    for (var y = 0, title; title = input.titleRow[y]; y++) {
+      if (title.name === name) {
+        return title;
+      }
     }
-  }
-  return null;
-};
-
-/**
- * Returns the human-readable text from the title of a block.
- * @param {string} name The name of the title.
- * @return {!string} Text from the title or null if title does not exist.
- */
-Blockly.Block.prototype.getTitleText = function(name) {
-  var title = this.getTitle_(name);
-  if (title) {
-    return title.getText();
   }
   return null;
 };
@@ -1020,20 +1003,6 @@ Blockly.Block.prototype.getTitleValue = function(name) {
 };
 
 /**
- * Change the title text for a block (e.g. 'choose' or 'remove list item').
- * @param {string} newText Text to be the new title.
- * @param {string} name The name of the title.
- */
-Blockly.Block.prototype.setTitleText = function(newText, name) {
-  var title = this.getTitle_(name);
-  if (title) {
-    title.setText(newText);
-  } else {
-    throw 'Title "' + name + '" not found.';
-  }
-};
-
-/**
  * Change the title value for a block (e.g. 'CHOOSE' or 'REMOVE').
  * @param {string} newValue Value to be the new title.
  * @param {string} name The name of the title.
@@ -1042,6 +1011,41 @@ Blockly.Block.prototype.setTitleValue = function(newValue, name) {
   var title = this.getTitle_(name);
   if (title) {
     title.setValue(newValue);
+  } else {
+    throw 'Title "' + name + '" not found.';
+  }
+};
+
+/**
+ * Returns the human-readable text from the title of a block.
+ * @param {string} name The name of the title.
+ * @return {!string} Text from the title or null if title does not exist.
+ * @deprecated
+ */
+Blockly.Block.prototype.getTitleText = function(name) {
+  // In September 2012 getTitleText was deprecated in favour of getTitleValue.
+  // At some future date this section should be deleted.
+  console.log('Obsolete call to getTitleText.  Please use getTitleValue.');
+  var title = this.getTitle_(name);
+  if (title) {
+    return title.getText();
+  }
+  return null;
+};
+
+/**
+ * Change the title text for a block (e.g. 'choose' or 'remove list item').
+ * @param {string} newText Text to be the new title.
+ * @param {string} name The name of the title.
+ * @deprecated
+ */
+Blockly.Block.prototype.setTitleText = function(newText, name) {
+  // In September 2012 setTitleText was deprecated in favour of setTitleValue.
+  // At some future date this section should be deleted.
+  console.log('Obsolete call to setTitleText.  Please use setTitleValue.');
+  var title = this.getTitle_(name);
+  if (title) {
+    title.setText(newText);
   } else {
     throw 'Title "' + name + '" not found.';
   }
@@ -1059,8 +1063,10 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
+ * @param {Object} opt_check Statement type or list of statement types.
+ *     Null or undefined if any type could be connected.
  */
-Blockly.Block.prototype.setPreviousStatement = function(newBoolean) {
+Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
   if (this.previousConnection) {
     if (this.previousConnection.targetConnection) {
       throw 'Must disconnect previous statement before removing connection.';
@@ -1072,8 +1078,11 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean) {
     if (this.outputConnection) {
       throw 'Remove output connection prior to adding previous connection.';
     }
+    if (opt_check === undefined) {
+      opt_check = null;
+    }
     this.previousConnection =
-        new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT, null);
+        new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT, opt_check);
   }
   if (this.rendered) {
     this.render();
@@ -1084,8 +1093,10 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean) {
 /**
  * Set whether another block can chain onto the bottom of this block.
  * @param {boolean} newBoolean True if there can be a next statement.
+ * @param {Object} opt_check Statement type or list of statement types.
+ *     Null or undefined if any type could be connected.
  */
-Blockly.Block.prototype.setNextStatement = function(newBoolean) {
+Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
   if (this.nextConnection) {
     if (this.nextConnection.targetConnection) {
       throw 'Must disconnect next statement before removing connection.';
@@ -1094,8 +1105,11 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean) {
     this.nextConnection = null;
   }
   if (newBoolean) {
+    if (opt_check === undefined) {
+      opt_check = null;
+    }
     this.nextConnection =
-        new Blockly.Connection(this, Blockly.NEXT_STATEMENT, null);
+        new Blockly.Connection(this, Blockly.NEXT_STATEMENT, opt_check);
   }
   if (this.rendered) {
     this.render();
@@ -1106,10 +1120,10 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean) {
 /**
  * Set whether this block returns a value.
  * @param {boolean} newBoolean True if there is an output.
- * @param {Object} check Returned type or list of returned types.
- *     Null if any type could be returned (e.g. variable get).
+ * @param {Object} opt_check Returned type or list of returned types.
+ *     Null or undefined if any type could be returned (e.g. variable get).
  */
-Blockly.Block.prototype.setOutput = function(newBoolean, check) {
+Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
   if (this.outputConnection) {
     if (this.outputConnection.targetConnection) {
       throw 'Must disconnect output value before removing connection.';
@@ -1121,8 +1135,11 @@ Blockly.Block.prototype.setOutput = function(newBoolean, check) {
     if (this.previousConnection) {
       throw 'Remove previous connection prior to adding output connection.';
     }
+    if (opt_check === undefined) {
+      opt_check = null;
+    }
     this.outputConnection =
-        new Blockly.Connection(this, Blockly.OUTPUT_VALUE, check);
+        new Blockly.Connection(this, Blockly.OUTPUT_VALUE, opt_check);
   }
   if (this.rendered) {
     this.render();
@@ -1186,9 +1203,9 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
   var display = collapsed ? 'none' : 'block';
   var renderList = [];
   for (var x = 0, input; input = this.inputList[x]; x++) {
-    if (input.label) {
-      var labelElement = input.label.getRootElement ?
-          input.label.getRootElement() : input.label;
+    for (var y = 0, title; title = input.titleRow[y]; y++) {
+      var labelElement = title.getRootElement ?
+          title.getRootElement() : title;
       labelElement.style.display = display;
     }
     if (input.targetBlock) {
@@ -1235,55 +1252,20 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
 
 /**
  * Add a value input, statement input or local variable to this block.
- * @param {string|Array} label Printed next to the input (e.g. 'x' or 'do').
- *     If the label is an editable field, this argument should be a tuple with
- *     the field and its name.
  * @param {number} type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or
- *     Blockly.LOCAL_VARIABLE, or Blockly.DUMMY_INPUT.
+ *     Blockly.DUMMY_INPUT.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
- * @param {Object} opt_check Acceptable value type, or list of value types.
+ * @param {*} opt_check Acceptable value type, or list of value types.
  *     Null or undefined means all values are acceptable.
- * @return {!Object} The input object created.
+ * @return {!Blockly.Input} The input object created.
  */
-Blockly.Block.prototype.appendInput = function(label, type, name, opt_check) {
-  // Create descriptive text element.
-  var textElement = null;
-  if (label) {
-    var labelElement = label;
-    var labelName = null;
-    if (label instanceof Array) {
-      // Editable label with name.
-      labelElement = label[0];
-      labelName = label[1];
-    }
-    if (typeof labelElement == 'string') {
-      // Text label.
-      labelElement = new Blockly.FieldLabel(labelElement);
-    }
-    textElement = labelElement;
-    textElement.name = labelName;
-    if (this.svg_) {
-      textElement.init(this);
-    }
+Blockly.Block.prototype.appendInput = function(type, name, opt_check) {
+  var connection = null;
+  if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
+    connection = new Blockly.Connection(this, type, opt_check);
   }
-  var input;
-  if (type == Blockly.DUMMY_INPUT) {
-    // Dummy input is used to show a label.
-    input = {};
-    input.type = type;
-  } else if (type == Blockly.LOCAL_VARIABLE) {
-    input = new Blockly.FieldDropdown(
-        Blockly.Variables.dropdownCreate, Blockly.Variables.dropdownChange);
-    if (this.svg_) {
-      input.init(this);
-    }
-    input.type = Blockly.LOCAL_VARIABLE;
-  } else {
-    input = new Blockly.Connection(this, type, opt_check);
-  }
-  input.label = textElement;
-  input.name = name;
+  var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
   this.inputList.push(input);
   if (this.rendered) {
@@ -1295,23 +1277,62 @@ Blockly.Block.prototype.appendInput = function(label, type, name, opt_check) {
 };
 
 /**
+ * Move an input to a different location on this block.
+ * @param {string} name The name of the input.
+ * @param {number} index New index.
+ */
+Blockly.Block.prototype.moveInputBefore = function(name, refName) {
+  if (name == refName) {
+    throw 'Can\'t move "' + name + '" to itself.';
+  }
+  // Find both inputs.
+  var inputIndex = -1;
+  var refIndex = -1;
+  for (var x = 0, input; input = this.inputList[x]; x++) {
+    if (input.name == name) {
+      inputIndex = x;
+      if (refIndex != -1) {
+        break;
+      }
+    } else if (input.name == refName) {
+      refIndex = x;
+      if (inputIndex != -1) {
+        break;
+      }
+    }
+  }
+  if (inputIndex == -1) {
+    throw 'Named input "' + name + '" not found.';
+  }
+  if (refIndex == -1) {
+    throw 'Reference input "' + name + '" not found.';
+  }
+  // Remove input.
+  this.inputList.splice(inputIndex, 1);
+  if (inputIndex < refIndex) {
+    refIndex--;
+  }
+  // Reinsert input.
+  this.inputList.splice(refIndex, 0, input);
+  if (this.rendered) {
+    this.render();
+    // Moving an input will cause the block to change shape.
+    this.bumpNeighbours_();
+  }
+};
+
+/**
  * Remove an input from this block.
  * @param {string} name The name of the input.
  */
 Blockly.Block.prototype.removeInput = function(name) {
   for (var x = 0, input; input = this.inputList[x]; x++) {
     if (input.name == name) {
-      if (input.targetConnection) {
+      if (input.connection && input.connection.targetConnection) {
         // Disconnect any attached block.
-        input.targetBlock().setParent(null);
+        input.connection.targetBlock().setParent(null);
       }
-      var field = input.label;
-      if (field) {
-        field.destroy();
-      }
-      if (input.destroy) {
-        input.destroy();
-      }
+      input.destroy();
       this.inputList.splice(x, 1);
       if (this.rendered) {
         this.render();
@@ -1347,30 +1368,7 @@ Blockly.Block.prototype.getInput = function(name) {
  */
 Blockly.Block.prototype.getInputTargetBlock = function(name) {
   var input = this.getInput(name);
-  return input && input.targetBlock();
-};
-
-/**
- * Gets the variable name attached to the named variable input.
- * @param {string} name The name of the input.
- * @return {string} The variable name, or null if the input does not exist.
- */
-Blockly.Block.prototype.getInputVariable = function(name) {
-  var input = this.getInput(name);
-  return input && input.getText();
-};
-
-/**
- * Sets the variable name attached to the named variable input.
- * @param {string} name The name of the input.
- * @param {string} text The new variable name.
- */
-Blockly.Block.prototype.setInputVariable = function(name, text) {
-  var input = this.getInput(name);
-  if (!input) {
-    throw 'Input does not exist.';
-  }
-  input.setText(text);
+  return input && input.connection && input.connection.targetBlock();
 };
 
 /**

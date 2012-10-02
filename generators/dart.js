@@ -31,12 +31,16 @@ Blockly.Dart = Blockly.Generator.get('Dart');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.Dart.RESERVED_WORDS_ =
+if (!Blockly.Dart.RESERVED_WORDS_) {
+  Blockly.Dart.RESERVED_WORDS_ = '';
+}
+
+Blockly.Dart.RESERVED_WORDS_ +=
     // http://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
     // Section 14.1.1
     'break,case,catch,class,const,continue,default,do,else,extends,false,final,finally,for,if,in,is,new,null,return,super,switch,this,throw,true,try,var,void,while,' +
     // http://api.dartlang.org/dart_core.html
-    'AssertionError,bool,Clock,Collection,Comparable,Completer,Date,double,Duration,Dynamic,Expect,FallThroughError,Function,Future,Futures,Hashable,HashMap,HashSet,int,Iterable,Iterator,LinkedHashMap,List,Map,Match,Math,num,Object,Options,Pattern,Queue,RegExp,Set,Stopwatch,String,StringBuffer,Strings,TimeZone,TypeError,BadNumberFormatException,ClosureArgumentMismatchException,EmptyQueueException,Exception,ExpectException,FutureAlreadyCompleteException,FutureNotCompleteException,IllegalAccessException,IllegalArgumentException,IllegalJSRegExpException,IndexOutOfRangeException,IntegerDivisionByZeroException,NoMoreElementsException,NoSuchMethodException,NotImplementedException,NullPointerException,ObjectNotClosureException,OutOfMemoryException,StackOverflowException,UnsupportedOperationException,WrongArgumentCountException';
+    'AssertionError,bool,Clock,Collection,Comparable,Completer,Date,double,Duration,Dynamic,Expect,FallThroughError,Function,Future,Futures,Hashable,HashMap,HashSet,int,Iterable,Iterator,LinkedHashMap,List,Map,Match,Math,num,Object,Options,Pattern,Queue,RegExp,Set,Stopwatch,String,StringBuffer,Strings,TimeZone,TypeError,BadNumberFormatException,ClosureArgumentMismatchException,EmptyQueueException,Exception,ExpectException,FutureAlreadyCompleteException,FutureNotCompleteException,IllegalAccessException,IllegalArgumentException,IllegalJSRegExpException,IndexOutOfRangeException,IntegerDivisionByZeroException,NoMoreElementsException,NoSuchMethodException,NotImplementedException,NullPointerException,ObjectNotClosureException,OutOfMemoryException,StackOverflowException,UnsupportedOperationException,WrongArgumentCountException,';
 
 /**
  * Order of operation ENUMs.
@@ -69,7 +73,7 @@ Blockly.Dart.init = function() {
   if (Blockly.Variables) {
     if (!Blockly.Dart.variableDB_) {
       Blockly.Dart.variableDB_ =
-          new Blockly.Names(Blockly.Dart.RESERVED_WORDS_.split(','));
+          new Blockly.Names(Blockly.Dart.RESERVED_WORDS_);
     } else {
       Blockly.Dart.variableDB_.reset();
     }
@@ -101,7 +105,7 @@ Blockly.Dart.finish = function(code) {
   for (var name in Blockly.Dart.definitions_) {
     definitions.push(Blockly.Dart.definitions_[name]);
   }
-  return definitions.join('\n') + '\n\n' + code;
+  return definitions.join('\n\n') + '\n\n\n' + code;
 };
 
 /**
@@ -155,7 +159,7 @@ Blockly.Dart.scrub_ = function(block, code) {
     // Don't collect comments for nested statements.
     for (var x = 0; x < block.inputList.length; x++) {
       if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].targetBlock();
+        var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.Generator.allNestedComments(childBlock);
           if (comment) {

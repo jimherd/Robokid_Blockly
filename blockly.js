@@ -110,13 +110,9 @@ Blockly.NEXT_STATEMENT = 3;
  */
 Blockly.PREVIOUS_STATEMENT = 4;
 /**
- * ENUM for an local variable.  E.g. 'for x in list'.
+ * ENUM for an dummy input.  Used to add title(s) with no input.
  */
-Blockly.LOCAL_VARIABLE = 5;
-/**
- * ENUM for an dummy input.  Used to add a label with no input.
- */
-Blockly.DUMMY_INPUT = 6;
+Blockly.DUMMY_INPUT = 5;
 
 /**
  * Lookup table for determining the opposite type of a connection.
@@ -233,7 +229,6 @@ Blockly.svgResize = function() {
 Blockly.onMouseDown_ = function(e) {
   Blockly.Block.terminateDrag_();
   Blockly.hideChaff();
-  Blockly.removeAllRanges();
   if (Blockly.isTargetInput_(e) ||
       (Blockly.Mutator && Blockly.Mutator.isOpen)) {
     return;
@@ -319,8 +314,7 @@ Blockly.onKeyDown_ = function(e) {
     if (Blockly.selected && Blockly.selected.editable &&
         (!Blockly.Mutator || !Blockly.Mutator.isOpen)) {
       Blockly.hideChaff();
-      Blockly.playAudio('delete');
-      Blockly.selected.destroy(true);
+      Blockly.selected.destroy(true, true);
     }
     // Stop the browser from going back to the previous page.
     e.preventDefault();
@@ -334,8 +328,7 @@ Blockly.onKeyDown_ = function(e) {
       } else if (e.keyCode == 88) {
         // 'x' for cut.
         Blockly.copy_(Blockly.selected);
-        Blockly.playAudio('delete');
-        Blockly.selected.destroy(true);
+        Blockly.selected.destroy(true, true);
       }
     }
     if (e.keyCode == 86) {

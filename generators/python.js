@@ -31,7 +31,11 @@ Blockly.Python = Blockly.Generator.get('Python');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.Python.RESERVED_WORDS_ =
+if (!Blockly.Python.RESERVED_WORDS_) {
+  Blockly.Python.RESERVED_WORDS_ = '';
+}
+
+Blockly.Python.RESERVED_WORDS_ +=
     // import keyword
     // print ','.join(keyword.kwlist)
     // http://docs.python.org/reference/lexical_analysis.html#keywords
@@ -39,7 +43,7 @@ Blockly.Python.RESERVED_WORDS_ =
     //http://docs.python.org/library/constants.html
     'True,False,None,NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
     // http://docs.python.org/library/functions.html
-    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern';
+    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern,';
 
 /**
  * Order of operation ENUMs.
@@ -78,7 +82,7 @@ Blockly.Python.init = function() {
   if (Blockly.Variables) {
     if (!Blockly.Python.variableDB_) {
       Blockly.Python.variableDB_ =
-          new Blockly.Names(Blockly.Python.RESERVED_WORDS_.split(','));
+          new Blockly.Names(Blockly.Python.RESERVED_WORDS_);
     } else {
       Blockly.Python.variableDB_.reset();
     }
@@ -100,11 +104,18 @@ Blockly.Python.init = function() {
  */
 Blockly.Python.finish = function(code) {
   // Convert the definitions dictionary into a list.
+  var imports = [];
   var definitions = [];
   for (var name in Blockly.Python.definitions_) {
-    definitions.push(Blockly.Python.definitions_[name]);
+    var def = Blockly.Python.definitions_[name];
+    if (def.match(/^(from\s+\S+\s+)?import\s+\S+/)) {
+      imports.push(def);
+    } else {
+      definitions.push(def);
+    }
   }
-  return definitions.join('\n') + '\n\n' + code;
+  var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
+  return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
 
 /**
@@ -158,7 +169,7 @@ Blockly.Python.scrub_ = function(block, code) {
     // Don't collect comments for nested statements.
     for (var x = 0; x < block.inputList.length; x++) {
       if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].targetBlock();
+        var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.Generator.allNestedComments(childBlock);
           if (comment) {

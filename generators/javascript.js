@@ -31,7 +31,11 @@ Blockly.JavaScript = Blockly.Generator.get('JavaScript');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.JavaScript.RESERVED_WORDS_ =
+if (!Blockly.JavaScript.RESERVED_WORDS_) {
+  Blockly.JavaScript.RESERVED_WORDS_ = '';
+}
+
+Blockly.JavaScript.RESERVED_WORDS_ +=
     'Blockly', // In case JS is evaled in the current window.
     // https://developer.mozilla.org/en/JavaScript/Reference/Reserved_Words
     'break,case,catch,continue,debugger,default,delete,do,else,finally,for,function,if,in,instanceof,new,return,switch,this,throw,try,typeof,var,void,while,with,' +
@@ -53,7 +57,7 @@ Blockly.JavaScript.RESERVED_WORDS_ =
     'SVGAngle,SVGColor,SVGICCColor,SVGElementInstance,SVGElementInstanceList,SVGLength,SVGLengthList,SVGMatrix,SVGNumber,SVGNumberList,SVGPaint,SVGPoint,SVGPointList,SVGPreserveAspectRatio,SVGRect,SVGStringList,SVGTransform,SVGTransformList,' +
     'SVGAnimatedAngle,SVGAnimatedBoolean,SVGAnimatedEnumeration,SVGAnimatedInteger,SVGAnimatedLength,SVGAnimatedLengthList,SVGAnimatedNumber,SVGAnimatedNumberList,SVGAnimatedPreserveAspectRatio,SVGAnimatedRect,SVGAnimatedString,SVGAnimatedTransformList,' +
     'SVGPathSegList,SVGPathSeg,SVGPathSegArcAbs,SVGPathSegArcRel,SVGPathSegClosePath,SVGPathSegCurvetoCubicAbs,SVGPathSegCurvetoCubicRel,SVGPathSegCurvetoCubicSmoothAbs,SVGPathSegCurvetoCubicSmoothRel,SVGPathSegCurvetoQuadraticAbs,SVGPathSegCurvetoQuadraticRel,SVGPathSegCurvetoQuadraticSmoothAbs,SVGPathSegCurvetoQuadraticSmoothRel,SVGPathSegLinetoAbs,SVGPathSegLinetoHorizontalAbs,SVGPathSegLinetoHorizontalRel,SVGPathSegLinetoRel,SVGPathSegLinetoVerticalAbs,SVGPathSegLinetoVerticalRel,SVGPathSegMovetoAbs,SVGPathSegMovetoRel,ElementTimeControl,TimeEvent,SVGAnimatedPathData,' +
-    'SVGAnimatedPoints,SVGColorProfileRule,SVGCSSRule,SVGExternalResourcesRequired,SVGFitToViewBox,SVGLangSpace,SVGLocatable,SVGRenderingIntent,SVGStylable,SVGTests,SVGTextContentElement,SVGTextPositioningElement,SVGTransformable,SVGUnitTypes,SVGURIReference,SVGViewSpec,SVGZoomAndPan';
+    'SVGAnimatedPoints,SVGColorProfileRule,SVGCSSRule,SVGExternalResourcesRequired,SVGFitToViewBox,SVGLangSpace,SVGLocatable,SVGRenderingIntent,SVGStylable,SVGTests,SVGTextContentElement,SVGTextPositioningElement,SVGTransformable,SVGUnitTypes,SVGURIReference,SVGViewSpec,SVGZoomAndPan,';
 
 /**
  * Order of operation ENUMs.
@@ -102,7 +106,7 @@ Blockly.JavaScript.init = function() {
   if (Blockly.Variables) {
     if (!Blockly.JavaScript.variableDB_) {
       Blockly.JavaScript.variableDB_ =
-          new Blockly.Names(Blockly.JavaScript.RESERVED_WORDS_.split(','));
+          new Blockly.Names(Blockly.JavaScript.RESERVED_WORDS_);
     } else {
       Blockly.JavaScript.variableDB_.reset();
     }
@@ -129,7 +133,7 @@ Blockly.JavaScript.finish = function(code) {
   for (var name in Blockly.JavaScript.definitions_) {
     definitions.push(Blockly.JavaScript.definitions_[name]);
   }
-  return definitions.join('\n') + '\n\n' + code;
+  return definitions.join('\n\n') + '\n\n\n' + code;
 };
 
 /**
@@ -183,7 +187,7 @@ Blockly.JavaScript.scrub_ = function(block, code) {
     // Don't collect comments for nested statements.
     for (var x = 0; x < block.inputList.length; x++) {
       if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].targetBlock();
+        var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.Generator.allNestedComments(childBlock);
           if (comment) {

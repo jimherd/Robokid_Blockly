@@ -81,7 +81,7 @@ Blockly.Language.maze_turnRight = {
     var dropdown =
         new Blockly.FieldDropdown(Blockly.Language.maze_turnLeft.DIRECTIONS);
     this.appendTitle(dropdown, 'DIR');
-    this.setTitleText(Blockly.Language.maze_turnLeft.DIRECTIONS[1][0], 'DIR');
+    this.setTitleValue(Blockly.Language.maze_turnLeft.DIRECTIONS[1][1], 'DIR');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Turns Pegman left or right by 90 degrees.');
@@ -140,10 +140,10 @@ Blockly.Language.controls_forever = {
   helpUrl: 'http://code.google.com/p/blockly/wiki/Repeat',
   init: function() {
     this.setColour(120);
-    this.appendTitle('repeat forever');
-    this.appendInput('do', Blockly.NEXT_STATEMENT, 'DO');
+    this.appendTitle('repeat until finished');
+    this.appendInput(Blockly.NEXT_STATEMENT, 'DO').appendTitle('do');
     this.setPreviousStatement(true);
-    this.setTooltip('Do the enclosed statements forever.');
+    this.setTooltip('Repeat the enclosed steps until finish point is reached.');
   }
 };
 
