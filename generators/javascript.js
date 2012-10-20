@@ -21,6 +21,7 @@
  * @fileoverview Helper functions for generating JavaScript for blocks.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 Blockly.JavaScript = Blockly.Generator.get('JavaScript');
 
@@ -168,6 +169,7 @@ Blockly.JavaScript.quote_ = function(string) {
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The JavaScript code created for this block.
  * @return {string} JavaScript code with comments and subsequent blocks added.
+ * @this {Blockly.CodeGenerator}
  * @private
  */
 Blockly.JavaScript.scrub_ = function(block, code) {

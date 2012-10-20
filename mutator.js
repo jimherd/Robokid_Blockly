@@ -22,6 +22,7 @@
  * user to change the shape of a block using a nested blocks editor.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for a mutator dialog.
@@ -71,12 +72,6 @@ Blockly.Mutator.prototype.relativeLeft_ = -180;
  * @private
  */
 Blockly.Mutator.prototype.relativeTop_ = -230;
-
-/**
- * Is the mutator always visible?
- * @private
- */
-Blockly.Mutator.prototype.isPinned_ = false;
 
 /**
  * Width of workspace.
@@ -129,8 +124,6 @@ Blockly.Mutator.prototype.createIcon = function() {
   this.block_.getSvgRoot().appendChild(this.iconGroup_);
   if (this.block_.editable) {
     Blockly.bindEvent_(this.iconGroup_, 'mouseup', this, this.iconClick_);
-    Blockly.bindEvent_(this.iconGroup_, 'mouseover', this, this.iconMouseOver_);
-    Blockly.bindEvent_(this.iconGroup_, 'mouseout', this, this.iconMouseOut_);
   }
 };
 
@@ -164,6 +157,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
 /**
  * Callback function triggered when the bubble has resized.
  * Resize the workspace accordingly.
+ * @private
  */
 Blockly.Mutator.prototype.resizeBubble_ = function() {
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
@@ -176,7 +170,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
     width = workspaceSize.width + workspaceSize.x;
   }
   var height = Math.max(workspaceSize.height + doubleBorderWidth * 3,
-                        flyoutMetrics.contentHeight);
+                        flyoutMetrics.contentHeight + 20);
   width += doubleBorderWidth * 3;
   // Only resize if the size difference is significant.  Eliminates shuddering.
   if (Math.abs(this.workspaceWidth_ - width) > doubleBorderWidth ||
@@ -199,41 +193,19 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
 };
 
 /**
- * Is the mutator bubble always visible?
- * @return {boolean} True if the bubble should be always visible.
- */
-Blockly.Mutator.prototype.isPinned = function() {
-  return this.isPinned_;
-};
-
-/**
- * Set whether the mutator bubble is always visible or not.
- * @param {boolean} pinned True if the bubble should be always visible.
- */
-Blockly.Mutator.prototype.setPinned = function(pinned) {
-  this.isPinned_ = pinned;
-  this.iconMark_.style.fill = pinned ? '#fff' : '';
-  if (this.bubble_) {
-    this.bubble_.setDisabled(!this.isPinned_);
-  }
-};
-
-/**
  * Is the mutator bubble visible?
  * @return {boolean} True if the bubble is visible.
- * @private
  */
-Blockly.Mutator.prototype.isVisible_ = function() {
+Blockly.Mutator.prototype.isVisible = function() {
   return !!this.bubble_;
 };
 
 /**
  * Show or hide the mutator bubble.
  * @param {boolean} visible True if the bubble should be visible.
- * @private
  */
-Blockly.Mutator.prototype.setVisible_ = function(visible) {
-  if (visible == this.isVisible_()) {
+Blockly.Mutator.prototype.setVisible = function(visible) {
+  if (visible == this.isVisible()) {
     // No change.
     return;
   }
@@ -274,7 +246,6 @@ Blockly.Mutator.prototype.setVisible_ = function(visible) {
     // When the mutator's workspace changes, update the source block.
     Blockly.bindEvent_(this.workspace_.getCanvas(), 'blocklyWorkspaceChange',
         this.block_, function() {thisObj.workspaceChanged_();});
-    this.bubble_.setDisabled(!this.isPinned_);
     this.updateColour();
   } else {
     // Destroy the bubble.
@@ -316,7 +287,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
       }
     }
   }
- 
+
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace == this.workspace_) {
     this.resizeBubble_();
@@ -324,7 +295,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     var savedRendered = this.block_.rendered;
     this.block_.rendered = false;
     // Allow the source block to rebuild itself.
-    this.block_.compose(this.rootBlock_)
+    this.block_.compose(this.rootBlock_);
     // Restore rendering and show the changes.
     this.block_.rendered = savedRendered;
     if (this.block_.rendered) {
@@ -358,34 +329,12 @@ Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
 };
 
 /**
- * Clicking on the icon toggles if the bubble is pinned.
+ * Clicking on the icon toggles if the bubble is visible.
  * @param {!Event} e Mouse click event.
  * @private
  */
 Blockly.Mutator.prototype.iconClick_ = function(e) {
-  this.setPinned(!this.isPinned_);
-};
-
-/**
- * Mousing over the icon makes the bubble visible.
- * @param {!Event} e Mouse over event.
- * @private
- */
-Blockly.Mutator.prototype.iconMouseOver_ = function(e) {
-  if (!this.isPinned_ && Blockly.Block.dragMode_ == 0) {
-    this.setVisible_(true);
-  }
-};
-
-/**
- * Mousing off of the icon hides the bubble (unless it is pinned).
- * @param {!Event} e Mouse out event.
- * @private
- */
-Blockly.Mutator.prototype.iconMouseOut_ = function(e) {
-  if (!this.isPinned_ && Blockly.Block.dragMode_ == 0) {
-    this.setVisible_(false);
-  }
+  this.setVisible(!this.isVisible());
 };
 
 /**
@@ -393,7 +342,7 @@ Blockly.Mutator.prototype.iconMouseOut_ = function(e) {
  * @return {!Object} Object with x and y properties.
  */
 Blockly.Mutator.prototype.getBubbleLocation = function() {
-  if (this.isVisible_()) {
+  if (this.isVisible()) {
     return this.bubble_.getBubbleLocation();
   } else {
     return {x: this.relativeLeft_, y: this.relativeTop_};
@@ -406,7 +355,7 @@ Blockly.Mutator.prototype.getBubbleLocation = function() {
  * @param {number} y Vertical offset from block.
  */
 Blockly.Mutator.prototype.setBubbleLocation = function(x, y) {
-  if (this.isVisible_()) {
+  if (this.isVisible()) {
     this.bubble_.setBubbleLocation(x, y);
   } else {
     this.relativeLeft_ = x;
@@ -418,7 +367,7 @@ Blockly.Mutator.prototype.setBubbleLocation = function(x, y) {
  * Change the colour of a mutator to match its block.
  */
 Blockly.Mutator.prototype.updateColour = function() {
-  if (this.isVisible_()) {
+  if (this.isVisible()) {
     var hexColour = Blockly.makeColour(this.block_.getColour());
     this.bubble_.setColour(hexColour);
   }
@@ -432,7 +381,7 @@ Blockly.Mutator.prototype.destroy = function() {
   this.iconGroup_.parentNode.removeChild(this.iconGroup_);
   this.iconGroup_ = null;
   // Destroy and unlink the bubble.
-  this.setVisible_(false);
+  this.setVisible(false);
   // Disconnect links between the block and the mutator.
   this.block_.mutator = null;
   this.block_ = null;
@@ -440,24 +389,29 @@ Blockly.Mutator.prototype.destroy = function() {
 
 /**
  * Render the icon for this mutator.
- * @param {number} titleX Horizontal offset at which to position the icon.
- * @return {number} Width of icon.
+ * @param {number} cursorX Horizontal offset at which to position the icon.
+ * @return {number} Horizontal offset for next item to draw.
  */
-Blockly.Mutator.prototype.renderIcon = function(titleX) {
+Blockly.Mutator.prototype.renderIcon = function(cursorX) {
   if (this.block_.collapsed) {
     this.iconGroup_.setAttribute('display', 'none');
-    return 0;
+    return cursorX;
   }
   this.iconGroup_.setAttribute('display', 'block');
 
   var TOP_MARGIN = 5;
   if (Blockly.RTL) {
-    titleX -= Blockly.Mutator.ICON_SIZE;
+    cursorX -= Blockly.Mutator.ICON_SIZE;
   }
   this.iconGroup_.setAttribute('transform',
-                               'translate(' + titleX + ', ' + TOP_MARGIN + ')');
+      'translate(' + cursorX + ', ' + TOP_MARGIN + ')');
   this.computeIconLocation();
-  return Blockly.Mutator.ICON_SIZE;
+  if (Blockly.RTL) {
+    cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
+  } else {
+    cursorX += Blockly.Mutator.ICON_SIZE + Blockly.BlockSvg.SEP_SPACE_X;
+  }
+  return cursorX;
 };
 
 /**
@@ -468,7 +422,7 @@ Blockly.Mutator.prototype.renderIcon = function(titleX) {
 Blockly.Mutator.prototype.setIconLocation = function(x, y) {
   this.iconX_ = x;
   this.iconY_ = y;
-  if (this.isVisible_()) {
+  if (this.isVisible()) {
     this.bubble_.setAnchorLocation(x, y);
   }
 };

@@ -21,6 +21,7 @@
  * @fileoverview Core JavaScript library for Blockly.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 // Top level object for Blockly.
 var Blockly = {};
@@ -115,6 +116,19 @@ Blockly.PREVIOUS_STATEMENT = 4;
 Blockly.DUMMY_INPUT = 5;
 
 /**
+ * ENUM for left alignment.
+ */
+Blockly.ALIGN_LEFT = -1;
+/**
+ * ENUM for centre alignment.
+ */
+Blockly.ALIGN_CENTRE = 0;
+/**
+ * ENUM for right alignment.
+ */
+Blockly.ALIGN_RIGHT = 1;
+
+/**
  * Lookup table for determining the opposite type of a connection.
  */
 Blockly.OPPOSITE_TYPE = [];
@@ -187,6 +201,7 @@ Blockly.mainWorkspace = null;
 /**
  * Contents of the local clipboard.
  * @type {Element}
+ * @private
  */
 Blockly.clipboard_ = null;
 

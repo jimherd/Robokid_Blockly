@@ -21,6 +21,7 @@
  * @fileoverview Flyout tray containing blocks which may be created.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for a flyout.
@@ -42,6 +43,7 @@ Blockly.Flyout.prototype.CORNER_RADIUS = 8;
 
 /**
  * Wrapper function called when a resize occurs.
+ * @private
  */
 Blockly.Flyout.prototype.onResizeWrapper_ = null;
 

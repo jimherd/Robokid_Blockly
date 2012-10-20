@@ -47,6 +47,11 @@
   stroke: #fc3;
   fill: none;
 }
+.blocklyPathLight {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
 .blocklySelected>.blocklyPath {
   stroke-width: 3px;
   stroke: #fc3;
@@ -132,6 +137,9 @@
 .blocklyIconGroup:hover>.blocklyIconShield {
   fill: #00f;
   stroke: #fff;
+}
+.blocklyIconGroup:hover>.blocklyIconMark {
+  fill: #fff;
 }
 .blocklyIconMark {
   cursor: default !important;

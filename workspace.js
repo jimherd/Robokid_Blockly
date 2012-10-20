@@ -21,6 +21,7 @@
  * @fileoverview Object representing a workspace.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for a workspace.
@@ -259,10 +260,10 @@ Blockly.Workspace.prototype.fireChangeEvent = function() {
 
 /**
  * Paste the provided block onto the workspace.
+ * @param {!Element} xmlBlock XML block element.
  */
 Blockly.Workspace.prototype.paste = function(xmlBlock) {
-  var block =
-      Blockly.Xml.domToBlock_(this, xmlBlock);
+  var block = Blockly.Xml.domToBlock_(this, xmlBlock);
   // Move the duplicate to original position.
   var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
   var blockY = parseInt(xmlBlock.getAttribute('y'), 10);

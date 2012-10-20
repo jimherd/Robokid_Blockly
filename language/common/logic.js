@@ -21,6 +21,7 @@
  * @fileoverview Logic blocks for Blockly.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 if (!Blockly.Language) Blockly.Language = {};
 
@@ -31,10 +32,9 @@ Blockly.Language.logic_compare = {
   init: function() {
     this.setColour(120);
     this.setOutput(true, Boolean);
-    this.appendInput(Blockly.INPUT_VALUE, 'A', null);
-    var dropdown = new Blockly.FieldDropdown(this.OPERATORS);
-    this.appendInput(Blockly.INPUT_VALUE, 'B', null)
-        .appendTitle(dropdown, 'OP');
+    this.appendValueInput('A');
+    this.appendValueInput('B')
+        .appendTitle(new Blockly.FieldDropdown(this.OPERATORS), 'OP');
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
@@ -69,10 +69,11 @@ Blockly.Language.logic_operation = {
   init: function() {
     this.setColour(120);
     this.setOutput(true, Boolean);
-    this.appendInput(Blockly.INPUT_VALUE, 'A', Boolean);
-    var dropdown = new Blockly.FieldDropdown(this.OPERATORS);
-    this.appendInput(Blockly.INPUT_VALUE, 'B', Boolean)
-        .appendTitle(dropdown, 'OP');
+    this.appendValueInput('A')
+        .setCheck(Boolean);
+    this.appendValueInput('B')
+        .setCheck(Boolean)
+        .appendTitle(new Blockly.FieldDropdown(this.OPERATORS), 'OP');
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
@@ -99,7 +100,8 @@ Blockly.Language.logic_negate = {
   init: function() {
     this.setColour(120);
     this.setOutput(true, Boolean);
-    this.appendInput(Blockly.INPUT_VALUE, 'BOOL', Boolean)
+    this.appendValueInput('BOOL')
+        .setCheck(Boolean)
         .appendTitle(Blockly.LANG_LOGIC_NEGATE_INPUT_NOT);
     this.setTooltip(Blockly.LANG_LOGIC_NEGATE_TOOLTIP_1);
   }
@@ -112,8 +114,8 @@ Blockly.Language.logic_boolean = {
   init: function() {
     this.setColour(120);
     this.setOutput(true, Boolean);
-    var dropdown = new Blockly.FieldDropdown(this.OPERATORS);
-    this.appendTitle(dropdown, 'BOOL');
+    this.appendDummyInput()
+        .appendTitle(new Blockly.FieldDropdown(this.OPERATORS), 'BOOL');
     this.setTooltip(Blockly.LANG_LOGIC_BOOLEAN_TOOLTIP_1);
   }
 };

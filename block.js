@@ -21,6 +21,7 @@
  * @fileoverview The class representing one block.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for one block.
@@ -31,7 +32,6 @@
  */
 Blockly.Block = function(workspace, prototypeName) {
   this.id = Blockly.uniqueId();
-  this.titleRow = [];
   this.outputConnection = null;
   this.nextConnection = null;
   this.previousConnection = null;
@@ -259,9 +259,6 @@ Blockly.Block.prototype.destroy = function(gentle, animate) {
     this.childBlocks_[x].destroy(false);
   }
   // Then destroy myself.
-  for (var x = 0; x < this.titleRow.length; x++) {
-    this.titleRow[x].destroy();
-  }
   if (this.mutator) {
     this.mutator.destroy();
   }
@@ -271,7 +268,7 @@ Blockly.Block.prototype.destroy = function(gentle, animate) {
   if (this.warning) {
     this.warning.destroy();
   }
-  // Destroy all inputs and their labels.
+  // Destroy all inputs and their titles.
   for (var x = 0, input; input = this.inputList[x]; x++) {
     input.destroy();
   }
@@ -531,8 +528,7 @@ Blockly.Block.prototype.showContextMenu_ = function(x, y) {
         block.setCollapsed(false);
       };
       options.push(expandOption);
-    } else if (this.inputList.length) {
-      // Only display this option if there are inputs on the block.
+    } else {
       var collapseOption = {enabled: true};
       collapseOption.text = Blockly.MSG_COLLAPSE_BLOCK;
       collapseOption.callback = function() {
@@ -579,7 +575,7 @@ Blockly.Block.prototype.showContextMenu_ = function(x, y) {
     block.showHelp_();
   };
   options.push(helpOption);
-  
+
   // Allow the block to add or modify options.
   if (this.customContextMenu) {
     this.customContextMenu(options);
@@ -940,45 +936,12 @@ Blockly.Block.prototype.setColour = function(colourHue) {
 };
 
 /**
- * Add an item to the end of the title row.
- * @param {*} title Something to add as a title.
- * @param {string} opt_name Language-neutral identifier which may used to find
- *     this title again.  Should be unique to this block.
- * @return {!Blockly.Field} The title object created.
- */
-Blockly.Block.prototype.appendTitle = function(title, opt_name) {
-  // Generate a FieldLabel when given a plain text title.
-  if (typeof title == 'string') {
-    title = new Blockly.FieldLabel(title);
-  }
-  title.name = opt_name;
-
-  // Add the title to the title row.
-  this.titleRow.push(title);
-
-  if (this.svg_) {
-    title.init(this);
-  }
-  if (this.rendered) {
-    this.render();
-    // Adding a title will cause the block to change shape.
-    this.bumpNeighbours_();
-  }
-  return title;
-};
-
-/**
- * Returns the named title or label from a block.
+ * Returns the named title from a block.
  * @param {string} name The name of the title.
  * @return {*} Named title, or null if title does not exist.
  * @private
  */
 Blockly.Block.prototype.getTitle_ = function(name) {
-  for (var x = 0, title; title = this.titleRow[x]; x++) {
-    if (title.name === name) {
-      return title;
-    }
-  }
   for (var x = 0, input; input = this.inputList[x]; x++) {
     for (var y = 0, title; title = input.titleRow[y]; y++) {
       if (title.name === name) {
@@ -1020,7 +983,7 @@ Blockly.Block.prototype.setTitleValue = function(newValue, name) {
  * Returns the human-readable text from the title of a block.
  * @param {string} name The name of the title.
  * @return {!string} Text from the title or null if title does not exist.
- * @deprecated
+ * @deprecated Use getValueText instead.
  */
 Blockly.Block.prototype.getTitleText = function(name) {
   // In September 2012 getTitleText was deprecated in favour of getTitleValue.
@@ -1037,7 +1000,7 @@ Blockly.Block.prototype.getTitleText = function(name) {
  * Change the title text for a block (e.g. 'choose' or 'remove list item').
  * @param {string} newText Text to be the new title.
  * @param {string} name The name of the title.
- * @deprecated
+ * @deprecated Use setValueText instead.
  */
 Blockly.Block.prototype.setTitleText = function(newText, name) {
   // In September 2012 setTitleText was deprecated in favour of setTitleValue.
@@ -1082,7 +1045,8 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     this.previousConnection =
-        new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT, opt_check);
+        new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
+    this.previousConnection.setCheck(opt_check);
   }
   if (this.rendered) {
     this.render();
@@ -1109,7 +1073,8 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     this.nextConnection =
-        new Blockly.Connection(this, Blockly.NEXT_STATEMENT, opt_check);
+        new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
+    this.nextConnection.setCheck(opt_check);
   }
   if (this.rendered) {
     this.render();
@@ -1139,7 +1104,8 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
       opt_check = null;
     }
     this.outputConnection =
-        new Blockly.Connection(this, Blockly.OUTPUT_VALUE, opt_check);
+        new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
+    this.outputConnection.setCheck(opt_check);
   }
   if (this.rendered) {
     this.render();
@@ -1204,38 +1170,35 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
   var renderList = [];
   for (var x = 0, input; input = this.inputList[x]; x++) {
     for (var y = 0, title; title = input.titleRow[y]; y++) {
-      var labelElement = title.getRootElement ?
+      var titleElement = title.getRootElement ?
           title.getRootElement() : title;
-      labelElement.style.display = display;
+      titleElement.style.display = display;
     }
-    if (input.targetBlock) {
+    if (input.connection) {
       // This is a connection.
       if (collapsed) {
-        input.hideAll();
+        input.connection.hideAll();
       } else {
-        renderList = renderList.concat(input.unhideAll());
+        renderList = renderList.concat(input.connection.unhideAll());
       }
-      var child = input.targetBlock();
+      var child = input.connection.targetBlock();
       if (child) {
         child.svg_.getRootNode().style.display = display;
         if (collapsed) {
           child.rendered = false;
         }
       }
-    } else if (input.getText) {
-      // This is a local variable.
-      input.setVisible(!collapsed);
     }
   }
 
   if (collapsed && this.mutator) {
-    this.mutator.setPinned(false);
+    this.mutator.setVisible(false);
   }
   if (collapsed && this.comment) {
-    this.comment.setPinned(false);
+    this.comment.setVisible(false);
   }
   if (collapsed && this.warning) {
-    this.warning.setPinned(false);
+    this.warning.setVisible(false);
   }
 
   if (renderList.length == 0) {
@@ -1251,19 +1214,48 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
 };
 
 /**
+ * Shortcut for appending a value input row.
+ * @param {string} name Language-neutral identifier which may used to find this
+ *     input again.  Should be unique to this block.
+ * @return {!Blockly.Input} The input object created.
+ */
+Blockly.Block.prototype.appendValueInput = function(name) {
+  return this.appendInput_(Blockly.INPUT_VALUE, name);
+};
+
+/**
+ * Shortcut for appending a statement input row.
+ * @param {string} name Language-neutral identifier which may used to find this
+ *     input again.  Should be unique to this block.
+ * @return {!Blockly.Input} The input object created.
+ */
+Blockly.Block.prototype.appendStatementInput = function(name) {
+  return this.appendInput_(Blockly.NEXT_STATEMENT, name);
+};
+
+/**
+ * Shortcut for appending a dummy input row.
+ * @param {string} opt_name Language-neutral identifier which may used to find
+ *     this input again.  Should be unique to this block.
+ * @return {!Blockly.Input} The input object created.
+ */
+Blockly.Block.prototype.appendDummyInput = function(opt_name) {
+  return this.appendInput_(Blockly.DUMMY_INPUT, opt_name || '');
+};
+
+/**
  * Add a value input, statement input or local variable to this block.
  * @param {number} type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or
  *     Blockly.DUMMY_INPUT.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
- * @param {*} opt_check Acceptable value type, or list of value types.
- *     Null or undefined means all values are acceptable.
  * @return {!Blockly.Input} The input object created.
+ * @private
  */
-Blockly.Block.prototype.appendInput = function(type, name, opt_check) {
+Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
-    connection = new Blockly.Connection(this, type, opt_check);
+    connection = new Blockly.Connection(this, type);
   }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
@@ -1278,8 +1270,8 @@ Blockly.Block.prototype.appendInput = function(type, name, opt_check) {
 
 /**
  * Move an input to a different location on this block.
- * @param {string} name The name of the input.
- * @param {number} index New index.
+ * @param {string} name The name of the input to move.
+ * @param {string} refName Name of input that should be after the moved input.
  */
 Blockly.Block.prototype.moveInputBefore = function(name, refName) {
   if (name == refName) {

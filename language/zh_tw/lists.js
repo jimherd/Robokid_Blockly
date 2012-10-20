@@ -18,9 +18,10 @@
  */
 
 /**
- * @fileoverview List blocks for Blockly.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview Custom list blocks for Traditional Chinese.
+ * @author gasolin@gmail.com (Fred Lin)
  */
+'use strict';
 
 if (!Blockly.Language) Blockly.Language = {};
 
@@ -32,9 +33,11 @@ Blockly.Language.lists_getIndex = {
     this.setColour(210);
     this.setOutput(true, null);
     //this.appendTitle(Blockly.LANG_LISTS_GET_INDEX_TITLE);
-    this.appendInput(Blockly.INPUT_VALUE, 'VALUE', Array)
+    this.appendValueInput('VALUE')
+        .setCheck(Array)
         .appendTitle(Blockly.LANG_LISTS_GET_INDEX_INPUT_IN_LIST);
-    this.appendInput(Blockly.INPUT_VALUE, 'AT', Number)
+    this.appendValueInput('AT')
+        .setCheck(Number)
         .appendTitle(Blockly.LANG_LISTS_GET_INDEX_INPUT_AT);
     this.setInputsInline(true);
     this.setTooltip(Blockly.LANG_LISTS_GET_INDEX_TOOLTIP_1);
@@ -48,11 +51,13 @@ Blockly.Language.lists_setIndex = {
   init: function() {
     this.setColour(210);
     //this.appendTitle(Blockly.LANG_LISTS_SET_INDEX_TITLE);
-    this.appendInput(Blockly.INPUT_VALUE, 'LIST', Array)
+    this.appendValueInput('LIST')
+        .setCheck(Array)
         .appendTitle(Blockly.LANG_LISTS_SET_INDEX_INPUT_IN_LIST);
-    this.appendInput(Blockly.INPUT_VALUE, 'AT', Number)
+    this.appendValueInput('AT')
+        .setCheck(Number)
         .appendTitle(Blockly.LANG_LISTS_SET_INDEX_INPUT_AT);
-    this.appendInput(Blockly.INPUT_VALUE, 'TO', null)
+    this.appendValueInput('TO')
         .appendTitle(Blockly.LANG_LISTS_SET_INDEX_INPUT_TO);
     this.setInputsInline(true);
     this.setPreviousStatement(true);

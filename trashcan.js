@@ -21,6 +21,7 @@
  * @fileoverview Object representing a trash can icon.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for a trash can.
@@ -228,7 +229,7 @@ Blockly.Trashcan.animateLid_ = function(trashcan) {
     var closure = function() {
       Blockly.Trashcan.animateLid_(trashcan);
     };
-    this.lidTask_ = window.setTimeout(closure, 5);
+    trashcan.lidTask_ = window.setTimeout(closure, 5);
   }
 };
 

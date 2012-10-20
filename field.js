@@ -23,6 +23,7 @@
  * instances would be Blockly.FieldTextInput, Blockly.FieldDropdown, etc.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for an editable field.
@@ -40,7 +41,7 @@ Blockly.Field = function(text) {
   this.borderRect_ = Blockly.createSvgElement('rect',
       {rx: 4,
        ry: 4,
-       x: -1 - Blockly.BlockSvg.SEP_SPACE_X / 2,
+       x: -Blockly.BlockSvg.SEP_SPACE_X / 2,
        y: -12,
        height: 16}, this.group_);
   this.textElement_ = Blockly.createSvgElement('text',
@@ -49,7 +50,7 @@ Blockly.Field = function(text) {
     // Different field types show different cursor hints.
     this.group_.style.cursor = this.CURSOR;
   }
-  this.size_ = {height: Blockly.BlockSvg.TITLE_HEIGHT, width: 0};
+  this.size_ = {height: 25, width: 0};
   this.setText(text);
 };
 
@@ -178,9 +179,8 @@ Blockly.Field.prototype.setText = function(text) {
   var textNode = Blockly.svgDoc.createTextNode(text);
   this.textElement_.appendChild(textNode);
 
-  // Cached size is obsolete.  Clear it.
+  // Cached width is obsolete.  Clear it.
   this.size_.width = 0;
-  this.size_.height = 0;
 
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();

@@ -21,6 +21,7 @@
  * @fileoverview Functions for injecting Blockly into a web page.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Initialize the SVG document with various handlers.
@@ -157,20 +158,6 @@ Blockly.createDom_ = function(container) {
   filter = Blockly.createSvgElement('filter',
       {id: 'blocklyShadowFilter'}, defs);
   Blockly.createSvgElement('feGaussianBlur', {stdDeviation: 2}, filter);
-  /*
-    <filter id="blocklyGrayscale">
-      <feColorMatrix type="saturate" values="0"/>
-    </filter>
-  */
-  filter = Blockly.createSvgElement('filter',
-      {id: 'blocklyGrayscale'}, defs);
-  // Grey out (.3) and lighten (.2) the bubble.
-  Blockly.createSvgElement('feColorMatrix',
-      {type: 'matrix', values:
-      '.3 .3 .3 0 .2 ' +
-      '.3 .3 .3 0 .2 ' +
-      '.3 .3 .3 0 .2 ' +
-      '0 0 0 1 0'}, filter);
   /*
     <pattern id="blocklyDisabledPattern" patternUnits="userSpaceOnUse"
              width="10" height="10">

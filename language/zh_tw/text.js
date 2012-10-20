@@ -18,9 +18,10 @@
  */
 
 /**
- * @fileoverview Text blocks for Blockly.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview Custom text blocks for Traditional Chinese.
+ * @author gasolin@gmail.com (Fred Lin)
  */
+'use strict';
 
 if (!Blockly.Language) Blockly.Language = {};
 
@@ -30,11 +31,12 @@ Blockly.Language.text_charAt = {
   helpUrl: Blockly.LANG_TEXT_CHARAT_HELPURL,
   init: function() {
     this.setColour(160);
-    //this.appendTitle(Blockly.LANG_TEXT_CHARAT_TITLE_LETTER);
     this.setOutput(true, String);
-    this.appendInput(Blockly.INPUT_VALUE, 'AT', Number)
+    this.appendValueInput('AT')
+        .setCheck(Number)
         .appendTitle(Blockly.LANG_TEXT_CHARAT_INPUT_AT);
-    this.appendInput(Blockly.INPUT_VALUE, 'VALUE', String)
+    this.appendValueInput('VALUE')
+        .setCheck(String)
         .appendTitle(Blockly.LANG_TEXT_CHARAT_INPUT_INTEXT);
     this.setInputsInline(true);
     this.setTooltip(Blockly.LANG_TEXT_CHARAT_TOOLTIP_1);

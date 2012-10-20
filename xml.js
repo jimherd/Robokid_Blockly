@@ -21,6 +21,7 @@
  * @fileoverview XML reader and writer.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 Blockly.Xml = {};
 
@@ -67,9 +68,6 @@ Blockly.Xml.blockToDom_ = function(block) {
       element.appendChild(container);
     }
   }
-  for (var i = 0, title; title = block.titleRow[i]; i++) {
-    titleToDom(title);
-  }
   for (var x = 0, input; input = block.inputList[x]; x++) {
     for (var y = 0, title; title = input.titleRow[y]; y++) {
       titleToDom(title);
@@ -80,7 +78,7 @@ Blockly.Xml.blockToDom_ = function(block) {
     var commentElement = document.createElement('comment');
     var commentText = document.createTextNode(block.comment.getText());
     commentElement.appendChild(commentText);
-    commentElement.setAttribute('pinned', block.comment.isPinned());
+    commentElement.setAttribute('pinned', block.comment.isVisible());
     var xy = block.comment.getBubbleLocation();
     commentElement.setAttribute('x', xy.x);
     commentElement.setAttribute('y', xy.y);
@@ -227,12 +225,12 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
   var block = new Blockly.Block(workspace, prototypeName);
   block.initSvg();
 
+  var blockChild = null;
   for (var x = 0, xmlChild; xmlChild = xmlBlock.childNodes[x]; x++) {
     if (xmlChild.nodeType == 3 && xmlChild.data.match(/^\s*$/)) {
       // Extra whitespace between tags does not concern us.
       continue;
     }
-    var blockChild = null;
     var input;
 
     // Find the first 'real' grandchild node (that isn't whitespace).
@@ -254,9 +252,9 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
         break;
       case 'comment':
         block.setCommentText(xmlChild.textContent);
-        var pinned = xmlChild.getAttribute('pinned');
-        if (pinned) {
-          block.comment.setPinned(pinned == 'true');
+        var visible = xmlChild.getAttribute('pinned');
+        if (visible) {
+          block.comment.setVisible(visible == 'true');
         }
         var bubbleX = parseInt(xmlChild.getAttribute('x'), 10);
         var bubbleY = parseInt(xmlChild.getAttribute('y'), 10);
@@ -336,7 +334,11 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
     block.setDisabled(disabled == 'true');
   }
 
-  block.render();
+  if (!blockChild) {
+    // Rendering a block renders all those above it.
+    // Therefore one only needs to render the leaf blocks.
+    block.render();
+  }
   return block;
 };
 

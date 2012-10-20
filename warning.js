@@ -21,6 +21,7 @@
  * @fileoverview Object representing a warning.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for a warning.
@@ -30,8 +31,6 @@
 Blockly.Warning = function(block) {
   this.block_ = block;
   this.createIcon_();
-
-  this.setPinned(false);
 };
 
 /**
@@ -80,12 +79,6 @@ Blockly.Warning.prototype.relativeLeft_ = -100;
 Blockly.Warning.prototype.relativeTop_ = -120;
 
 /**
- * Is the warning always visible?
- * @private
- */
-Blockly.Warning.prototype.isPinned_ = false;
-
-/**
  * Create the icon on the block.
  * @private
  */
@@ -100,7 +93,8 @@ Blockly.Warning.prototype.createIcon_ = function() {
       {'class': 'blocklyIconGroup'}, null);
   var iconShield = Blockly.createSvgElement('path',
       {'class': 'blocklyIconShield',
-       d: 'M 2,15 Q -1,15 0.5,12 L 6.5,1.7 Q 8,-1 9.5,1.7 L 15.5,12 Q 17,15 14,15 z'},
+       d: 'M 2,15 Q -1,15 0.5,12 L 6.5,1.7 Q 8,-1 9.5,1.7 L 15.5,12 ' +
+       'Q 17,15 14,15 z'},
       this.iconGroup_);
   this.iconMark_ = Blockly.createSvgElement('text',
       {'class': 'blocklyIconMark',
@@ -109,8 +103,6 @@ Blockly.Warning.prototype.createIcon_ = function() {
   this.iconMark_.appendChild(Blockly.svgDoc.createTextNode('!'));
   this.block_.getSvgRoot().appendChild(this.iconGroup_);
   Blockly.bindEvent_(this.iconGroup_, 'mouseup', this, this.iconClick_);
-  Blockly.bindEvent_(this.iconGroup_, 'mouseover', this, this.iconMouseOver_);
-  Blockly.bindEvent_(this.iconGroup_, 'mouseout', this, this.iconMouseOut_);
 };
 
 /**
@@ -133,41 +125,19 @@ Blockly.Warning.prototype.textToDom_ = function(text) {
 };
 
 /**
- * Is the warning bubble always visible?
- * @return {boolean} True if the bubble should be always visible.
- */
-Blockly.Warning.prototype.isPinned = function() {
-  return this.isPinned_;
-};
-
-/**
- * Set whether the warning bubble is always visible or not.
- * @param {boolean} pinned True if the bubble should be always visible.
- */
-Blockly.Warning.prototype.setPinned = function(pinned) {
-  this.isPinned_ = pinned;
-  this.iconMark_.style.fill = pinned ? '#fff' : '';
-  if (this.bubble_) {
-    this.bubble_.setDisabled(!this.isPinned_);
-  }
-};
-
-/**
  * Is the warning bubble visible?
  * @return {boolean} True if the bubble is visible.
- * @private
  */
-Blockly.Warning.prototype.isVisible_ = function() {
+Blockly.Warning.prototype.isVisible = function() {
   return !!this.bubble_;
 };
 
 /**
  * Show or hide the warning bubble.
  * @param {boolean} visible True if the bubble should be visible.
- * @private
  */
-Blockly.Warning.prototype.setVisible_ = function(visible) {
-  if (visible == this.isVisible_()) {
+Blockly.Warning.prototype.setVisible = function(visible) {
+  if (visible == this.isVisible()) {
     // No change.
     return;
   }
@@ -186,7 +156,6 @@ Blockly.Warning.prototype.setVisible_ = function(visible) {
         textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
       }
     }
-    this.bubble_.setDisabled(!this.isPinned_);
     this.updateColour();
   } else {
     // Destroy the bubble.
@@ -198,34 +167,12 @@ Blockly.Warning.prototype.setVisible_ = function(visible) {
 };
 
 /**
- * Clicking on the icon toggles if the bubble is pinned.
+ * Clicking on the icon toggles if the bubble is visible.
  * @param {!Event} e Mouse click event.
  * @private
  */
 Blockly.Warning.prototype.iconClick_ = function(e) {
-  this.setPinned(!this.isPinned_);
-};
-
-/**
- * Mousing over the icon makes the bubble visible.
- * @param {!Event} e Mouse over event.
- * @private
- */
-Blockly.Warning.prototype.iconMouseOver_ = function(e) {
-  if (!this.isPinned_ && Blockly.Block.dragMode_ == 0) {
-    this.setVisible_(true);
-  }
-};
-
-/**
- * Mousing off of the icon hides the bubble (unless it is pinned).
- * @param {!Event} e Mouse out event.
- * @private
- */
-Blockly.Warning.prototype.iconMouseOut_ = function(e) {
-  if (!this.isPinned_ && Blockly.Block.dragMode_ == 0) {
-    this.setVisible_(false);
-  }
+  this.setVisible(!this.isVisible());
 };
 
 /**
@@ -243,7 +190,7 @@ Blockly.Warning.prototype.bodyFocus_ = function(e) {
  * @param {number} y Vertical offset from block.
  */
 Blockly.Warning.prototype.setBubbleLocation = function(x, y) {
-  if (this.isVisible_()) {
+  if (this.isVisible()) {
     this.bubble_.setBubbleLocation(x, y);
   } else {
     this.relativeLeft_ = x;
@@ -257,9 +204,9 @@ Blockly.Warning.prototype.setBubbleLocation = function(x, y) {
  */
 Blockly.Warning.prototype.setText = function(text) {
   this.text_ = text;
-  if (this.isVisible_()) {
-    this.setVisible_(false);
-    this.setVisible_(true);
+  if (this.isVisible()) {
+    this.setVisible(false);
+    this.setVisible(true);
   }
 };
 
@@ -267,7 +214,7 @@ Blockly.Warning.prototype.setText = function(text) {
  * Change the colour of a warning to match its block.
  */
 Blockly.Warning.prototype.updateColour = function() {
-  if (this.isVisible_()) {
+  if (this.isVisible()) {
     var hexColour = Blockly.makeColour(this.block_.getColour());
     this.bubble_.setColour(hexColour);
   }
@@ -281,7 +228,7 @@ Blockly.Warning.prototype.destroy = function() {
   this.iconGroup_.parentNode.removeChild(this.iconGroup_);
   this.iconGroup_ = null;
   // Destroy and unlink the bubble.
-  this.setVisible_(false);
+  this.setVisible(false);
   // Disconnect links between the block and the warning.
   this.block_.warning = null;
   this.block_ = null;
@@ -289,25 +236,30 @@ Blockly.Warning.prototype.destroy = function() {
 
 /**
  * Render the icon for this warning.
- * @param {number} titleX Horizontal offset at which to position the icon.
- * @return {number} Width of icon.
+ * @param {number} cursorX Horizontal offset at which to position the icon.
+ * @return {number} Horizontal offset for next item to draw.
  */
-Blockly.Warning.prototype.renderIcon = function(titleX) {
+Blockly.Warning.prototype.renderIcon = function(cursorX) {
   if (this.block_.collapsed) {
     this.iconGroup_.setAttribute('display', 'none');
-    return 0;
+    return cursorX;
   }
   this.iconGroup_.setAttribute('display', 'block');
 
   var TOP_MARGIN = 5;
   var diameter = 2 * Blockly.Warning.ICON_RADIUS;
   if (Blockly.RTL) {
-    titleX -= diameter;
+    cursorX -= diameter;
   }
   this.iconGroup_.setAttribute('transform',
-      'translate(' + titleX + ', ' + TOP_MARGIN + ')');
+      'translate(' + cursorX + ', ' + TOP_MARGIN + ')');
   this.computeIconLocation();
-  return diameter;
+  if (Blockly.RTL) {
+    cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
+  } else {
+    cursorX += diameter + Blockly.BlockSvg.SEP_SPACE_X;
+  }
+  return cursorX;
 };
 
 /**
@@ -318,7 +270,7 @@ Blockly.Warning.prototype.renderIcon = function(titleX) {
 Blockly.Warning.prototype.setIconLocation = function(x, y) {
   this.iconX_ = x;
   this.iconY_ = y;
-  if (this.isVisible_()) {
+  if (this.isVisible()) {
     this.bubble_.setAnchorLocation(x, y);
   }
 };

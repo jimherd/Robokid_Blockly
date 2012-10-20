@@ -23,6 +23,7 @@
  * one can't have a variable and a procedure of the same name.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for a database of variables.
@@ -164,9 +165,10 @@ Blockly.Variables.generateUniqueName = function() {
       if (inUse) {
         // Try the next potential name.
         if (potName.charAt(0) === 'z') {
-          // Reached the end of the character sequence so back to 'i' but with a new suffix.
+          // Reached the end of the character sequence so back to 'a' but with
+          // a new suffix.
           nameSuffix++;
-          potName = 'i';
+          potName = 'a';
         } else {
           potName = String.fromCharCode(potName.charCodeAt(0) + 1);
           if (potName.charAt(0) == 'l') {

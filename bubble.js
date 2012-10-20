@@ -21,6 +21,7 @@
  * @fileoverview Object representing a UI bubble.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for UI bubble.
@@ -30,7 +31,7 @@
  * @param {number} anchorY Absolute vertical position of bubbles anchor point.
  * @param {number} relativeX Distance between anchorX and bubble center.
  * @param {number} relativeY Distance between anchorY and bubble center.
- * @param {?number} bubblewidth Width of bubble, or null if not resizable.
+ * @param {?number} bubbleWidth Width of bubble, or null if not resizable.
  * @param {?number} bubbleHeight Height of bubble, or null if not resizable.
  * @constructor
  */
@@ -340,18 +341,6 @@ Blockly.Bubble.prototype.registerResizeEvent = function(thisObject, callback) {
 Blockly.Bubble.prototype.promote_ = function() {
   var svgGroup = this.bubbleGroup_.parentNode;
   svgGroup.appendChild(this.bubbleGroup_);
-};
-
-/**
- * Change the bubble to be enabled or disabled.
- * @param {boolean} disabled True if disabled.
- */
-Blockly.Bubble.prototype.setDisabled = function(disabled) {
-  if (disabled) {
-    this.bubbleGroup_.setAttribute('filter', 'url(#blocklyGrayscale)');
-  } else {
-    this.bubbleGroup_.removeAttribute('filter');
-  }
 };
 
 /**

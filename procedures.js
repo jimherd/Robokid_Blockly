@@ -21,6 +21,7 @@
  * @fileoverview Utility functions for handling procedures.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  */
@@ -123,6 +124,7 @@ Blockly.Procedures.isLegalName = function(name, workspace, opt_exclude) {
  * Rename a procedure.  Called by the editable field.
  * @param {string} text The proposed new name.
  * @return {?string} The accepted name, or null if rejected.
+ * @this {!Blockly.FieldVariable}
  */
 Blockly.Procedures.rename = function(text) {
   if (!this.sourceBlock_.editable) {
@@ -207,7 +209,7 @@ Blockly.Procedures.refreshFlyoutCategory = function() {
  * @return {!Array.<!Blockly.Block>} Array of caller blocks.
  */
 Blockly.Procedures.getCallers = function(name, workspace) {
-  callers = [];
+  var callers = [];
   var blocks = workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
   for (var x = 0; x < blocks.length; x++) {
@@ -250,4 +252,24 @@ Blockly.Procedures.mutateCallers = function(name, workspace,
   for (var x = 0; x < callers.length; x++) {
     callers[x].setProcedureParameters(paramNames, paramIds);
   }
+};
+
+/**
+ * Find the definition block for the named procedure.
+ * @param {string} name Name of procedure.
+ * @param {!Blockly.Workspace} workspace The workspace to search.
+ * @return {Blockly.Block} The procedure definition block, or null not found.
+ */
+Blockly.Procedures.getDefinition = function(name, workspace) {
+  var blocks = workspace.getAllBlocks(false);
+  for (var x = 0; x < blocks.length; x++) {
+    var func = blocks[x].getProcedureDef;
+    if (func) {
+      var tuple = func.call(blocks[x]);
+      if (tuple && Blockly.Names.equals(tuple[0], name)) {
+        return blocks[x];
+      }
+    }
+  }
+  return null;
 };

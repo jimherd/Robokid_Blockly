@@ -21,26 +21,28 @@
  * @fileoverview Image field.  Used for titles, labels, etc.
  * @author fraser@google.com (Neil Fraser)
  */
+'use strict';
 
 /**
  * Class for an image.
  * @param {string} src The URL of the image.
- * @param {number} height Height of the image.
  * @param {number} width Width of the image.
+ * @param {number} height Height of the image.
  * @constructor
  */
-Blockly.FieldImage = function(src, height, width) {
+Blockly.FieldImage = function(src, width, height) {
   this.sourceBlock_ = null;
   // Ensure height and width are numbers.  Strings are bad at math.
   height = Number(height);
   width = Number(width);
-  this.size_ = {height: height, width: width};
+  this.size_ = {height: height + 10, width: width};
   // Build the DOM.
+  var offsetY = 6 - Blockly.BlockSvg.TITLE_HEIGHT;
   this.group_ = Blockly.createSvgElement('g', {}, null);
   this.imageElement_ = Blockly.createSvgElement('image',
       {height: height + 'px',
        width: width + 'px',
-       y: 6 - Blockly.BlockSvg.TITLE_HEIGHT}, this.group_);
+       y: offsetY}, this.group_);
   this.setText(src);
   var isGecko = window.navigator.userAgent.indexOf('Gecko/') != -1;
   if (isGecko) {
@@ -49,18 +51,20 @@ Blockly.FieldImage = function(src, height, width) {
     this.rectElement_ = Blockly.createSvgElement('rect',
         {height: height + 'px',
          width: width + 'px',
-         y: 6 - Blockly.BlockSvg.TITLE_HEIGHT,
+         y: offsetY,
          'fill-opacity': 0}, this.group_);
   }
 };
 
 // FieldImage is a subclass of Field.
 Blockly.FieldImage.prototype = new Blockly.Field(null);
+Blockly.FieldImage.constructor = Blockly.FieldImage;
 
 /**
  * Rectangular mask used by Firefox.
  * @type {Element}
- */ 
+ * @private
+ */
 Blockly.FieldImage.prototype.rectElement_ = null;
 
 /**
@@ -115,7 +119,7 @@ Blockly.FieldImage.prototype.getText = function() {
 
 /**
  * Set the source URL of this image.
- * @param {string} text New text.
+ * @param {string} src New source.
  */
 Blockly.FieldImage.prototype.setText = function(src) {
   this.src_ = src;
