@@ -31,22 +31,30 @@ if (!Blockly.Language) Blockly.Language = {};
 	helpUrl: Blockly.LANG_ROBOKID_LEDS_SET_HELPURL,
 	init: function() {
 		this.setColour(210);
-		this.appendTitle('LEDS');
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
-		this.appendTitle('LED_A:');
-		var LED_dropdown_A = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
-		this.appendTitle(LED_dropdown_A, 'LED_A_mode');
-		this.appendTitle('LED_B:');
-		var LED_dropdown_B = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
-		this.appendTitle(LED_dropdown_B, 'LED_B_mode');
-		this.appendTitle('LED_C:');
-		var LED_dropdown_C = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
-		this.appendTitle(LED_dropdown_C, 'LED_C_mode');
-		this.appendTitle('LED_D:');
-		var LED_dropdown_D = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
-		this.appendTitle(LED_dropdown_D, 'LED_D_mode');
 		this.setTooltip('Define state of the four LEDs on Robokid');
+		this.setInputsInline(true);
+		
+		var LED_dropdown_A = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);	
+		var LED_dropdown_B = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
+		var LED_dropdown_C = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
+		var LED_dropdown_D = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
+		
+		this.appendDummyInput()
+			.appendTitle("LEDS ");			
+		this.appendDummyInput()	
+			.appendTitle('LED_A:')
+			.appendTitle(LED_dropdown_A, 'LED_A_mode');
+		this.appendDummyInput()	
+			.appendTitle('LED_B:')
+			.appendTitle(LED_dropdown_B, 'LED_B_mode');
+		this.appendDummyInput()	
+			.appendTitle('LED_C:')
+			.appendTitle(LED_dropdown_C, 'LED_C_mode');
+		this.appendDummyInput()	
+			.appendTitle('LED_D:')
+			.appendTitle(LED_dropdown_D, 'LED_D_mode');
 	}
  };
  
@@ -55,13 +63,19 @@ if (!Blockly.Language) Blockly.Language = {};
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
 		this.setColour(210);
-		this.appendTitle('Set speed');
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 		this.setInputsInline(true);
-		this.appendInput('Left %', Blockly.INPUT_VALUE, 'MOTOR_LEFT', null);
-		this.appendInput('Right %', Blockly.INPUT_VALUE, 'MOTOR_RIGHT', null);
 		this.setTooltip('Set power on each of the two motors as a % of full power');
+		
+		this.appendDummyInput()
+			.appendTitle("Set Speed ");
+		this.appendValueInput('Motor_LEFT')
+			.setCheck(Number)
+			.appendTitle("Left %");
+		this.appendValueInput('Motor_RIGHT')
+			.setCheck(Number)
+			.appendTitle("Right %");		
 	}
 };
 
@@ -70,17 +84,23 @@ if (!Blockly.Language) Blockly.Language = {};
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
 		this.setColour(210);
-		this.appendTitle('Motors');
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 		this.setInputsInline(true);	
-		this.appendTitle('Left motor :');		
-		var left_motor = new Blockly.FieldDropdown([['off','off'], ['forward','forward'], ['backward','backward']]);
-		this.appendTitle(left_motor, 'left_motor');
-		this.appendTitle('Right motor :');	
-		var right_motor = new Blockly.FieldDropdown([['off','off'], ['forward','forward'], ['backward','backward']]);
-		this.appendTitle(right_motor, 'right_motor');
 		this.setTooltip('Command motors to go or stop');
+		
+		var left_motor = new Blockly.FieldDropdown([['off','off'], ['forward','forward'], ['backward','backward']]);		
+		var right_motor = new Blockly.FieldDropdown([['off','off'], ['forward','forward'], ['backward','backward']]);
+		
+		this.appendDummyInput()
+			.appendTitle("Motors ");	
+
+		this.appendDummyInput()	
+			.appendTitle('Left Motor:')
+			.appendTitle(left_motor, 'left_motor');
+		this.appendDummyInput()	
+			.appendTitle('Right Motor:')
+			.appendTitle(right_motor, 'right_motor');		
 	}
 };
 
@@ -91,9 +111,11 @@ Blockly.Language.read_sensor = {
   init: function() {
     this.setColour(210);
     this.setOutput(true, Boolean);
-    var dropdown = new Blockly.FieldDropdown(this.SENSORS);
-    this.appendTitle(dropdown, 'SENSOR');
     this.setTooltip('Read value from one of the robots 13 sensors');
+	
+    var dropdown = new Blockly.FieldDropdown(this.SENSORS);
+	this.appendDummyInput()	
+		.appendTitle(dropdown, 'SENSOR');
   }
 };
 	
@@ -120,16 +142,19 @@ Blockly.Language.comment = {
   helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
     this.setColour(210);
-    this.appendTitle('Comment');
 	this.setPreviousStatement(true);
 	this.setNextStatement(true);
-	this.appendTitle('\u201C');
-    this.appendTitle(new Blockly.FieldTextInput('Comment here'), 'TEXT');
-    this.appendTitle('\u201D');
     this.setTooltip('Comment for the code :: does not generate Robokid code');
+	
+	this.appendDummyInput()	
+		.appendTitle('\u201C')
+		.appendTitle(new Blockly.FieldTextInput('Comment here'), 'TEXT')
+		.appendTitle('\u201D');
+
   }
 };
 
+/*
 Blockly.Language.ubasic_for = {
   // For loop.
   category: Blockly.LANG_CATEGORY_ROBOKID,
@@ -160,4 +185,5 @@ Blockly.Language.ubasic_for = {
     }
   }
 };
+*/
  
