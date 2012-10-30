@@ -33,7 +33,12 @@ Blockly.Robokid = Blockly.Generator.get('Robokid');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.Robokid.RESERVED_WORDS_ =
+ 
+ if (!Blockly.Robokid.RESERVED_WORDS_) {
+  Blockly.Dart.RESERVED_WORDS_ = '';
+}
+
+Blockly.Robokid.RESERVED_WORDS_ +=
     // import keyword
     // print ','.join(keyword.kwlist)
     // http://docs.Python.org/reference/lexical_analysis.html#keywords

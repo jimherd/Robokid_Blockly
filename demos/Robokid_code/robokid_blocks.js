@@ -35,7 +35,7 @@ if (!Blockly.Language) Blockly.Language = {};
 		this.setNextStatement(true);
 		this.setTooltip('Define state of the four LEDs on Robokid');
 		this.setInputsInline(true);
-		
+
 		var LED_dropdown_A = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);	
 		var LED_dropdown_B = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
 		var LED_dropdown_C = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
@@ -154,36 +154,43 @@ Blockly.Language.comment = {
   }
 };
 
-/*
 Blockly.Language.ubasic_for = {
   // For loop.
   category: Blockly.LANG_CATEGORY_ROBOKID,
   helpUrl: Blockly.LANG_CONTROLS_FOR_HELPURL,
   init: function() {
-    this.setColour(210);
-    this.appendTitle(Blockly.LANG_CONTROLS_FOR_TITLE_COUNT);
-    this.appendInput(Blockly.LANG_CONTROLS_FOR_INPUT_WITH, Blockly.LOCAL_VARIABLE, 'VAR').setText(Blockly.LANG_CONTROLS_FOR_INPUT_VAR);
-    this.appendInput(Blockly.LANG_CONTROLS_FOR_INPUT_FROM, Blockly.INPUT_VALUE, 'FROM', Number);
-    this.appendInput(Blockly.LANG_CONTROLS_FOR_INPUT_TO, Blockly.INPUT_VALUE, 'TO', Number);
-    this.appendInput(Blockly.LANG_CONTROLS_FOR_INPUT_DO, Blockly.NEXT_STATEMENT, 'DO');
-    this.setPreviousStatement(true);
+    this.setColour(210);    
+	this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setInputsInline(true);
+
+    this.appendDummyInput()
+        .appendTitle(Blockly.LANG_CONTROLS_FOR_INPUT_WITH)
+        .appendTitle(new Blockly.FieldVariable(null), 'VAR');
+    this.appendValueInput('FROM')
+        .setCheck(Number)
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendTitle(Blockly.LANG_CONTROLS_FOR_INPUT_FROM);
+    this.appendValueInput('TO')
+        .setCheck(Number)
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendTitle(Blockly.LANG_CONTROLS_FOR_INPUT_TO);
+    this.appendStatementInput('DO')
+        .appendTitle(Blockly.LANG_CONTROLS_FOR_INPUT_DO);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
       return Blockly.LANG_CONTROLS_FOR_TOOLTIP_1.replace('%1',
-          thisBlock.getInputVariable('VAR'));
+          thisBlock.getTitleValue('VAR'));
     });
   },
   getVars: function() {
-    return [this.getInputVariable('VAR')];
+    return [this.getTitleValue('VAR')];
   },
   renameVar: function(oldName, newName) {
-    if (Blockly.Names.equals(oldName, this.getInputVariable('VAR'))) {
-      this.setInputVariable('VAR', newName);
+    if (Blockly.Names.equals(oldName, this.getTitleValue('VAR'))) {
+      this.setTitleValue(newName, 'VAR');
     }
   }
 };
-*/
- 
+

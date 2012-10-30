@@ -30,8 +30,10 @@ Blockly.Robokid = Blockly.Generator.get('Robokid');
 Blockly.Robokid.LEDS_set = function() {
   // leds command for 4 LEDs on the Robokid robot
   // Todo : posible use of an array rather than individual variables
-  var LED_A_value, LED_B_value, LED_C_value, LED_D_value;
-    switch (this.getTitleValue('LED_A_mode')) {
+/*  
+  var LED_A_value = Blockly.Robokid.valueToCode(this, 'LED_A_mode',
+      Blockly.Robokid.ORDER_NONE) || '0';
+    switch (LED_A_value) {
 		case 'off':
 			LED_A_value = '0';
 			break;
@@ -45,7 +47,9 @@ Blockly.Robokid.LEDS_set = function() {
 			LED_A_value = '3';
 			break;
   }
-    switch (this.getTitleValue('LED_B_mode')) {
+  var LED_B_value = Blockly.Robokid.valueToCode(this, 'LED_B_mode',
+      Blockly.Robokid.ORDER_NONE) || '0';
+    switch (LED_B_value) {
 		case 'off':
 			LED_B_value = '0';
 			break;
@@ -59,7 +63,9 @@ Blockly.Robokid.LEDS_set = function() {
 			LED_B_value = '3';
 			break;
   }
-    switch (this.getTitleValue('LED_C_mode')) {
+  var LED_C_value = Blockly.Robokid.valueToCode(this, 'LED_C_mode',
+      Blockly.Robokid.ORDER_NONE) || '0';
+    switch (LED_C_value) {
 		case 'off':
 			LED_C_value = '0';
 			break;
@@ -73,7 +79,9 @@ Blockly.Robokid.LEDS_set = function() {
 			LED_C_value = '3';
 			break;
   }
-    switch (this.getTitleValue('LED_D_mode')) {
+  var LED_A_value = Blockly.Robokid.valueToCode(this, 'LED_D_mode',
+      Blockly.Robokid.ORDER_NONE) || '0';
+    switch (LED_D_value) {
 		case 'off':
 			LED_D_value = '0';
 			break;
@@ -87,10 +95,15 @@ Blockly.Robokid.LEDS_set = function() {
 			LED_D_value = '3';
 			break;
   }
-  return 'leds ' + LED_A_value  + ' ' + LED_B_value + ' ' + LED_C_value + 
+  
+  var code = 'leds ' + LED_A_value  + ' ' + LED_B_value + ' ' + LED_C_value + 
 			' ' + LED_D_value +';\n';
+*/
+var code = 'LEDs\n';
+  return [code, Blockly.Robokid.ORDER_MEMBER];
 };
 
+/*
 Blockly.Robokid.set_speed = function() {
   // 
   var argument0 = Blockly.Robokid.valueToCode(this, 'MOTOR_LEFT',
@@ -171,5 +184,6 @@ Blockly.Robokid.ubasic_for = function() {
   }
   return code;
 };
+*/
 
 
