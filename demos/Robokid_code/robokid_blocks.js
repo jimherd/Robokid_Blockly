@@ -146,11 +146,11 @@ Blockly.Language.comment = {
 	this.setNextStatement(true);
     this.setTooltip('Comment for the code :: does not generate Robokid code');
 	
+	var textInput = new Blockly.FieldTextInput('Comment here');
 	this.appendDummyInput()	
 		.appendTitle('\u201C')
-		.appendTitle(new Blockly.FieldTextInput('Comment here'), 'TEXT')
+		.appendTitle(textInput, 'TEXT')
 		.appendTitle('\u201D');
-
   }
 };
 

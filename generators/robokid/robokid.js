@@ -24,13 +24,15 @@
  * to language files.
  */
 
+'use strict';
+ 
 Blockly.Robokid = Blockly.Generator.get('Robokid');
 
 
 Blockly.Robokid.LEDS_set = function() {
   // leds command for 4 LEDs on the Robokid robot
   // Todo : posible use of an array rather than individual variables
-/*  
+  
   var LED_A_value = Blockly.Robokid.valueToCode(this, 'LED_A_mode',
       Blockly.Robokid.ORDER_NONE) || '0';
     switch (LED_A_value) {
@@ -98,9 +100,9 @@ Blockly.Robokid.LEDS_set = function() {
   
   var code = 'leds ' + LED_A_value  + ' ' + LED_B_value + ' ' + LED_C_value + 
 			' ' + LED_D_value +';\n';
-*/
-var code = 'LEDs\n';
-  return [code, Blockly.Robokid.ORDER_MEMBER];
+
+//  return [code, Blockly.Robokid.ORDER_MEMBER];
+	return code;
 };
 
 /*
