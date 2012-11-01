@@ -81,7 +81,7 @@ Blockly.Robokid.LEDS_set = function() {
 			LED_C_value = '3';
 			break;
   }
-  var LED_A_value = Blockly.Robokid.valueToCode(this, 'LED_D_mode',
+  var LED_D_value = Blockly.Robokid.valueToCode(this, 'LED_D_mode',
       Blockly.Robokid.ORDER_NONE) || '0';
     switch (LED_D_value) {
 		case 'off':
@@ -101,22 +101,23 @@ Blockly.Robokid.LEDS_set = function() {
   var code = 'leds ' + LED_A_value  + ' ' + LED_B_value + ' ' + LED_C_value + 
 			' ' + LED_D_value +';\n';
 
-//  return [code, Blockly.Robokid.ORDER_MEMBER];
 	return code;
 };
 
-/*
+
 Blockly.Robokid.set_speed = function() {
   // 
-  var argument0 = Blockly.Robokid.valueToCode(this, 'MOTOR_LEFT',
+  var argument0 = Blockly.Robokid.valueToCode(this, 'Motor_L',
       Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
 	if (argument0 > 100) {
 		argument0 = '0';
 	}
-  var argument1 = Blockly.Robokid.valueToCode(this, 'MOTOR_RIGHT',
+	var argument1 = Blockly.Robokid.valueToCode(this, 'Motor_R',
       Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
 	  
-  return 'speed ' + argument0 + ' ' + argument1 + ';\n';
+	var code;
+	code = 'speed ' + argument0 + ' ' + argument1 + ';\n';
+	return code;
 };
 
 Blockly.Robokid.motors = function() {
@@ -186,6 +187,6 @@ Blockly.Robokid.ubasic_for = function() {
   }
   return code;
 };
-*/
+
 
 

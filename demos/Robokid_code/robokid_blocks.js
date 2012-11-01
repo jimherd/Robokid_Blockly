@@ -70,11 +70,11 @@ if (!Blockly.Language) Blockly.Language = {};
 		
 		this.appendDummyInput()
 			.appendTitle("Set Speed ");
-		this.appendValueInput('Motor_LEFT')
-			.setCheck(Number)
+		this.appendValueInput('Motor_L')
+//			.setCheck(Number)
 			.appendTitle("Left %");
-		this.appendValueInput('Motor_RIGHT')
-			.setCheck(Number)
+		this.appendValueInput('Motor_R')
+//			.setCheck(Number)
 			.appendTitle("Right %");		
 	}
 };

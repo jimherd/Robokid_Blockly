@@ -28,7 +28,7 @@ Blockly.Robokid = Blockly.Generator.get('Robokid');
 
 Blockly.Robokid.math_number = function() {
   // Numeric value.
-  var code = window.parseFloat(this.getTitleText('NUM'));
+  var code = window.parseFloat(this.getTitleValue('NUM'));
   return [code, Blockly.Robokid.ORDER_UNARY_SIGN];
 };
 
@@ -56,7 +56,7 @@ Blockly.Robokid.math_change = function() {
   // Add to a variable in place.
   var argument0 = Blockly.Robokid.valueToCode(this, 'DELTA',
       Blockly.Robokid.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Robokid.variableDB_.getName(this.getTitleText('VAR'),
+  var varName = Blockly.Robokid.variableDB_.getName(this.getTitleValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   return varName + ' = (' + varName + ' if type(' + varName + ') in (int, float) else 0)' +
       ' + ' + argument0 + '\n';
@@ -64,55 +64,62 @@ Blockly.Robokid.math_change = function() {
 
 Blockly.Robokid.math_single = function() {
   // Math operators with single operand.
-  if (operator == 'NEG') {
-    var argNeg = Blockly.Robokid.valueToCode(this, 'NUM',
-        Blockly.Robokid.ORDER_UNARY_SIGN) || '0';
-    return ['-' + argNeg, Blockly.Robokid.ORDER_UNARY_SIGN];
-  }
-  Blockly.Robokid.definitions_['import_math'] = 'import math';
-  var argNaked = Blockly.Robokid.valueToCode(this, 'NUM',
-      Blockly.Robokid.ORDER_NONE) || '0';
-  var argParen = Blockly.Robokid.valueToCode(this, 'NUM',
-      Blockly.Robokid.ORDER_MULTIPLICATIVE) || '0';
+ 
   var operator = this.getTitleValue('OP');
   var code;
-  // First, handle cases which generate values that don't need parentheses wrapping the code.
+  var arg;
+  if (operator == 'NEG') {
+    // Negation is a special case given its different operator precedence.
+    var code = Blockly.Robokid.valueToCode(this, 'NUM',
+        Blockly.Robokid.ORDER_UNARY_SIGN) || '0';
+    return ['-' + code, Blockly.Robokid.ORDER_UNARY_SIGN];
+  }
+  Blockly.Robokid.definitions_['import_math'] = 'import math';
+  if (operator == 'SIN' || operator == 'COS' || operator == 'TAN') {
+    arg = Blockly.Robokid.valueToCode(this, 'NUM',
+        Blockly.Robokid.ORDER_MULTIPLICATIVE) || '0';
+  } else {
+    arg = Blockly.Robokid.valueToCode(this, 'NUM',
+        Blockly.Robokid.ORDER_NONE) || '0';
+  }
+  // First, handle cases which generate values that don't need parentheses
+  // wrapping the code.
   switch (operator) {
     case 'ABS':
-      code = 'math.fabs(' + argNaked + ')';
+      code = 'math.fabs(' + arg + ')';
       break;
     case 'ROOT':
-      code = 'math.sqrt(' + argNaked + ')';
+      code = 'math.sqrt(' + arg + ')';
       break;
     case 'LN':
-      code = 'math.log(' + argNaked + ')';
+      code = 'math.log(' + arg + ')';
       break;
     case 'LOG10':
-      code = 'math.log10(' + argNaked + ')';
+      code = 'math.log10(' + arg + ')';
       break;
     case 'EXP':
-      code = 'math.exp(' + argNaked + ')';
+      code = 'math.exp(' + arg + ')';
       break;
-    case '10POW':
-      code = 'math.pow(10,' + argNaked + ')';
+    case 'POW10':
+      code = 'math.pow(10,' + arg + ')';
       break;
     case 'ROUND':
-      code = 'round(' + argNaked + ')';
+      code = 'round(' + arg + ')';
       break;
     case 'ROUNDUP':
-      code = 'math.ceil(' + argNaked + ')';
+      code = 'math.ceil(' + arg + ')';
       break;
     case 'ROUNDDOWN':
-      code = 'math.floor(' + argNaked + ')';
+      code = 'math.floor(' + arg + ')';
       break;
     case 'SIN':
-      code = 'math.sin(' + argParen + ' / 180 * Math.PI)';
+      code = 'math.sin(' + arg + ' / 180.0 * math.pi)';
       break;
     case 'COS':
-      code = 'math.cos(' + argParen + ' / 180 * Math.PI)';
+      code = 'math.cos(' + arg + ' / 180.0 * math.pi)';
       break;
     case 'TAN':
-      code = 'math.tan(' + argParen + ' / 180 * Math.PI)';
+      code = 'math.tan(' + arg + ' / 180.0 * math.pi)';
       break;
   }
   if (code) {
@@ -121,16 +128,16 @@ Blockly.Robokid.math_single = function() {
   // Second, handle cases which generate values that may need parentheses wrapping the code.
   switch (operator) {
     case 'ASIN':
-      code = 'math.asin(' + argNaked + ') / Math.PI * 180';
+      code = 'math.asin(' + arg + ') / math.pi * 180';
       break;
     case 'ACOS':
-      code = 'math.acos(' + argNaked + ') / Math.PI * 180';
+      code = 'math.acos(' + arg + ') / math.pi * 180';
       break;
     case 'ATAN':
-      code = 'math.atan(' + argNaked + ') / Math.PI * 180';
+      code = 'math.atan(' + arg + ') / math.pi * 180';
       break;
     default:
-      throw 'Unknown math operator.';
+      throw 'Unknown math operator: ' + operator;
   }
   return [code, Blockly.Robokid.ORDER_MULTIPLICATIVE];
 };

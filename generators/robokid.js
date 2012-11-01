@@ -23,6 +23,7 @@
  * Due to the frequency of long strings, the 80-column wrap rule need not apply
  * to language files.
  */
+'use strict';
 
 Blockly.Robokid = Blockly.Generator.get('Robokid');
 
@@ -35,9 +36,9 @@ Blockly.Robokid = Blockly.Generator.get('Robokid');
  */
  
  if (!Blockly.Robokid.RESERVED_WORDS_) {
-  Blockly.Dart.RESERVED_WORDS_ = '';
+  Blockly.Robokid.RESERVED_WORDS_ = '';
 }
-
+/*
 Blockly.Robokid.RESERVED_WORDS_ +=
     // import keyword
     // print ','.join(keyword.kwlist)
@@ -46,8 +47,8 @@ Blockly.Robokid.RESERVED_WORDS_ +=
     //http://docs.Python.org/library/constants.html
     'True,False,None,NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
     // http://docs.Python.org/library/functions.html
-    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern';
-
+    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern,';
+*/
 /**
  * Order of operation ENUMs.
  * http://docs.Robokid.org/reference/expressions.html#summary
@@ -84,7 +85,7 @@ Blockly.Robokid.init = function() {
   if (Blockly.Variables) {
     if (!Blockly.Robokid.variableDB_) {
       Blockly.Robokid.variableDB_ =
-          new Blockly.Names(Blockly.Robokid.RESERVED_WORDS_.split(','));
+          new Blockly.Names(Blockly.Robokid.RESERVED_WORDS_);
     } else {
       Blockly.Robokid.variableDB_.reset();
     }
@@ -164,7 +165,7 @@ Blockly.Robokid.scrub_ = function(block, code) {
     // Don't collect comments for nested statements.
     for (var x = 0; x < block.inputList.length; x++) {
       if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].targetBlock();
+        var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.Generator.allNestedComments(childBlock);
           if (comment) {
