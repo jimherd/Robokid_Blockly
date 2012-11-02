@@ -122,8 +122,9 @@ Blockly.Robokid.set_speed = function() {
 
 Blockly.Robokid.motors = function() {
   // 
-    var left_mode, right_mode;
-    switch (this.getTitleValue('left_motor')) {
+	var left_mode = Blockly.Robokid.valueToCode(this, 'left_motor',
+         Blockly.Robokid.ORDER_NONE) || '0';
+    switch (left_mode) {
 		case 'off':
 			left_mode = '0';
 			break;
@@ -134,7 +135,9 @@ Blockly.Robokid.motors = function() {
 			left_mode = '2';
 			break;
   }
-      switch (this.getTitleValue('right_motor')) {
+  	var right_mode = Blockly.Robokid.valueToCode(this, 'right_motor',
+         Blockly.Robokid.ORDER_NONE) || '0';
+      switch (right_mode) {
 		case 'off':
 			right_mode = '0';
 			break;
