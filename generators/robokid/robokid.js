@@ -33,9 +33,9 @@ Blockly.Robokid.LEDS_set = function() {
   // leds command for 4 LEDs on the Robokid robot
   // Todo : posible use of an array rather than individual variables
   
-  var LED_A_value = Blockly.Robokid.valueToCode(this, 'LED_A_mode',
-      Blockly.Robokid.ORDER_NONE) || '0';
-    switch (LED_A_value) {
+  var LED_A_value, LED_B_value, LED_C_value, LED_D_value;  
+  
+    switch (this.getTitleValue('LED_A_mode')) {
 		case 'off':
 			LED_A_value = '0';
 			break;
@@ -49,9 +49,8 @@ Blockly.Robokid.LEDS_set = function() {
 			LED_A_value = '3';
 			break;
   }
-  var LED_B_value = Blockly.Robokid.valueToCode(this, 'LED_B_mode',
-      Blockly.Robokid.ORDER_NONE) || '0';
-    switch (LED_B_value) {
+
+    switch (this.getTitleValue('LED_B_mode')) {
 		case 'off':
 			LED_B_value = '0';
 			break;
@@ -65,9 +64,8 @@ Blockly.Robokid.LEDS_set = function() {
 			LED_B_value = '3';
 			break;
   }
-  var LED_C_value = Blockly.Robokid.valueToCode(this, 'LED_C_mode',
-      Blockly.Robokid.ORDER_NONE) || '0';
-    switch (LED_C_value) {
+
+    switch (this.getTitleValue('LED_C_mode')) {
 		case 'off':
 			LED_C_value = '0';
 			break;
@@ -81,9 +79,8 @@ Blockly.Robokid.LEDS_set = function() {
 			LED_C_value = '3';
 			break;
   }
-  var LED_D_value = Blockly.Robokid.valueToCode(this, 'LED_D_mode',
-      Blockly.Robokid.ORDER_NONE) || '0';
-    switch (LED_D_value) {
+
+    switch (this.getTitleValue('LED_D_mode')) {
 		case 'off':
 			LED_D_value = '0';
 			break;
@@ -122,9 +119,8 @@ Blockly.Robokid.set_speed = function() {
 
 Blockly.Robokid.motors = function() {
   // 
-	var left_mode = Blockly.Robokid.valueToCode(this, 'left_motor',
-         Blockly.Robokid.ORDER_NONE) || '0';
-    switch (left_mode) {
+	var left_mode, right_mode;
+    switch (this.getTitleValue('left_motor')) {
 		case 'off':
 			left_mode = '0';
 			break;
@@ -135,9 +131,8 @@ Blockly.Robokid.motors = function() {
 			left_mode = '2';
 			break;
   }
-  	var right_mode = Blockly.Robokid.valueToCode(this, 'right_motor',
-         Blockly.Robokid.ORDER_NONE) || '0';
-      switch (right_mode) {
+
+      switch (this.getTitleValue('right_motor')) {
 		case 'off':
 			right_mode = '0';
 			break;
