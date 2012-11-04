@@ -38,7 +38,7 @@ Blockly.Robokid.logic_compare = function() {
 };
 
 Blockly.Robokid.logic_compare.OPERATORS = {
-  EQ: '==',
+  EQ: '=',
   NEQ: '!=',
   LT: '<',
   LTE: '<=',

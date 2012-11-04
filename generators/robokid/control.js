@@ -30,18 +30,18 @@ Blockly.Robokid.controls_if = function() {
   // If/elseif/else condition.
   var n = 0;
   var argument = Blockly.Robokid.valueToCode(this, 'IF' + n,
-      Blockly.Robokid.ORDER_NONE) || 'False';
-  var branch = Blockly.Robokid.statementToCode(this, 'DO' + n) || '  pass\n';
-  var code = 'if ' + argument + ':\n' + branch;
+      Blockly.Robokid.ORDER_NONE) || 'false';
+  var branch = Blockly.Robokid.statementToCode(this, 'DO' + n);
+  var code = 'if ' + argument + ' {\n' + branch + '};';
   for (n = 1; n <= this.elseifCount_; n++) {
     argument = Blockly.Robokid.valueToCode(this, 'IF' + n,
-        Blockly.Robokid.ORDER_NONE) || 'False';
-    branch = Blockly.Robokid.statementToCode(this, 'DO' + n) || '  pass\n';
-    code += 'elif ' + argument + ':\n' + branch;
+        Blockly.Robokid.ORDER_NONE) || 'false';
+    branch = Blockly.Robokid.statementToCode(this, 'DO' + n);
+    code += ' else if (' + argument + ') {\n' + branch + '}';
   }
   if (this.elseCount_) {
-    branch = Blockly.Robokid.statementToCode(this, 'ELSE') || '  pass\n';
-    code += 'else:\n' + branch;
+    branch = Blockly.Robokid.statementToCode(this, 'ELSE');
+    code += ' else {\n' + branch + '}';
   }
   return code + '\n';
 };
@@ -65,25 +65,45 @@ Blockly.Robokid.controls_whileUntil = function() {
 Blockly.Robokid.controls_for = function() {
   // For loop.
   var variable0 = Blockly.Robokid.variableDB_.getName(
-      this.getInputVariable('VAR'), Blockly.Variables.NAME_TYPE);
+      this.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.Robokid.valueToCode(this, 'FROM',
-      Blockly.Robokid.ORDER_NONE) || '0';
-  // If starting index is 0, omit it.
-  argument0 = (parseInt(argument0, 10) === 0) ? '' : argument0 + ', ';
+      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
   var argument1 = Blockly.Robokid.valueToCode(this, 'TO',
-      Blockly.Robokid.ORDER_ADDITIVE) || '0';
-  if (argument1.match(/^\d+$/)) {
-    // If the index is a naked number, increment it right now.
-    argument1 = parseInt(argument1, 10) + 1;
+      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+  var branch0 = Blockly.Robokid.statementToCode(this, 'DO');
+  var code;
+  if (argument0.match(/^-?\d+(\.\d+)?$/) &&
+      argument1.match(/^-?\d+(\.\d+)?$/)) {
+    // Both arguments are simple numbers.
+    var up = parseFloat(argument0) <= parseFloat(argument1);
+    code = 'for ' + variable0 + '=' + argument0  +
+       ' to ' + argument1 + ' {\n' + branch0 + '};\n';
   } else {
-    // If the index is dynamic, increment it in code.
-    argument1 += ' + 1';
+    code = '';
+    // Cache non-trivial values to variables to prevent repeated look-ups.
+    var startVar = argument0;
+    if (!argument0.match(/^\w+$/) && !argument0.match(/^-?\d+(\.\d+)?$/)) {
+      var startVar = Blockly.Robokid.variableDB_.getDistinctName(
+          variable0 + '_start', Blockly.Variables.NAME_TYPE);
+      code += 'var ' + startVar + ' = ' + argument0 + ';\n';
+    }
+    var endVar = argument1;
+    if (!argument1.match(/^\w+$/) && !argument1.match(/^-?\d+(\.\d+)?$/)) {
+      var endVar = Blockly.Robokid.variableDB_.getDistinctName(
+          variable0 + '_end', Blockly.Variables.NAME_TYPE);
+      code += 'var ' + endVar + ' = ' + argument1 + ';\n';
+    }
+    code += 'for ' + variable0 + '=' + startVar + ';\n' +
+        '    (' + startVar + ' <= ' + endVar + ') ? ' +
+        variable0 + ' <= ' + endVar + ' : ' +
+        variable0 + ' >= ' + endVar + ';\n' +
+        '    ' + variable0 +
+        ' += (' + startVar + ' <= ' + endVar + ') ? 1 : -1) {\n' +
+        branch0 + '}\n';
   }
-  var branch0 = Blockly.Robokid.statementToCode(this, 'DO') || '  pass\n';
-  var code = 'for ' + variable0 + ' in range(' + argument0 +
-      argument1 + '):\n' + branch0 + '\n';
   return code;
 };
+
 
 Blockly.Robokid.controls_forEach = function() {
   // For each loop.

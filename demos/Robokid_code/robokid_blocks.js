@@ -71,10 +71,10 @@ if (!Blockly.Language) Blockly.Language = {};
 		this.appendDummyInput()
 			.appendTitle("Set Speed ");
 		this.appendValueInput('Motor_L')
-//			.setCheck(Number)
+			.setCheck(Number)
 			.appendTitle("Left %");
 		this.appendValueInput('Motor_R')
-//			.setCheck(Number)
+			.setCheck(Number)
 			.appendTitle("Right %");		
 	}
 };
@@ -154,43 +154,37 @@ Blockly.Language.comment = {
   }
 };
 
-Blockly.Language.ubasic_for = {
-  // For loop.
+Blockly.Language.text = {
+  // Allow user to input a comment block
   category: Blockly.LANG_CATEGORY_ROBOKID,
-  helpUrl: Blockly.LANG_CONTROLS_FOR_HELPURL,
+  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
-    this.setColour(210);    
+    this.setColour(210);
 	this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setInputsInline(true);
-
-    this.appendDummyInput()
-        .appendTitle(Blockly.LANG_CONTROLS_FOR_INPUT_WITH)
-        .appendTitle(new Blockly.FieldVariable(null), 'VAR');
-    this.appendValueInput('FROM')
-        .setCheck(Number)
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(Blockly.LANG_CONTROLS_FOR_INPUT_FROM);
-    this.appendValueInput('TO')
-        .setCheck(Number)
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(Blockly.LANG_CONTROLS_FOR_INPUT_TO);
-    this.appendStatementInput('DO')
-        .appendTitle(Blockly.LANG_CONTROLS_FOR_INPUT_DO);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      return Blockly.LANG_CONTROLS_FOR_TOOLTIP_1.replace('%1',
-          thisBlock.getTitleValue('VAR'));
-    });
-  },
-  getVars: function() {
-    return [this.getTitleValue('VAR')];
-  },
-  renameVar: function(oldName, newName) {
-    if (Blockly.Names.equals(oldName, this.getTitleValue('VAR'))) {
-      this.setTitleValue(newName, 'VAR');
-    }
+	this.setNextStatement(true);
+    this.setTooltip('Ouput a string to the robot display');
+	
+	var textInput = new Blockly.FieldTextInput('Text here');
+	this.appendDummyInput()	
+		.appendTitle('\u201C')
+		.appendTitle(textInput, 'TEXT')
+		.appendTitle('\u201D');
   }
 };
 
+Blockly.Language.wait = {
+  // Allow user to input a comment block
+  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
+  init: function() {
+    this.setColour(210);
+	this.setNextStatement(true);
+	this.setPreviousStatement(true);
+	this.setInputsInline(true);		
+    this.setTooltip('wait a number of tenths of a second');
+	
+	this.appendValueInput('TIME')
+		.setCheck(Number)
+		.appendTitle("Wait (in units of 0.1sec)");
+  }
+};

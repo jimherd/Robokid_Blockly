@@ -155,36 +155,28 @@ Blockly.Robokid.read_sensor = function() {
 
 Blockly.Robokid.comment = function() {
   // Simple code comment which does not generate any code
-  var code = (this.getTitleText('TEXT'));
+  var code = (this.getTitleValue('TEXT'));
   return '# ' + code + ';\n';
 };
 
-Blockly.Robokid.ubasic_for = function() {
-  // For loop.
-  var variable0 = Blockly.Robokid.variableDB_.getName(
-      this.getInputVariable('VAR'), Blockly.Variables.NAME_TYPE);
-  var argument0 = Blockly.Robokid.valueToCode(this, 'FROM',
+Blockly.Robokid.wait = function() {
+  // 
+  var argument0 = Blockly.Robokid.valueToCode(this, 'TIME',
       Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'TO',
-      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
-  var branch0 = Blockly.Robokid.statementToCode(this, 'DO');
-  var code;
-  if (argument1.match(/^\w+$/)) {
-    code = 'for ' + variable0 + '=' + argument0 + ' to ' + argument1 + 
-        ' {\n' + branch0 + '};' + '\n';
-  } else {
-    // The end value appears to be more complicated than a simple variable.
-    // Cache it to a variable to prevent repeated look-ups.
-    var endVar = Blockly.Robokid.variableDB_.getDistinctName(
-        variable0 + '_end', Blockly.Variables.NAME_TYPE);
-    code = 'var ' + endVar + ' = ' + argument1 + ';\n' +
-        'for ' + variable0 + ' = ' + argument0 + ' to ' +
-              variable0 + ' <= ' + endVar + '; ' +
-              variable0 + '++) {\n' +
-        branch0 + '}\n';
-  }
-  return code;
+	if (argument0 > 255) {
+		argument0 = '0';
+	}
+	var code;
+	code = 'wait ' + argument0 + ';\n';
+	return code;
 };
+
+Blockly.Robokid.text = function() {
+  // Simple code comment which does not generate any code
+  var code = (this.getTitleValue('TEXT'));
+  return 'text \'' + code + '\';\n';
+};
+
 
 
 

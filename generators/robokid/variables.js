@@ -28,7 +28,7 @@ Blockly.Robokid = Blockly.Generator.get('Robokid');
 
 Blockly.Robokid.variables_get = function() {
   // Variable getter.
-  code = Blockly.Robokid.variableDB_.getName(this.getTitleText('VAR'),
+  var code = Blockly.Robokid.variableDB_.getName(this.getTitleValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   return [code, Blockly.Robokid.ORDER_ATOMIC];
 };
@@ -37,7 +37,7 @@ Blockly.Robokid.variables_set = function() {
   // Variable setter.
   var argument0 = Blockly.Robokid.valueToCode(this, 'VALUE',
       Blockly.Robokid.ORDER_NONE) || '0';
-  var varName = Blockly.Robokid.variableDB_.getName(this.getTitleText('VAR'),
+  var varName = Blockly.Robokid.variableDB_.getName(this.getTitleValue('VAR'),
       Blockly.Variables.NAME_TYPE);
-  return varName + ' = ' + argument0 + '\n';
+  return varName + ' = ' + argument0 + ';\n';
 };

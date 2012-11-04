@@ -38,17 +38,9 @@ Blockly.Robokid = Blockly.Generator.get('Robokid');
  if (!Blockly.Robokid.RESERVED_WORDS_) {
   Blockly.Robokid.RESERVED_WORDS_ = '';
 }
-/*
+
 Blockly.Robokid.RESERVED_WORDS_ +=
-    // import keyword
-    // print ','.join(keyword.kwlist)
-    // http://docs.Python.org/reference/lexical_analysis.html#keywords
-    'and,as,assert,break,class,continue,def,del,elif,else,except,exec,finally,for,from,global,if,import,in,is,lambda,not,or,pass,print,raise,return,try,while,with,yield,' +
-    //http://docs.Python.org/library/constants.html
-    'True,False,None,NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
-    // http://docs.Python.org/library/functions.html
-    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern,';
-*/
+	'if, for, to, leds, motors, speed, wait, text,';
 /**
  * Order of operation ENUMs.
  * http://docs.Robokid.org/reference/expressions.html#summary
@@ -92,11 +84,11 @@ Blockly.Robokid.init = function() {
 
     var defvars = [];
     var variables = Blockly.Variables.allVariables();
-    for (var x = 0; x < variables.length; x++) {
-      defvars[x] = Blockly.Robokid.variableDB_.getDistinctName(variables[x],
-          Blockly.Variables.NAME_TYPE) + ' = None';
-    }
-    Blockly.Robokid.definitions_['variables'] = defvars.join('\n');
+ //   for (var x = 0; x < variables.length; x++) {
+ //     defvars[x] = Blockly.Robokid.variableDB_.getDistinctName(variables[x],
+ //         Blockly.Variables.NAME_TYPE) + ' = None';
+ //   }
+ //   Blockly.Robokid.definitions_['variables'] = defvars.join('\n');
   }
 };
 
@@ -111,7 +103,7 @@ Blockly.Robokid.finish = function(code) {
   for (var name in Blockly.Robokid.definitions_) {
     definitions.push(Blockly.Robokid.definitions_[name]);
   }
-  return definitions.join('\n') + '\n\n' + code;
+  return '# Robokid code;' + definitions.join('\n') + '\n\n' + code;
 };
 
 /**
