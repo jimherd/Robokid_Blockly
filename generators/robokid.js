@@ -40,7 +40,7 @@ Blockly.Robokid = Blockly.Generator.get('Robokid');
 }
 
 Blockly.Robokid.RESERVED_WORDS_ +=
-	'if, for, to, leds, motors, speed, wait, text,';
+	'if, while, else, for, to, leds, motors, speed, wait, display, print,';
 /**
  * Order of operation ENUMs.
  * http://docs.Robokid.org/reference/expressions.html#summary

@@ -103,7 +103,7 @@ if (!Blockly.Language) Blockly.Language = {};
 			.appendTitle(right_motor, 'right_motor');		
 	}
 };
-
+/*
 Blockly.Language.read_sensor = {
   // get data from one of the analogue sensors on the robot
   category: Blockly.LANG_CATEGORY_ROBOKID,
@@ -118,23 +118,7 @@ Blockly.Language.read_sensor = {
 		.appendTitle(dropdown, 'SENSOR');
   }
 };
-	
-Blockly.Language.read_sensor.SENSORS =
-    [[Blockly.LANG_SENSOR_BATTERY_VOLTS, '0'],
-     [Blockly.LANG_SENSOR_POT_3, '1'],
-     [Blockly.LANG_SENSOR_POT_2, '2'],
-     [Blockly.LANG_SENSOR_POT_1, '3'],
-     [Blockly.LANG_SENSOR_PAD_SWL, '4'],
-     [Blockly.LANG_SENSOR_PAD_SWR, '5'],	
-     [Blockly.LANG_SENSOR_LINE_SENSOR_L, '6'],
-     [Blockly.LANG_SENSOR_LINE_SENSOR_R, '7'],	 
-     [Blockly.LANG_SENSOR_FRONT_SENSOR_L, '8'],	 
-     [Blockly.LANG_SENSOR_FRONT_SENSOR_C, '9'],
-     [Blockly.LANG_SENSOR_FRONT_SENSOR_R, '10'],
-     [Blockly.LANG_SENSOR_WHEEL_SENSOR_L, '11'],	
-     [Blockly.LANG_SENSOR_WHEEL_SENSOR_R, '12'],	
-     [Blockly.LANG_SENSOR_REAR_SENSOR, '13']		 
-	 ];
+*/	
 
 Blockly.Language.comment = {
   // Allow user to input a comment block
@@ -148,14 +132,15 @@ Blockly.Language.comment = {
 	
 	var textInput = new Blockly.FieldTextInput('Comment here');
 	this.appendDummyInput()	
+		.appendTitle('Comment : ')
 		.appendTitle('\u201C')
 		.appendTitle(textInput, 'TEXT')
 		.appendTitle('\u201D');
   }
 };
 
-Blockly.Language.text = {
-  // Allow user to input a comment block
+Blockly.Language.display = {
+  // show string on 2-character display on the robot
   category: Blockly.LANG_CATEGORY_ROBOKID,
   helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
@@ -166,6 +151,7 @@ Blockly.Language.text = {
 	
 	var textInput = new Blockly.FieldTextInput('Text here');
 	this.appendDummyInput()	
+		.appendTitle('Display : ')
 		.appendTitle('\u201C')
 		.appendTitle(textInput, 'TEXT')
 		.appendTitle('\u201D');
@@ -185,6 +171,65 @@ Blockly.Language.wait = {
 	
 	this.appendValueInput('TIME')
 		.setCheck(Number)
-		.appendTitle("Wait (in units of 0.1sec)");
+		.appendTitle("Wait ");
+	this.appendDummyInput()
+		.appendTitle(" \u00D7 0.1 sec ");
   }
 };
+
+Blockly.Language.read_sensor = {
+  // Read a sensor and load into a variable
+  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
+  init: function() {
+    this.setColour(210);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+	this.setInputsInline(true);
+	
+	this.appendDummyInput()
+		.appendTitle("Read sensor : ");
+	var dropdown = new Blockly.FieldDropdown(this.SENSORS);
+	this.appendDummyInput()	
+		.appendTitle(dropdown, 'SENSOR');
+	this.appendDummyInput()
+		.appendTitle(" into variable ");
+	this.appendDummyInput() 
+        .appendTitle(new Blockly.FieldVariable(
+        Blockly.LANG_MATH_CHANGE_TITLE_ITEM), 'VAR')
+
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      return Blockly.LANG_MATH_CHANGE_TOOLTIP_1.replace('%1',
+          thisBlock.getTitleValue('VAR'));
+    });
+  },
+  getVars: function() {
+	var variable = this.getTitleValue('VAR');
+    return [variable];
+  },
+  renameVar: function(oldName, newName) {
+    if (Blockly.Names.equals(oldName, this.getTitleValue('VAR'))) {
+      this.setTitleValue(newName, 'VAR');
+    }
+  }
+};
+
+Blockly.Language.read_sensor.SENSORS =
+    [[Blockly.LANG_SENSOR_BATTERY_VOLTS, '0'],
+     [Blockly.LANG_SENSOR_POT_3, '1'],
+     [Blockly.LANG_SENSOR_POT_2, '2'],
+     [Blockly.LANG_SENSOR_POT_1, '3'],
+     [Blockly.LANG_SENSOR_PAD_SWL, '4'],
+     [Blockly.LANG_SENSOR_PAD_SWR, '5'],	
+     [Blockly.LANG_SENSOR_LINE_SENSOR_L, '6'],
+     [Blockly.LANG_SENSOR_LINE_SENSOR_R, '7'],	 
+     [Blockly.LANG_SENSOR_FRONT_SENSOR_L, '8'],	 
+     [Blockly.LANG_SENSOR_FRONT_SENSOR_C, '9'],
+     [Blockly.LANG_SENSOR_FRONT_SENSOR_R, '10'],
+     [Blockly.LANG_SENSOR_WHEEL_SENSOR_L, '11'],	
+     [Blockly.LANG_SENSOR_WHEEL_SENSOR_R, '12'],	
+     [Blockly.LANG_SENSOR_REAR_SENSOR, '13']		 
+	 ];
+

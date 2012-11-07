@@ -230,6 +230,12 @@ function getTitles(block) {
             escapeString(block.getTitleValue('TEXT')) + '), ' +
             escapeString(block.getTitleValue('TITLENAME')));
         break;
+      case 'title_checkbox':
+        // Result: new Blockly.FieldCheckbox('TRUE'), 'CHECK'
+        titles.push('new Blockly.FieldCheckbox(' +
+            escapeString(block.getTitleValue('CHECKED')) + '), ' +
+            escapeString(block.getTitleValue('TITLENAME')));
+        break;
       case 'title_variable':
         // Result:
         // new Blockly.FieldVariable('item'), 'VAR'
@@ -357,6 +363,11 @@ function updateGenerator() {
         var name = block.getTitleValue('TITLENAME');
         code.push(makeVar('dropdown', name) +
                   ' = this.getTitleValue(\'' + name + '\');');
+        break;
+      case 'title_checkbox':
+        var name = block.getTitleValue('TITLENAME');
+        code.push(makeVar('checkbox', name) +
+                  ' = this.getTitleValue(\'' + name + '\') == \'TRUE\';');
         break;
       case 'title_variable':
         var name = block.getTitleValue('TITLENAME');

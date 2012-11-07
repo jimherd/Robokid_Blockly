@@ -146,13 +146,6 @@ Blockly.Robokid.motors = function() {
    return 'motors ' + left_mode  + ' ' + right_mode +';\n';
 };
 
-Blockly.Robokid.read_sensor = function() {
-  // 
-  var code = (this.getTitleValue('SENSOR'));
-  
-  return ['Read', 0];
-};
-
 Blockly.Robokid.comment = function() {
   // Simple code comment which does not generate any code
   var code = (this.getTitleValue('TEXT'));
@@ -171,12 +164,21 @@ Blockly.Robokid.wait = function() {
 	return code;
 };
 
-Blockly.Robokid.text = function() {
+Blockly.Robokid.display = function() {
   // Simple code comment which does not generate any code
   var code = (this.getTitleValue('TEXT'));
-  return 'text \'' + code + '\';\n';
+  return 'display \'' + code + '\';\n';
 };
 
+Blockly.Robokid.read_sensor = function() {
+  // Read a sensor and assign to a variable
+  var code = (this.getTitleValue('SENSOR'));
+  var variable = (this.getTitleValue('VAR'));
+  if (!variable.match(/^[a-z]$/)) {
+      variable = 'ERROR: variable should be a single letter'
+  } 
+  return 'sense ' + code + ' ' + variable + ';\n';
+};
 
 
 
