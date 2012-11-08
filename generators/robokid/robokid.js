@@ -107,13 +107,20 @@ Blockly.Robokid.set_speed = function() {
   var argument0 = Blockly.Robokid.valueToCode(this, 'Motor_L',
       Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
 	if (argument0 > 100) {
-		argument0 = '0';
+		argument0 = '100';
 	}
+	if (argument0 < 0) {
+		argument0 = '0';
+	}	
 	var argument1 = Blockly.Robokid.valueToCode(this, 'Motor_R',
       Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
-	  
-	var code;
-	code = 'speed ' + argument0 + ' ' + argument1 + ';\n';
+	if (argument1 > 100) {
+		argument1 = '100';
+	}
+	if (argument1 < 0) {
+		argument1 = '0';
+	}		  
+	var code = 'speed ' + argument0 + ' ' + argument1 + ';\n';
 	return code;
 };
 
@@ -175,9 +182,21 @@ Blockly.Robokid.read_sensor = function() {
   var code = (this.getTitleValue('SENSOR'));
   var variable = (this.getTitleValue('VAR'));
   if (!variable.match(/^[a-z]$/)) {
-      variable = 'ERROR: variable should be a single letter'
+      variable = 'ERROR: variable should be a single letter';
+//	  promptName('test', '');
   } 
   return 'sense ' + code + ' ' + variable + ';\n';
+};
+
+Blockly.Robokid.read_sysvar = function() {
+  // Read a sensor and assign to a variable
+  var code = (this.getTitleValue('SYSVAR'));
+  var variable = (this.getTitleValue('VAR'));
+  if (!variable.match(/^[a-z]$/)) {
+      variable = 'ERROR: variable should be a single letter';
+//	  promptName('test', '');
+  } 
+  return 'read ' + code + ' ' + variable + ';\n';
 };
 
 
