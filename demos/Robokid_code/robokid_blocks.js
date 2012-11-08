@@ -260,3 +260,114 @@ Blockly.Language.read_sysvar.SYSVARS =
     [[Blockly.LANG_SYSVAR_TIMER_TICK, '0'],
 	 ];
 
+Blockly.Language.print = {
+  // Create a string made up of any number of elements of any type.
+  category: Blockly.LANG_CATEGORY_ROBOKID,
+  helpUrl: Blockly.LANG_TEXT_JOIN_HELPURL,
+  init: function() {
+    this.setColour(210);
+	this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.appendValueInput('ADD0')
+        .appendTitle('Print to USB connection ');
+    this.appendValueInput('ADD1');
+    this.setMutator(new Blockly.Mutator(['text_create_join_item']));
+    this.setTooltip(Blockly.LANG_TEXT_JOIN_TOOLTIP_1);
+    this.itemCount_ = 2;
+  },
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('items', this.itemCount_);
+    return container;
+  },
+  domToMutation: function(xmlElement) {
+    for (var x = 0; x < this.itemCount_; x++) {
+      this.removeInput('ADD' + x);
+    }
+    this.itemCount_ = window.parseInt(xmlElement.getAttribute('items'), 10);
+    for (var x = 0; x < this.itemCount_; x++) {
+      var input = this.appendValueInput('ADD' + x);
+      if (x == 0) {
+        input.appendTitle('Print to USB connection ');
+      }
+    }
+    if (this.itemCount_ == 0) {
+      this.appendDummyInput('EMPTY')
+          .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+          'media/quote0.png', 12, 12))
+          .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+          'media/quote1.png', 12, 12));
+    }
+  },
+  decompose: function(workspace) {
+    var containerBlock = new Blockly.Block(workspace,
+                                           'text_create_join_container');
+    containerBlock.initSvg();
+    var connection = containerBlock.getInput('STACK').connection;
+    for (var x = 0; x < this.itemCount_; x++) {
+      var itemBlock = new Blockly.Block(workspace, 'text_create_join_item');
+      itemBlock.initSvg();
+      connection.connect(itemBlock.previousConnection);
+      connection = itemBlock.nextConnection;
+    }
+    return containerBlock;
+  },
+  compose: function(containerBlock) {
+    // Disconnect all input blocks and remove all inputs.
+    if (this.itemCount_ == 0) {
+      this.removeInput('EMPTY');
+    } else {
+      for (var x = this.itemCount_ - 1; x >= 0; x--) {
+        this.removeInput('ADD' + x);
+      }
+    }
+    this.itemCount_ = 0;
+    // Rebuild the block's inputs.
+    var itemBlock = containerBlock.getInputTargetBlock('STACK');
+    while (itemBlock) {
+      var input = this.appendValueInput('ADD' + this.itemCount_);
+      if (this.itemCount_ == 0) {
+        input.appendTitle('Print to USB connection ');
+      }
+      // Reconnect any child blocks.
+      if (itemBlock.valueConnection_) {
+        input.connection.connect(itemBlock.valueConnection_);
+      }
+      this.itemCount_++;
+      itemBlock = itemBlock.nextConnection &&
+          itemBlock.nextConnection.targetBlock();
+    }
+    if (this.itemCount_ == 0) {
+      this.appendDummyInput('EMPTY')
+          .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+          'media/quote0.png', 12, 12))
+          .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+          'media/quote1.png', 12, 12));
+    }
+  },
+  saveConnections: function(containerBlock) {
+    // Store a pointer to any connected child blocks.
+    var itemBlock = containerBlock.getInputTargetBlock('STACK');
+    var x = 0;
+    while (itemBlock) {
+      var input = this.getInput('ADD' + x);
+      itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      x++;
+      itemBlock = itemBlock.nextConnection &&
+          itemBlock.nextConnection.targetBlock();
+    }
+  }
+};
+
+Blockly.Language.print_container = {
+  // Container.
+  init: function() {
+    this.setColour(210);
+    this.appendDummyInput()
+        .appendTitle(Blockly.LANG_TEXT_CREATE_JOIN_TITLE_JOIN);
+    this.appendStatementInput('STACK');
+    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_TOOLTIP_1);
+    this.contextMenu = false;
+  }
+};
+

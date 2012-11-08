@@ -199,5 +199,31 @@ Blockly.Robokid.read_sysvar = function() {
   return 'read ' + code + ' ' + variable + ';\n';
 };
 
+Blockly.Robokid.print = function() {
+  // Create a string made up of any number of elements of any type.
+  var code;
+  if (this.itemCount_ == 0) {
+//    return ['# empty print\n', Blockly.Robokid.ORDER_ATOMIC];
+		return '# empty print\n';
+  } else if (this.itemCount_ == 1) {
+    var argument0 = Blockly.Robokid.valueToCode(this, 'ADD0',
+        Blockly.Robokid.ORDER_UNARY_POSTFIX) || ' ';
+    code = 'print ' +  argument0 + ';\n';
+//    return [code, Blockly.Robokid.ORDER_UNARY_POSTFIX];
+	return code;
+  } else {
+    code = [];
+    code[0] = 'print ' + (Blockly.Robokid.valueToCode(this, 'ADD0',
+        Blockly.Robokid.ORDER_NONE) || ' ');
+    for (var n = 1; n < this.itemCount_; n++) {
+      code[n] = ',' + (Blockly.Robokid.valueToCode(this, 'ADD' + n,
+          Blockly.Robokid.ORDER_NONE) || ' ');
+    }
+	code[this.itemCount_] = ';\n';
+    code = code.join('');
+//    return [code, Blockly.Robokid.ORDER_UNARY_POSTFIX];
+	return code;
+  }
+};
 
 

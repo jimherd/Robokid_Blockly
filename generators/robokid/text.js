@@ -28,7 +28,7 @@ Blockly.Robokid = Blockly.Generator.get('Robokid');
 
 Blockly.Robokid.text = function() {
   // Text value.
-  var code = Blockly.Robokid.quote_(this.getTitleText('TEXT'));
+  var code = Blockly.Robokid.quote_(this.getTitleValue('TEXT'));
   return [code, Blockly.Robokid.ORDER_ATOMIC];
 };
 
