@@ -45,11 +45,11 @@ Blockly.Robokid.math_arithmetic = function() {
 };
 
 Blockly.Robokid.math_arithmetic.OPERATORS = {
-  ADD: [' + ', Blockly.Robokid.ORDER_ADDITIVE],
-  MINUS: [' - ', Blockly.Robokid.ORDER_ADDITIVE],
-  MULTIPLY: [' * ', Blockly.Robokid.ORDER_MULTIPLICATIVE],
-  DIVIDE: [' / ', Blockly.Robokid.ORDER_MULTIPLICATIVE],
-  POWER: [' ** ', Blockly.Robokid.ORDER_EXPONENTIATION]
+  ADD: ['+', Blockly.Robokid.ORDER_ADDITIVE],
+  MINUS: ['-', Blockly.Robokid.ORDER_ADDITIVE],
+  MULTIPLY: ['*', Blockly.Robokid.ORDER_MULTIPLICATIVE],
+  DIVIDE: ['/', Blockly.Robokid.ORDER_MULTIPLICATIVE],
+  POWER: ['**', Blockly.Robokid.ORDER_EXPONENTIATION]
 };
 
 Blockly.Robokid.math_change = function() {

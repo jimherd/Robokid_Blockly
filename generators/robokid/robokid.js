@@ -166,8 +166,10 @@ Blockly.Robokid.wait = function() {
 	if (argument0 > 255) {
 		argument0 = '0';
 	}
+	var units = argument0 % 10;
+	var tens = (argument0 - units)/10;
 	var code;
-	code = 'wait ' + argument0 + ';\n';
+	code = 'wait ' + argument0 + ';  # delay of ' + tens + '.' + units + ' seconds\n';
 	return code;
 };
 
@@ -226,4 +228,16 @@ Blockly.Robokid.print = function() {
   }
 };
 
+Blockly.Robokid.calibrate = function() {
+  // Execute calibrate function
+  return 'cal;' + ' # read notes about calibrate before using\n';
+};
+
+Blockly.Robokid.play_tone = function() {
+  // Read a sensor and assign to a variable
+  var code = (this.getTitleValue('NOTE'));
+  var argument0 = Blockly.Robokid.valueToCode(this, 'duration',
+      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+	  return 'tone ' + code + ' ' + argument0 + ';\n';
+};
 

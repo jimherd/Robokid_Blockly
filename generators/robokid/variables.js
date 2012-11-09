@@ -39,5 +39,5 @@ Blockly.Robokid.variables_set = function() {
       Blockly.Robokid.ORDER_NONE) || '0';
   var varName = Blockly.Robokid.variableDB_.getName(this.getTitleValue('VAR'),
       Blockly.Variables.NAME_TYPE);
-  return varName + ' = ' + argument0 + ';\n';
+  return varName + '=' + argument0 + ';\n';
 };

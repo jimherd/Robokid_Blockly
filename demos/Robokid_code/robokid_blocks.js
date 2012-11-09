@@ -371,3 +371,56 @@ Blockly.Language.print_container = {
   }
 };
 
+Blockly.Language.calibrate = {
+  // Allow user to input a comment block
+  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
+  init: function() {
+    this.setColour(210);
+	this.setNextStatement(true);
+	this.setPreviousStatement(true);
+//	this.setInputsInline(true);		
+    this.setTooltip('wait a number of tenths of a second');
+	this.appendDummyInput()
+		.appendTitle("Calibrate the robot movement");
+  }
+};
+
+Blockly.Language.play_tone = {
+  // play a tone for a period of time
+  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
+  init: function() {
+    this.setColour(210);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+	this.setInputsInline(true);
+	this.setTooltip('Pick note and set duration inunits of 1 millisecond');
+	
+	this.appendDummyInput()
+		.appendTitle("Play tone : ");
+	var dropdown = new Blockly.FieldDropdown(this.NOTES);
+	this.appendDummyInput()	
+		.appendTitle(dropdown, 'NOTE');
+	this.appendValueInput('duration')
+		.setCheck(Number)
+		.appendTitle(' for ');
+  }
+};
+
+Blockly.Language.play_tone.NOTES =
+    [[Blockly.LANG_NOTE_C, '0'],
+     [Blockly.LANG_NOTE_CS, '1'],
+     [Blockly.LANG_NOTE_D, '2'],
+     [Blockly.LANG_NOTE_DS, '3'],
+     [Blockly.LANG_NOTE_E, '4'],
+     [Blockly.LANG_NOTE_F, '5'],
+     [Blockly.LANG_NOTE_FS, '6'],
+     [Blockly.LANG_NOTE_G, '7'],
+     [Blockly.LANG_NOTE_GS, '8'],
+     [Blockly.LANG_NOTE_A, '9'], 
+     [Blockly.LANG_NOTE_AS, '10'],
+     [Blockly.LANG_NOTE_B, '11'],
+     [Blockly.LANG_NOTE_s, '12']  
+	];
+

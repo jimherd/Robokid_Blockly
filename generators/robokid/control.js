@@ -32,7 +32,7 @@ Blockly.Robokid.controls_if = function() {
   var argument = Blockly.Robokid.valueToCode(this, 'IF' + n,
       Blockly.Robokid.ORDER_NONE) || 'false';
   var branch = Blockly.Robokid.statementToCode(this, 'DO' + n);
-  var code = 'if ' + argument + ' {\n' + branch + '};';
+  var code = 'if ' + argument + ' {\n' + branch + '}';
   for (n = 1; n <= this.elseifCount_; n++) {
     argument = Blockly.Robokid.valueToCode(this, 'IF' + n,
         Blockly.Robokid.ORDER_NONE) || 'false';
@@ -43,7 +43,7 @@ Blockly.Robokid.controls_if = function() {
     branch = Blockly.Robokid.statementToCode(this, 'ELSE');
     code += ' else {\n' + branch + '}';
   }
-  return code + '\n';
+  return code + ';\n';
 };
 
 Blockly.Robokid.controls_whileUntil = function() {

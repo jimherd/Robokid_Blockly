@@ -33,7 +33,7 @@ Blockly.Robokid.logic_compare = function() {
   var order = Blockly.Robokid.ORDER_RELATIONAL;
   var argument0 = Blockly.Robokid.valueToCode(this, 'A', order) || '0';
   var argument1 = Blockly.Robokid.valueToCode(this, 'B', order) || '0';
-  var code = argument0 + ' ' + operator + ' ' + argument1;
+  var code = argument0 + operator + argument1;
   return [code, order];
 };
 
@@ -53,7 +53,7 @@ Blockly.Robokid.logic_operation = function() {
       Blockly.Robokid.ORDER_LOGICAL_OR;
   var argument0 = Blockly.Robokid.valueToCode(this, 'A', order) || 'False';
   var argument1 = Blockly.Robokid.valueToCode(this, 'B', order) || 'False';
-  var code = argument0 + ' ' + operator + ' ' + argument1;
+  var code = argument0 +  operator + argument1;
   return [code, order];
 };
 
