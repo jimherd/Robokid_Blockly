@@ -233,11 +233,11 @@ Blockly.Robokid.calibrate = function() {
   return 'cal;' + ' # read notes about calibrate before using\n';
 };
 
-Blockly.Robokid.play_tone = function() {
+Blockly.Robokid.play_note = function() {
   // Read a sensor and assign to a variable
   var code = (this.getTitleValue('NOTE'));
   var argument0 = Blockly.Robokid.valueToCode(this, 'duration',
       Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
-	  return 'tone ' + code + ' ' + argument0 + ';\n';
+	  return 'note ' + code + ' ' + argument0 + ';\n';
 };
 

@@ -45,19 +45,20 @@ Blockly.Language.logic_compare = {
 
 Blockly.Language.logic_compare.OPERATORS =
     [['=', 'EQ'],
-     ['\u2260', 'NEQ'],
+     /* ['\u2260', 'NEQ'], */
      ['<', 'LT'],
-     ['\u2264', 'LTE'],
+     /* ['\u2264', 'LTE'], */
      ['>', 'GT'],
-     ['\u2265', 'GTE']];
+     /* ['\u2265', 'GTE'] */
+	];
 
 Blockly.Language.logic_compare.TOOLTIPS = {
   EQ: Blockly.LANG_LOGIC_COMPARE_TOOLTIP_EQ,
-  NEQ: Blockly.LANG_LOGIC_COMPARE_TOOLTIP_NEQ,
+/*  NEQ: Blockly.LANG_LOGIC_COMPARE_TOOLTIP_NEQ, */
   LT: Blockly.LANG_LOGIC_COMPARE_TOOLTIP_LT,
-  LTE: Blockly.LANG_LOGIC_COMPARE_TOOLTIP_LTE,
+/*  LTE: Blockly.LANG_LOGIC_COMPARE_TOOLTIP_LTE, */
   GT: Blockly.LANG_LOGIC_COMPARE_TOOLTIP_GT,
-  GTE: Blockly.LANG_LOGIC_COMPARE_TOOLTIP_GTE
+/*   GTE: Blockly.LANG_LOGIC_COMPARE_TOOLTIP_GTE */
 };
 
 Blockly.Language.logic_operation = {
@@ -91,6 +92,7 @@ Blockly.Language.logic_operation.TOOLTIPS = {
   OR: Blockly.LANG_LOGIC_OPERATION_TOOLTIP_OR
 };
 
+/*
 Blockly.Language.logic_negate = {
   // Negation.
   category: Blockly.LANG_CATEGORY_LOGIC,
@@ -134,3 +136,5 @@ Blockly.Language.logic_null = {
     this.setTooltip(Blockly.LANG_LOGIC_NULL_TOOLTIP);
   }
 };
+
+*/

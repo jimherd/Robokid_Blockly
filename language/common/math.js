@@ -71,15 +71,17 @@ Blockly.Language.math_arithmetic.OPERATORS =
      ['-', 'MINUS'],
      ['\u00D7', 'MULTIPLY'],
      ['\u00F7', 'DIVIDE'],
-     ['^', 'POWER']];
+     /* ['^', 'POWER'] */ ];
 
 Blockly.Language.math_arithmetic.TOOLTIPS = {
   ADD: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_ADD,
   MINUS: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_MINUS,
   MULTIPLY: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_MULTIPLY,
   DIVIDE: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_DIVIDE,
-  POWER: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_POWER
+ /* POWER: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_POWER */
 };
+
+/* Not required for Robokid, but do not delete
 
 Blockly.Language.math_change = {
   // Add to a variable in place.
@@ -328,3 +330,5 @@ Blockly.Language.math_random_float = {
     this.setTooltip(Blockly.LANG_MATH_RANDOM_FLOAT_TOOLTIP);
   }
 };
+
+*/

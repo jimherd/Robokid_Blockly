@@ -238,11 +238,12 @@ Blockly.Language.controls_whileUntil = {
 
 Blockly.Language.controls_whileUntil.OPERATORS =
     [[Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_WHILE, 'WHILE'],
-     [Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL, 'UNTIL']];
+    /* [Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL, 'UNTIL'] */
+	];
 
 Blockly.Language.controls_whileUntil.TOOLTIPS = {
   WHILE: Blockly.LANG_CONTROLS_WHILEUNTIL_TOOLTIP_WHILE,
-  UNTIL: Blockly.LANG_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL
+ /* UNTIL: Blockly.LANG_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL */
 };
 
 Blockly.Language.controls_for = {
@@ -284,6 +285,7 @@ Blockly.Language.controls_for = {
   }
 };
 
+/*
 Blockly.Language.controls_forEach = {
   // For each loop.
   category: Blockly.LANG_CATEGORY_CONTROLS,
@@ -367,3 +369,5 @@ Blockly.Language.controls_flow_statements.TOOLTIPS = {
   BREAK: Blockly.LANG_CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK,
   CONTINUE: Blockly.LANG_CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE
 };
+
+*/

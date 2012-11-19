@@ -117,9 +117,11 @@ Blockly.Language.comment = {
 	var textInput = new Blockly.FieldTextInput('Comment here');
 	this.appendDummyInput()	
 		.appendTitle('Comment : ')
-		.appendTitle('\u201C')
-		.appendTitle(textInput, 'TEXT')
-		.appendTitle('\u201D');
+		.appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+        'media/quote0.png', 12, 12))
+        .appendTitle(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+        'media/quote1.png', 12, 12));
   }
 };
 
@@ -136,9 +138,11 @@ Blockly.Language.display = {
 	var textInput = new Blockly.FieldTextInput('Text here');
 	this.appendDummyInput()	
 		.appendTitle('Display : ')
-		.appendTitle('\u201C')
-		.appendTitle(textInput, 'TEXT')
-		.appendTitle('\u201D');
+        .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+        'media/quote0.png', 12, 12))
+        .appendTitle(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+        'media/quote1.png', 12, 12));
   }
 };
 
@@ -386,7 +390,7 @@ Blockly.Language.calibrate = {
   }
 };
 
-Blockly.Language.play_tone = {
+Blockly.Language.play_note = {
   // play a tone for a period of time
   category: Blockly.LANG_CATEGORY_ROBOKID,
 //  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
@@ -395,20 +399,22 @@ Blockly.Language.play_tone = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
 	this.setInputsInline(true);
-	this.setTooltip('Pick note and set duration inunits of 1 millisecond');
+	this.setTooltip('Pick note and set duration in units of 1 millisecond');
 	
 	this.appendDummyInput()
-		.appendTitle("Play tone : ");
+		.appendTitle("Play note : ");
 	var dropdown = new Blockly.FieldDropdown(this.NOTES);
 	this.appendDummyInput()	
 		.appendTitle(dropdown, 'NOTE');
 	this.appendValueInput('duration')
 		.setCheck(Number)
 		.appendTitle(' for ');
+	this.appendDummyInput()
+		.appendTitle(" milliseconds");
   }
 };
 
-Blockly.Language.play_tone.NOTES =
+Blockly.Language.play_note.NOTES =
     [[Blockly.LANG_NOTE_C, '0'],
      [Blockly.LANG_NOTE_CS, '1'],
      [Blockly.LANG_NOTE_D, '2'],

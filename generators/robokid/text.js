@@ -32,6 +32,7 @@ Blockly.Robokid.text = function() {
   return [code, Blockly.Robokid.ORDER_ATOMIC];
 };
 
+
 Blockly.Robokid.text_join = function() {
   // Create a string made up of any number of elements of any type.
   //Should we allow joining by '-' or ',' or any other characters?
@@ -172,3 +173,4 @@ Blockly.Robokid.text_prompt = function() {
   }
   return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
 };
+

@@ -40,6 +40,7 @@ Blockly.Language.text = {
   }
 };
 
+/*
 Blockly.Language.text_join = {
   // Create a string made up of any number of elements of any type.
   category: Blockly.LANG_CATEGORY_TEXT,
@@ -384,3 +385,5 @@ Blockly.Language.text_prompt = {
 Blockly.Language.text_prompt.TYPES =
     [[Blockly.LANG_TEXT_PROMPT_TYPE_TEXT, 'TEXT'],
      [Blockly.LANG_TEXT_PROMPT_TYPE_NUMBER, 'NUMBER']];
+	 
+*/
