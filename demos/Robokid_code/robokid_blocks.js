@@ -275,7 +275,7 @@ Blockly.Language.print = {
     this.appendValueInput('ADD0')
         .appendTitle('Print to USB connection ');
     this.appendValueInput('ADD1');
-    this.setMutator(new Blockly.Mutator(['text_create_join_item']));
+    this.setMutator(new Blockly.Mutator(['print_create_join_item']));
     this.setTooltip(Blockly.LANG_TEXT_JOIN_TOOLTIP_1);
     this.itemCount_ = 2;
   },
@@ -305,11 +305,11 @@ Blockly.Language.print = {
   },
   decompose: function(workspace) {
     var containerBlock = new Blockly.Block(workspace,
-                                           'text_create_join_container');
+                                           'print_container');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var x = 0; x < this.itemCount_; x++) {
-      var itemBlock = new Blockly.Block(workspace, 'text_create_join_item');
+      var itemBlock = new Blockly.Block(workspace, 'print_create_join_item');
       itemBlock.initSvg();
       connection.connect(itemBlock.previousConnection);
       connection = itemBlock.nextConnection;
@@ -371,6 +371,19 @@ Blockly.Language.print_container = {
         .appendTitle(Blockly.LANG_TEXT_CREATE_JOIN_TITLE_JOIN);
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_TOOLTIP_1);
+    this.contextMenu = false;
+  }
+};
+
+Blockly.Language.print_create_join_item = {
+  // Add items.
+  init: function() {
+    this.setColour(210);
+    this.appendDummyInput()
+        .appendTitle(Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TITLE_ITEM);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TOOLTIP);
     this.contextMenu = false;
   }
 };

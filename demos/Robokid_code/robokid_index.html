@@ -29,9 +29,9 @@ function setDisplay() {
  * Switch the visible pane when a tab is clicked.
  * @param {string} id ID of tab clicked.
  */
-function tabClick(id) {
-  // If the XML tab was open, save and render the content.
- /* if (document.getElementById('tab_xml').className == 'tabon') {
+   function tabClick(id) {
+/*  // If the XML tab was open, save and render the content.
+ if (document.getElementById('tab_xml').className == 'tabon') {
     var xmlTextarea = document.getElementById('textarea_xml');
     var xmlText = xmlTextarea.value;
     var xmlDom = null;
@@ -113,7 +113,9 @@ function init(blockly) {
             // Account for the 19 pixel margin and on each side.
     }, 1);
   }
+  selected  = 'robokid';
   auto_save_and_restore_blocks();
+  setDisplay();
   }
   
   </script>
@@ -178,6 +180,8 @@ function init(blockly) {
 /*      border-top-style: none; */
       overflow: hidden;
       display: none;
+	  font-size: 110%;
+	  font-weight: bold;
     }
     #textarea_xml {
       width: 100%;
@@ -224,22 +228,22 @@ function init(blockly) {
       <td>
         <table>
           <tr id="tabRow" height="1em">
-            <td id="tab_blocks" class="taboff" onclick="tabClick(this.id)">Blocks</td>
-            <td class="tabmin">&nbsp;</td>
+		  <td id="tab_blocks" class="taboff" onclick="tabClick(this.id)">Blocks</td>
+            <td class="tabmin">&nbsp;</td> 
 <!--        <td id="tab_javascript" class="taboff" onclick="tabClick(this.id)">JavaScript</td>
             <td class="tabmin">&nbsp;</td>
             <td id="tab_dart" class="taboff" onclick="tabClick(this.id)">Dart</td>
             <td class="tabmin">&nbsp;</td>
             <td id="tab_python" class="taboff" onclick="tabClick(this.id)">Python</td>
             <td class="tabmin">&nbsp;</td>  -->
-            <td id="tab_robokid" class="tabon" onclick="tabClick(this.id)">Robokid</td>
-			<td class="tabmin">&nbsp;</td>
+<!--            <td id="tab_robokid" class="tabon" onclick="tabClick(this.id)">Robokid</td>
+			<td class="tabmin">&nbsp;</td>  -->
 <!--        <td id="tab_xml" class="taboff" onclick="tabClick(this.id)">XML</td> -->
             <td class="tabmax">
-              <button onclick="setDisplay()">Discard</button>
-              <button onclick="save()">Save XML</button>
+              <button onclick="setDisplay()">Start</button>
+ <!--             <button onclick="save()">Save XML</button>
               <button id="fakeload">Load XML</button>   
-              <input type="file" id="load" style="display: none;"/>
+              <input type="file" id="load" style="display: none;"/>  -->
 <!--          <button class="launch" onclick="runJS()">Run Program</button>  -->
             </td>
           </tr>
@@ -249,7 +253,8 @@ function init(blockly) {
     <tr>
       <td height="99%" width="65%">
         <iframe id="content_blocks" src="frame.html"></iframe>
-	  </td> <td>
+	  </td> 
+	  <td height="99%" width="30%">
 <!--    <pre id="content_javascript"></pre>
         <pre id="content_dart"></pre>
         <pre id="content_python"></pre> -->
