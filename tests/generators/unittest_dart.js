@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ Blockly.Dart.unittest_assertequals = function() {
     Blockly.Dart.unittest_assertequals.assert = functionName;
     var func = [];
     func.push('void ' + functionName +
-        '(Dynamic actual, Dynamic expected, String message) {');
+        '(dynamic actual, dynamic expected, String message) {');
     func.push('  // Asserts that a value equals another value.');
     func.push('  if (' + resultsVar + ' == null) {');
     func.push('    throw "Orphaned assert equals: ' + message + '";');
@@ -107,9 +107,9 @@ Blockly.Dart.unittest_assertequals = function() {
     Blockly.Dart.definitions_['unittest_assertequals'] = func.join('\n');
   }
   var actual = Blockly.Dart.valueToCode(this, 'ACTUAL',
-      Blockly.Dart.ORDER_COMMA) || 'null';
+      Blockly.Dart.ORDER_NONE) || 'null';
   var expected = Blockly.Dart.valueToCode(this, 'EXPECTED',
-      Blockly.Dart.ORDER_COMMA) || 'null';
+      Blockly.Dart.ORDER_NONE) || 'null';
   return Blockly.Dart.unittest_assertequals.assert + '(' +
       actual + ', ' + expected + ', ' + message + ');\n';
 };
@@ -140,7 +140,7 @@ Blockly.Dart.unittest_asserttrue = function() {
     Blockly.Dart.definitions_['unittest_asserttrue'] = func.join('\n');
   }
   var actual = Blockly.Dart.valueToCode(this, 'ACTUAL',
-      Blockly.Dart.ORDER_COMMA) || 'true';
+      Blockly.Dart.ORDER_NONE) || 'true';
   return Blockly.Dart.unittest_asserttrue.assert +
       '(' + actual + ', ' + message + ');\n';
 };
@@ -171,7 +171,7 @@ Blockly.Dart.unittest_assertfalse = function() {
     Blockly.Dart.definitions_['unittest_assertfalse'] = func.join('\n');
   }
   var actual = Blockly.Dart.valueToCode(this, 'ACTUAL',
-      Blockly.Dart.ORDER_COMMA) || 'false';
+      Blockly.Dart.ORDER_NONE) || 'false';
   return Blockly.Dart.unittest_assertfalse.assert +
       '(' + actual + ', ' + message + ');\n';
 };

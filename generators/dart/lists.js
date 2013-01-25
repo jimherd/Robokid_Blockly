@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,11 @@
  */
 'use strict';
 
-Blockly.Dart = Blockly.Generator.get('Dart');
+goog.provide('Blockly.Dart.lists');
+
+goog.require('Blockly.Dart');
+
+Blockly.Dart.addReservedWords('Math');
 
 Blockly.Dart.lists_create_empty = function() {
   // Create an empty list.
@@ -58,31 +62,152 @@ Blockly.Dart.lists_repeat = function() {
     func.push('}');
     Blockly.Dart.definitions_['lists_repeat'] = func.join('\n');
   }
-  var argument0 = Blockly.Dart.valueToCode(this, 'ITEM', true) || 'null';
-  var argument1 = Blockly.Dart.valueToCode(this, 'NUM') || '0';
+  var argument0 = Blockly.Dart.valueToCode(this, 'ITEM',
+    Blockly.Dart.ORDER_NONE) || 'null';
+  var argument1 = Blockly.Dart.valueToCode(this, 'NUM',
+    Blockly.Dart.ORDER_NONE) || '0';
   var code = Blockly.Dart.lists_repeat.repeat +
       '(' + argument0 + ', ' + argument1 + ')';
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart.lists_length = function() {
-  // Testing the length of a list is the same as for a string.
-  return Blockly.Dart.text_length.call(this);
+  // List length.
+  var argument0 = Blockly.Dart.valueToCode(this, 'VALUE',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
+  return [argument0 + '.length', Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart.lists_isEmpty = function() {
-  // Testing a list for being empty is the same as for a string.
-  return Blockly.Dart.text_isEmpty.call(this);
+  // Is the list empty?
+  var argument0 = Blockly.Dart.valueToCode(this, 'VALUE',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
+  return [argument0 + '.isEmpty', Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart.lists_indexOf = function() {
-  // Searching a list for a value is the same as search for a substring.
-  return Blockly.Dart.text_indexOf.call(this);
+  // Find an item in the list.
+  var operator = this.getTitleValue('END') == 'FIRST' ?
+      'indexOf' : 'lastIndexOf';
+  var argument0 = Blockly.Dart.valueToCode(this, 'FIND',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
+  var argument1 = Blockly.Dart.valueToCode(this, 'VALUE',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
+  var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart.lists_getIndex = function() {
-  // Indexing into a list is the same as indexing into a string.
-  return Blockly.Dart.text_charAt.call(this);
+  // Get element at index.
+  // Note: Until January 2013 this block did not have MODE or WHERE inputs.
+  var mode = this.getTitleValue('MODE') || 'GET';
+  var where = this.getTitleValue('WHERE') || 'FROM_START';
+  var at = Blockly.Dart.valueToCode(this, 'AT',
+      Blockly.Dart.ORDER_UNARY_PREFIX) || '1';
+  var list = Blockly.Dart.valueToCode(this, 'VALUE',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
+
+  if (where == 'FIRST') {
+    if (mode == 'GET') {
+      var code = list + '.first';
+      return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+    } else if (mode == 'GET_REMOVE') {
+      var code = list + '.removeAt(0)';
+      return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+    } else if (mode == 'REMOVE') {
+      return list + '.removeAt(0);\n';
+    }
+  } else if (where == 'LAST') {
+    if (mode == 'GET') {
+      var code = list + '.last';
+      return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+    } else if (mode == 'GET_REMOVE') {
+      var code = list + '.removeLast()';
+      return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+    } else if (mode == 'REMOVE') {
+      return list + '.removeLast();\n';
+    }
+  } else if (where == 'FROM_START') {
+    // Blockly uses one-based indicies.
+    if (at.match(/^-?\d+$/)) {
+      // If the index is a naked number, decrement it right now.
+      at = parseInt(at, 10) - 1;
+    } else {
+      // If the index is dynamic, decrement it in code.
+      at += ' - 1';
+    }
+    if (mode == 'GET') {
+      var code = list + '[' + at + ']';
+      return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+    } else if (mode == 'GET_REMOVE') {
+      var code = list + '.removeAt(' + at + ')';
+      return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+    } else if (mode == 'REMOVE') {
+      return list + '.removeAt(' + at + ');\n';
+    }
+  } else if (where == 'FROM_END') {
+    if (mode == 'GET') {
+      if (!Blockly.Dart.definitions_['lists_get_from_end']) {
+        var functionName = Blockly.Dart.variableDB_.getDistinctName(
+            'lists_get_from_end', Blockly.Generator.NAME_TYPE);
+        Blockly.Dart.lists_getIndex.lists_get_from_end = functionName;
+        var func = [];
+        func.push('dynamic ' + functionName + '(List myList, num x) {');
+        func.push('  x = myList.length - x;');
+        func.push('  return myList.removeAt(x);');
+        func.push('}');
+        Blockly.Dart.definitions_['lists_get_from_end'] = func.join('\n');
+      }
+      code = Blockly.Dart.lists_getIndex.lists_get_from_end +
+          '(' + list + ', ' + at + ')';
+      return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+    } else if (mode == 'GET_REMOVE' || mode == 'REMOVE') {
+      if (!Blockly.Dart.definitions_['lists_remove_from_end']) {
+        var functionName = Blockly.Dart.variableDB_.getDistinctName(
+            'lists_remove_from_end', Blockly.Generator.NAME_TYPE);
+        Blockly.Dart.lists_getIndex.lists_remove_from_end = functionName;
+        var func = [];
+        func.push('dynamic ' + functionName + '(List myList, num x) {');
+        func.push('  x = myList.length - x;');
+        func.push('  return myList.removeAt(x);');
+        func.push('}');
+        Blockly.Dart.definitions_['lists_remove_from_end'] = func.join('\n');
+      }
+      code = Blockly.Dart.lists_getIndex.lists_remove_from_end +
+          '(' + list + ', ' + at + ')';
+      if (mode == 'GET_REMOVE') {
+        return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+      } else if (mode == 'REMOVE') {
+        return code + ';\n';
+      }
+    }
+  } else if (where == 'RANDOM') {
+    if (!Blockly.Dart.definitions_['lists_random_item']) {
+      Blockly.Dart.definitions_['import_dart_math'] =
+          'import \'dart:math\' as Math;';
+      var functionName = Blockly.Dart.variableDB_.getDistinctName(
+          'lists_random_item', Blockly.Generator.NAME_TYPE);
+      Blockly.Dart.lists_getIndex.lists_random_item = functionName;
+      var func = [];
+      func.push('dynamic ' + functionName + '(List myList, bool remove) {');
+      func.push('  int x = new Math.Random().nextInt(myList.length);');
+      func.push('  if (remove) {');
+      func.push('    return myList.removeAt(x);');
+      func.push('  } else {');
+      func.push('    return myList[x];');
+      func.push('  }');
+      func.push('}');
+      Blockly.Dart.definitions_['lists_random_item'] = func.join('\n');
+    }
+    code = Blockly.Dart.lists_getIndex.lists_random_item +
+        '(' + list + ', ' + (mode != 'GET') + ')';
+    if (mode == 'GET' || mode == 'GET_REMOVE') {
+      return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+    } else if (mode == 'REMOVE') {
+      return code + ';\n';
+    }
+  }
+  throw 'Unhandled combination (lists_getIndex).';
 };
 
 Blockly.Dart.lists_setIndex = function() {

@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,9 +98,9 @@ Blockly.Python.unittest_assertequals = function() {
     Blockly.Python.definitions_['unittest_assertequals'] = func.join('\n');
   }
   var actual = Blockly.Python.valueToCode(this, 'ACTUAL',
-      Blockly.Python.ORDER_COMMA) || 'None';
+      Blockly.Python.ORDER_NONE) || 'None';
   var expected = Blockly.Python.valueToCode(this, 'EXPECTED',
-      Blockly.Python.ORDER_COMMA) || 'None';
+      Blockly.Python.ORDER_NONE) || 'None';
   return Blockly.Python.unittest_assertequals.assert + '(' +
       actual + ', ' + expected + ', ' + message + ')\n';
 };
@@ -128,7 +128,7 @@ Blockly.Python.unittest_asserttrue = function() {
     Blockly.Python.definitions_['unittest_asserttrue'] = func.join('\n');
   }
   var actual = Blockly.Python.valueToCode(this, 'ACTUAL',
-      Blockly.Python.ORDER_COMMA) || 'True';
+      Blockly.Python.ORDER_NONE) || 'True';
   return Blockly.Python.unittest_asserttrue.assert +
       '(' + actual + ', ' + message + ')\n';
 };
@@ -156,7 +156,7 @@ Blockly.Python.unittest_assertfalse = function() {
     Blockly.Python.definitions_['unittest_assertfalse'] = func.join('\n');
   }
   var actual = Blockly.Python.valueToCode(this, 'ACTUAL',
-      Blockly.Python.ORDER_COMMA) || 'False';
+      Blockly.Python.ORDER_NONE) || 'False';
   return Blockly.Python.unittest_assertfalse.assert +
       '(' + actual + ', ' + message + ')\n';
 };

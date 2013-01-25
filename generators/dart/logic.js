@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@
 
 /**
  * @fileoverview Generating Dart for logic blocks.
- * @author fraser@google.com (Neil Fraser)
+ * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 
-Blockly.Dart = Blockly.Generator.get('Dart');
+goog.provide('Blockly.Dart.logic');
+
+goog.require('Blockly.Dart');
 
 Blockly.Dart.logic_compare = function() {
   // Comparison operator.
@@ -74,4 +76,16 @@ Blockly.Dart.logic_boolean = function() {
 Blockly.Dart.logic_null = function() {
   // Null data type.
   return ['null', Blockly.Dart.ORDER_ATOMIC];
+};
+
+Blockly.Dart.logic_ternary = function() {
+  // Ternary operator.
+  var value_if = Blockly.Dart.valueToCode(this, 'IF',
+      Blockly.Dart.ORDER_CONDITIONAL) || 'false';
+  var value_then = Blockly.Dart.valueToCode(this, 'THEN',
+      Blockly.Dart.ORDER_CONDITIONAL) || 'null';
+  var value_else = Blockly.Dart.valueToCode(this, 'ELSE',
+      Blockly.Dart.ORDER_CONDITIONAL) || 'null';
+  var code = value_if + ' ? ' + value_then + ' : ' + value_else
+  return [code, Blockly.Dart.ORDER_CONDITIONAL];
 };

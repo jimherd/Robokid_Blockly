@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,10 @@
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
+
+goog.provide('Blockly.Language.control');
+
+goog.require('Blockly.Language');
 
 Blockly.Language.controls_if = {
   // If/elseif/else condition.
@@ -213,6 +217,25 @@ Blockly.Language.controls_if_else = {
   }
 };
 
+Blockly.Language.controls_repeat = {
+  // Repeat n times.
+  category: Blockly.LANG_CATEGORY_CONTROLS,
+  helpUrl: Blockly.LANG_CONTROLS_REPEAT_HELPURL,
+  init: function() {
+    this.setColour(120);
+    this.appendDummyInput()
+        .appendTitle(Blockly.LANG_CONTROLS_REPEAT_TITLE_REPEAT)
+        .appendTitle(new Blockly.FieldTextInput('10',
+            Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES')
+        .appendTitle(Blockly.LANG_CONTROLS_REPEAT_TITLE_TIMES);
+    this.appendStatementInput('DO')
+        .appendTitle(Blockly.LANG_CONTROLS_REPEAT_INPUT_DO);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(Blockly.LANG_CONTROLS_REPEAT_TOOLTIP);
+  }
+};
+
 Blockly.Language.controls_whileUntil = {
   // Do while/until loop.
   category: Blockly.LANG_CATEGORY_CONTROLS,
@@ -345,7 +368,8 @@ Blockly.Language.controls_flow_statements = {
     // Is the block nested in a control statement?
     var block = this;
     do {
-      if (block.type == 'controls_forEach' ||
+      if (block.type == 'controls_repeat' ||
+          block.type == 'controls_forEach' ||
           block.type == 'controls_for' ||
           block.type == 'controls_whileUntil') {
         legal = true;

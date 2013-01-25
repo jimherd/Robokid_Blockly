@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@
  */
 'use strict';
 
-Blockly.Python = Blockly.Generator.get('Python');
+goog.provide('Blockly.Python.procedures');
+
+goog.require('Blockly.Python');
 
 Blockly.Python.procedures_defreturn = function() {
   // Define a procedure with a return value.
@@ -44,6 +46,10 @@ Blockly.Python.procedures_defreturn = function() {
   var funcName = Blockly.Python.variableDB_.getName(this.getTitleValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Python.statementToCode(this, 'STACK');
+  if (Blockly.Python.INFINITE_LOOP_TRAP) {
+    branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '"' + this.id + '"') + branch;
+  }
   var returnValue = Blockly.Python.valueToCode(this, 'RETURN',
       Blockly.Python.ORDER_NONE) || '';
   if (returnValue) {

@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@
 
 /**
  * @fileoverview Generating Python for variable blocks.
- * @author fraser@google.com (Neil Fraser)
+ * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 
-Blockly.Python = Blockly.Generator.get('Python');
+goog.provide('Blockly.Python.variables');
+
+goog.require('Blockly.Python');
 
 Blockly.Python.variables_get = function() {
   // Variable getter.

@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,19 @@
  */
 'use strict';
 
-Blockly.JavaScript = Blockly.Generator.get('JavaScript');
+goog.provide('Blockly.JavaScript.procedures');
+
+goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript.procedures_defreturn = function() {
   // Define a procedure with a return value.
   var funcName = Blockly.JavaScript.variableDB_.getName(
       this.getTitleValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.JavaScript.statementToCode(this, 'STACK');
+  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
+    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '\'' + this.id + '\'') + branch;
+  }
   var returnValue = Blockly.JavaScript.valueToCode(this, 'RETURN',
       Blockly.JavaScript.ORDER_NONE) || '';
   if (returnValue) {

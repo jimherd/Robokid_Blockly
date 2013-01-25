@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,19 +23,25 @@
  */
 'use strict';
 
-Blockly.Dart = Blockly.Generator.get('Dart');
+goog.provide('Blockly.Dart.procedures');
+
+goog.require('Blockly.Dart');
 
 Blockly.Dart.procedures_defreturn = function() {
   // Define a procedure with a return value.
   var funcName = Blockly.Dart.variableDB_.getName(this.getTitleValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Dart.statementToCode(this, 'STACK');
+  if (Blockly.Dart.INFINITE_LOOP_TRAP) {
+    branch = Blockly.Dart.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '\'' + this.id + '\'') + branch;
+  }
   var returnValue = Blockly.Dart.valueToCode(this, 'RETURN',
       Blockly.Dart.ORDER_NONE) || '';
   if (returnValue) {
     returnValue = '  return ' + returnValue + ';\n';
   }
-  var returnType = returnValue ? 'Dynamic' : 'void';
+  var returnType = returnValue ? 'dynamic' : 'void';
   var args = [];
   for (var x = 0; x < this.arguments_.length; x++) {
     args[x] = Blockly.Dart.variableDB_.getName(this.arguments_[x],

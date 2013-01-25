@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,15 @@
 
 /**
  * @fileoverview Generating Dart for math blocks.
- * @author fraser@google.com (Neil Fraser)
+ * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 
-Blockly.Dart = Blockly.Generator.get('Dart');
+goog.provide('Blockly.Dart.math');
 
-if (!Blockly.Dart.RESERVED_WORDS_) {
-  Blockly.Dart.RESERVED_WORDS_ = '';
-}
-Blockly.Dart.RESERVED_WORDS_ += 'Math,';
+goog.require('Blockly.Dart');
+
+Blockly.Dart.addReservedWords('Math');
 
 Blockly.Dart.math_number = function() {
   // Numeric value.
@@ -43,7 +42,7 @@ Blockly.Dart.math_number = function() {
 Blockly.Dart.math_arithmetic = function() {
   // Basic arithmetic operators, and power.
   var mode = this.getTitleValue('OP');
-  var tuple = Blockly.JavaScript.math_arithmetic.OPERATORS[mode];
+  var tuple = Blockly.Dart.math_arithmetic.OPERATORS[mode];
   var operator = tuple[0];
   var order = tuple[1];
   var argument0 = Blockly.Dart.valueToCode(this, 'A', order) || '0';
@@ -52,7 +51,7 @@ Blockly.Dart.math_arithmetic = function() {
   // Power in Dart requires a special case since it has no operator.
   if (!operator) {
     Blockly.Dart.definitions_['import_dart_math'] =
-        'import \'dart:math\', prefix:\'Math\';';
+        'import \'dart:math\' as Math;';
     code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
     return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
   }
@@ -66,16 +65,6 @@ Blockly.Dart.math_arithmetic.OPERATORS = {
   MULTIPLY: [' * ', Blockly.Dart.ORDER_MULTIPLICATIVE],
   DIVIDE: [' / ', Blockly.Dart.ORDER_MULTIPLICATIVE],
   POWER: [null, Blockly.Dart.ORDER_NONE]  // Handle power separately.
-};
-
-Blockly.Dart.math_change = function() {
-  // Add to a variable in place.
-  var argument0 = Blockly.Dart.valueToCode(this, 'DELTA',
-      Blockly.Dart.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Dart.variableDB_.getName(this.getTitleValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
-  return varName + ' = (' + varName + ' is num ? ' + varName + ' : 0) + ' +
-      argument0 + ';\n';
 };
 
 Blockly.Dart.math_single = function() {
@@ -163,6 +152,106 @@ Blockly.Dart.math_single = function() {
       throw 'Unknown math operator: ' + operator;
   }
   return [code, Blockly.Dart.ORDER_MULTIPLICATIVE];
+};
+
+Blockly.Dart.math_constant = function() {
+  // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
+  var constant = this.getTitleValue('CONSTANT');
+  if (constant != 'INFINITY') {
+    Blockly.Dart.definitions_['import_dart_math'] =
+        'import \'dart:math\' as Math;';
+  }
+  return Blockly.Dart.math_constant.CONSTANTS[constant];
+};
+
+Blockly.Dart.math_constant.CONSTANTS = {
+  PI: ['Math.PI', Blockly.Dart.ORDER_UNARY_POSTFIX],
+  E: ['Math.E', Blockly.Dart.ORDER_UNARY_POSTFIX],
+  GOLDEN_RATIO: ['(1 + Math.sqrt(5)) / 2', Blockly.Dart.ORDER_MULTIPLICATIVE],
+  SQRT2: ['Math.SQRT2', Blockly.Dart.ORDER_UNARY_POSTFIX],
+  SQRT1_2: ['Math.SQRT1_2', Blockly.Dart.ORDER_UNARY_POSTFIX],
+  INFINITY: ['double.INFINITY', Blockly.Dart.ORDER_ATOMIC]
+};
+
+Blockly.Dart.math_number_property = function() {
+  // Check if a number is even, odd, prime, whole, positive, or negative
+  // or if it is divisible by certain number. Returns true or false.
+  var number_to_check = Blockly.Dart.valueToCode(this, 'NUMBER_TO_CHECK',
+      Blockly.Dart.ORDER_MULTIPLICATIVE);
+  if (!number_to_check) {
+    return ['false', Blockly.Python.ORDER_ATOMIC];
+  }
+  var dropdown_property = this.getTitleValue('PROPERTY');
+  var code;
+  if (dropdown_property == 'PRIME') {
+    // Prime is a special case as it is not a one-liner test.
+    if (!Blockly.Dart.definitions_['isPrime']) {
+      Blockly.Dart.definitions_['import_dart_math'] =
+          'import \'dart:math\' as Math;';
+      var functionName = Blockly.Dart.variableDB_.getDistinctName(
+          'isPrime', Blockly.Generator.NAME_TYPE);
+      Blockly.Dart.logic_prime= functionName;
+      var func = [];
+      func.push('bool ' + functionName + '(n) {');
+      func.push('  // http://en.wikipedia.org/wiki/Primality_test#Naive_methods');
+      func.push('  if (n == 2 || n == 3) {');
+      func.push('    return true;');
+      func.push('  }');
+      func.push('  // False if n is null, negative, is 1, or not whole.');
+      func.push('  // And false if n is divisible by 2 or 3.');
+      func.push('  if (n == null || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
+                ' n % 3 == 0) {');
+      func.push('    return false;');
+      func.push('  }');
+      func.push('  // Check all the numbers of form 6k +/- 1, up to sqrt(n).');
+      func.push('  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {');
+      func.push('    if (n % (x - 1) == 0 || n % (x + 1) == 0) {');
+      func.push('      return false;');
+      func.push('    }');
+      func.push('  }');
+      func.push('  return true;');
+      func.push('}');
+      Blockly.Dart.definitions_['isPrime'] = func.join('\n');
+    }
+    code = Blockly.Dart.logic_prime + '(' + number_to_check + ')';
+    return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+  }
+  switch (dropdown_property) {
+    case 'EVEN':
+      code = number_to_check + ' % 2 == 0';
+      break;
+    case 'ODD':
+      code = number_to_check + ' % 2 == 1';
+      break;
+    case 'WHOLE':
+      code = number_to_check + ' % 1 == 0';
+      break;
+    case 'POSITIVE':
+      code = number_to_check + ' > 0';
+      break;
+    case 'NEGATIVE':
+      code = number_to_check + ' < 0';
+      break;
+    case 'DIVISIBLE_BY':
+      var divisor = Blockly.Dart.valueToCode(this, 'DIVISOR',
+          Blockly.Dart.ORDER_MULTIPLICATIVE);
+      if (!divisor) {
+        return ['false', Blockly.Python.ORDER_ATOMIC];
+      }
+      code = number_to_check + ' % ' + divisor + ' == 0';
+      break;
+  }
+  return [code, Blockly.Dart.ORDER_EQUALITY];
+};
+
+Blockly.Dart.math_change = function() {
+  // Add to a variable in place.
+  var argument0 = Blockly.Dart.valueToCode(this, 'DELTA',
+      Blockly.Dart.ORDER_ADDITIVE) || '0';
+  var varName = Blockly.Dart.variableDB_.getName(this.getTitleValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  return varName + ' = (' + varName + ' is num ? ' + varName + ' : 0) + ' +
+      argument0 + ';\n';
 };
 
 // Rounding functions have a single operand.
@@ -266,7 +355,7 @@ Blockly.Dart.math_on_list = function() {
         func.push('  List localList = myList.filter((a) => a is num);');
         func.push('  if (localList.isEmpty) return null;');
         func.push('  localList.sort((a, b) => (a - b));');
-        func.push('  int index = (localList.length / 2).toInt();');
+        func.push('  int index = localList.length ~/ 2;');
         func.push('  if (localList.length % 2 == 1) {');
         func.push('    return localList[index];');
         func.push('  } else {');
@@ -297,7 +386,7 @@ Blockly.Dart.math_on_list = function() {
         func.push('    bool found = false;');
         func.push('    int thisCount;');
         func.push('    for (int j = 0; j < counts.length; j++) {');
-        func.push('      if (counts[j][0] === value) {');
+        func.push('      if (counts[j][0] == value) {');
         func.push('        thisCount = ++counts[j][1];');
         func.push('        found = true;');
         func.push('        break;');
@@ -354,7 +443,7 @@ Blockly.Dart.math_on_list = function() {
             'math_random_item', Blockly.Generator.NAME_TYPE);
         Blockly.Dart.math_on_list.math_random_item = functionName;
         var func = [];
-        func.push('Dynamic ' + functionName + '(List myList) {');
+        func.push('dynamic ' + functionName + '(List myList) {');
         func.push('  int x = new Math.Random().nextInt(myList.length);');
         func.push('  return myList[x];');
         func.push('}');
@@ -368,19 +457,6 @@ Blockly.Dart.math_on_list = function() {
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
-Blockly.Dart.math_constrain = function() {
-  // Constrain a number between two limits.
-  var argument0 = Blockly.Dart.valueToCode(this, 'VALUE',
-      Blockly.Dart.ORDER_NONE) || '0';
-  var argument1 = Blockly.Dart.valueToCode(this, 'LOW',
-      Blockly.Dart.ORDER_NONE) || '0';
-  var argument2 = Blockly.Dart.valueToCode(this, 'HIGH',
-      Blockly.Dart.ORDER_NONE) || '0';
-  var code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
-      argument2 + ')';
-  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
-};
-
 Blockly.Dart.math_modulo = function() {
   // Remainder computation.
   var argument0 = Blockly.Dart.valueToCode(this, 'DIVIDEND',
@@ -389,6 +465,19 @@ Blockly.Dart.math_modulo = function() {
       Blockly.Dart.ORDER_MULTIPLICATIVE) || '0';
   var code = argument0 + ' % ' + argument1;
   return [code, Blockly.Dart.ORDER_MULTIPLICATIVE];
+};
+
+Blockly.Dart.math_constrain = function() {
+  // Constrain a number between two limits.
+  var argument0 = Blockly.Dart.valueToCode(this, 'VALUE',
+      Blockly.Dart.ORDER_NONE) || '0';
+  var argument1 = Blockly.Dart.valueToCode(this, 'LOW',
+      Blockly.Dart.ORDER_NONE) || '0';
+  var argument2 = Blockly.Dart.valueToCode(this, 'HIGH',
+      Blockly.Dart.ORDER_NONE) || 'double.INFINITY';
+  var code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
+      argument2 + ')';
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart.math_random_int = function() {

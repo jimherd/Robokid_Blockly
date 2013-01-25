@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,10 @@
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
+
+goog.provide('Blockly.Language.procedures');
+
+goog.require('Blockly.Language');
 
 Blockly.Language.procedures_defnoreturn = {
   // Define a procedure with no return value.
@@ -414,9 +418,8 @@ Blockly.Language.procedures_ifreturn = {
     this.appendValueInput('CONDITION')
         .setCheck(Boolean)
         .appendTitle(Blockly.LANG_CONTROLS_IF_MSG_IF);
-    this.appendDummyInput()
+    this.appendValueInput('VALUE')
         .appendTitle(Blockly.LANG_PROCEDURES_DEFRETURN_RETURN);
-    this.appendValueInput('VALUE');
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -435,6 +438,8 @@ Blockly.Language.procedures_ifreturn = {
     this.hasReturnValue_ = (value == 1);
     if (!this.hasReturnValue_) {
       this.removeInput('VALUE');
+      this.appendDummyInput('VALUE')
+        .appendTitle(Blockly.LANG_PROCEDURES_DEFRETURN_RETURN);
     }
   },
   onchange: function() {
@@ -457,10 +462,14 @@ Blockly.Language.procedures_ifreturn = {
       // If needed, toggle whether this block has a return value.
       if (block.type == 'procedures_defnoreturn' && this.hasReturnValue_) {
         this.removeInput('VALUE');
+        this.appendDummyInput('VALUE')
+          .appendTitle(Blockly.LANG_PROCEDURES_DEFRETURN_RETURN);
         this.hasReturnValue_ = false;
       } else if (block.type == 'procedures_defreturn' &&
                  !this.hasReturnValue_) {
-        this.appendValueInput('VALUE');
+        this.removeInput('VALUE');
+        this.appendValueInput('VALUE')
+          .appendTitle(Blockly.LANG_PROCEDURES_DEFRETURN_RETURN);
         this.hasReturnValue_ = true;
       }
       this.setWarningText(null);

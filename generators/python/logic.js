@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@
 
 /**
  * @fileoverview Generating Python for logic blocks.
- * @author fraser@google.com (Neil Fraser)
+ * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 
-Blockly.Python = Blockly.Generator.get('Python');
+goog.provide('Blockly.Python.logic');
+
+goog.require('Blockly.Python');
 
 Blockly.Python.logic_compare = function() {
   // Comparison operator.
@@ -73,4 +75,16 @@ Blockly.Python.logic_boolean = function() {
 Blockly.Python.logic_null = function() {
   // Null data type.
   return ['None', Blockly.Python.ORDER_ATOMIC];
+};
+
+Blockly.Python.logic_ternary = function() {
+  // Ternary operator.
+  var value_if = Blockly.Python.valueToCode(this, 'IF',
+      Blockly.Python.ORDER_CONDITIONAL) || 'False';
+  var value_then = Blockly.Python.valueToCode(this, 'THEN',
+      Blockly.Python.ORDER_CONDITIONAL) || 'None';
+  var value_else = Blockly.Python.valueToCode(this, 'ELSE',
+      Blockly.Python.ORDER_CONDITIONAL) || 'None';
+  var code = value_then + ' if ' + value_if + ' else ' + value_else
+  return [code, Blockly.Python.ORDER_CONDITIONAL];
 };

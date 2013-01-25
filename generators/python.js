@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,10 @@
  */
 'use strict';
 
+goog.provide('Blockly.Python');
+
+goog.require('Blockly.CodeGenerator');
+
 Blockly.Python = Blockly.Generator.get('Python');
 
 /**
@@ -32,11 +36,7 @@ Blockly.Python = Blockly.Generator.get('Python');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-if (!Blockly.Python.RESERVED_WORDS_) {
-  Blockly.Python.RESERVED_WORDS_ = '';
-}
-
-Blockly.Python.RESERVED_WORDS_ +=
+Blockly.Python.addReservedWords(
     // import keyword
     // print ','.join(keyword.kwlist)
     // http://docs.python.org/reference/lexical_analysis.html#keywords
@@ -44,7 +44,7 @@ Blockly.Python.RESERVED_WORDS_ +=
     //http://docs.python.org/library/constants.html
     'True,False,None,NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
     // http://docs.python.org/library/functions.html
-    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern,';
+    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern');
 
 /**
  * Order of operation ENUMs.
@@ -74,6 +74,14 @@ Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
+ * Arbitrary code to inject into locations that risk causing infinite loops.
+ * Any instances of '%1' will be replaced by the block ID that failed.
+ * E.g. '  checkTimeout(%1)\n'
+ * @type ?string
+ */
+Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+/**
  * Initialise the database of variable names.
  */
 Blockly.Python.init = function() {
@@ -91,7 +99,7 @@ Blockly.Python.init = function() {
     var defvars = [];
     var variables = Blockly.Variables.allVariables();
     for (var x = 0; x < variables.length; x++) {
-      defvars[x] = Blockly.Python.variableDB_.getDistinctName(variables[x],
+      defvars[x] = Blockly.Python.variableDB_.getName(variables[x],
           Blockly.Variables.NAME_TYPE) + ' = None';
     }
     Blockly.Python.definitions_['variables'] = defvars.join('\n');

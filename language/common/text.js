@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,10 @@
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
+
+goog.provide('Blockly.Language.text');
+
+goog.require('Blockly.Language');
 
 Blockly.Language.text = {
   // Text value.
@@ -276,16 +280,62 @@ Blockly.Language.text_charAt = {
   init: function() {
     this.setColour(160);
     this.setOutput(true, String);
-    this.appendValueInput('AT')
-        .setCheck(Number)
-        .appendTitle(Blockly.LANG_TEXT_CHARAT_INPUT_AT);
+    this.appendDummyInput('AT');
     this.appendValueInput('VALUE')
         .setCheck(String)
         .appendTitle(Blockly.LANG_TEXT_CHARAT_INPUT_INTEXT);
     this.setInputsInline(true);
+    this.updateAt(true);
     this.setTooltip(Blockly.LANG_TEXT_CHARAT_TOOLTIP);
+  },
+  mutationToDom: function() {
+    // Save whether there is an 'AT' input.
+    var container = document.createElement('mutation');
+    var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
+    container.setAttribute('at', isAt);
+    return container;
+  },
+  domToMutation: function(xmlElement) {
+    // Restore the 'AT' input.
+    // Note: Until January 2013 this block did not have mutations,
+    // so 'at' defaults to true.
+    var isAt = (xmlElement.getAttribute('at') != 'false');
+    this.updateAt(isAt);
+  },
+  updateAt: function(isAt) {
+    // Create or delete an input for the numeric index.
+    // Destroy old 'AT' input.
+    this.removeInput('AT');
+    // Create either a value 'AT' input or a dummy input.
+    if (isAt) {
+      this.appendValueInput('AT').setCheck(Number);
+    } else {
+      this.appendDummyInput('AT');
+    }
+    this.moveInputBefore('AT', 'VALUE');
+    var menu = new Blockly.FieldDropdown(this.WHERE, function(value) {
+      var newAt = (value == 'FROM_START') || (value == 'FROM_END');
+      // The 'isAt' variable is available due to this function being a closure.
+      if (newAt != isAt) {
+        var block = this.sourceBlock_;
+        block.updateAt(newAt);
+        // This menu has been destroyed and replaced.  Update the replacement.
+        block.setTitleValue(value, 'WHERE');
+        return null;
+      }
+      return undefined;
+    });
+    this.getInput('AT').appendTitle(Blockly.LANG_TEXT_CHARAT_GET)
+        .appendTitle(menu, 'WHERE');
   }
 };
+
+Blockly.Language.text_charAt.WHERE =
+    [[Blockly.LANG_TEXT_CHARAT_FROM_START, 'FROM_START'],
+     [Blockly.LANG_TEXT_CHARAT_FROM_END, 'FROM_END'],
+     [Blockly.LANG_TEXT_CHARAT_FIRST, 'FIRST'],
+     [Blockly.LANG_TEXT_CHARAT_LAST, 'LAST'],
+     [Blockly.LANG_TEXT_CHARAT_RANDOM, 'RANDOM']];
 
 Blockly.Language.text_changeCase = {
   // Change capitalization.
@@ -313,12 +363,9 @@ Blockly.Language.text_trim = {
   helpUrl: Blockly.LANG_TEXT_TRIM_HELPURL,
   init: function() {
     this.setColour(160);
-    var menu = new Blockly.FieldDropdown(this.OPERATORS, function(text) {
-      var newTitle = (text == Blockly.LANG_TEXT_TRIM_OPERATOR_BOTH) ?
-          Blockly.LANG_TEXT_TRIM_TITLE_SIDES :
-          Blockly.LANG_TEXT_TRIM_TITLE_SIDE;
-      this.sourceBlock_.setTitleValue(newTitle, 'SIDES');
-      this.setText(text);
+    var menu = new Blockly.FieldDropdown(this.OPERATORS, function(value) {
+      var plural = (value == 'BOTH');
+      this.sourceBlock_.updatePlural(plural);
     });
     this.appendValueInput('TEXT')
         .setCheck(String)
@@ -338,8 +385,12 @@ Blockly.Language.text_trim = {
   domToMutation: function(xmlElement) {
     // Restore the 'sides' title as plural or singular.
     var plural = (xmlElement.getAttribute('plural') == 'true');
+    this.updatePlural(plural);
+  },
+  updatePlural: function(plural) {
+    // Set the 'sides' title as plural or singular.
     this.setTitleValue(plural ? Blockly.LANG_TEXT_TRIM_TITLE_SIDES :
-                      Blockly.LANG_TEXT_TRIM_TITLE_SIDE, 'SIDES');
+        Blockly.LANG_TEXT_TRIM_TITLE_SIDE, 'SIDES');
   }
 };
 

@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@
  */
 'use strict';
 
-Blockly.Dart = Blockly.Generator.get('Dart');
+goog.provide('Blockly.Dart.variables');
+
+goog.require('Blockly.Dart');
 
 Blockly.Dart.variables_get = function() {
   // Variable getter.

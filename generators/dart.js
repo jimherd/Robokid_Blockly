@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,10 @@
  */
 'use strict';
 
+goog.provide('Blockly.Dart');
+
+goog.require('Blockly.CodeGenerator');
+
 Blockly.Dart = Blockly.Generator.get('Dart');
 
 /**
@@ -32,17 +36,12 @@ Blockly.Dart = Blockly.Generator.get('Dart');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-if (!Blockly.Dart.RESERVED_WORDS_) {
-  Blockly.Dart.RESERVED_WORDS_ = '';
-}
-
-Blockly.Dart.RESERVED_WORDS_ +=
+Blockly.Dart.addReservedWords(
     // http://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
-    // Section 15.1.1
-    'assert,break,case,catch,class,const,continue,default,do,else,extends,false,final,finally,for,if,in,is,new,null,return,super,switch,this,throw,true,try,var,void,while,' +
+    // Section 16.1.1
+    'assert,break,case,catch,class,const,continue,default,do,else,extends,false,final,finally,for,if,in,is,new,null,return,super,switch,this,throw,true,try,var,void,while,with,' +
     // http://api.dartlang.org/dart_core.html
-    'AbstractClassInstantiationError,ArgumentError,AssertionError,bool,CastError,Collection,Comparable,Completer,Date,double,Duration,Error,Expando,Expect,FallThroughError,Function,Future,Futures,Hashable,HashSet,int,Iterable,Iterator,Match,NoSuchMethodError,num,Object,Options,Pattern,Queue,RuntimeError,Set,Stopwatch,StringBuffer,Strings,Type,TypeError,HashMap,LinkedHashMap,List,Map,RegExp,String,Comparator,ClosureArgumentMismatchException,EmptyQueueException,Exception,ExpectException,FormatException,FutureAlreadyCompleteException,FutureNotCompleteException,IllegalAccessException,IllegalArgumentException,IllegalJSRegExpException,IndexOutOfRangeException,IntegerDivisionByZeroException,NoMoreElementsException,NotImplementedException,NullPointerException,ObjectNotClosureException,OutOfMemoryException,StackOverflowException,UnsupportedOperationException,WrongArgumentCountException,';
-
+    'Collection,Comparable,Completer,Date,double,Function,Future,Hashable,HashMap,HashSet,int,InvocationMirror,Iterable,Iterator,LinkedHashMap,List,Map,Match,num,Options,Pattern,Queue,RegExp,Sequence,SequenceCollection,Set,Stopwatch,String,StringBuffer,Strings,Type,bool,DoubleLinkedQueue,DoubleLinkedQueueEntry,Duration,Expando,Expect,Futures,Object,SequenceIterator,SequenceList,Comparator,AbstractClassInstantiationError,ArgumentError,AssertionError,CastError,Error,Exception,ExpectException,FallThroughError,FormatException,FutureAlreadyCompleteException,FutureNotCompleteException,FutureUnhandledException,IllegalJSRegExpException,IntegerDivisionByZeroException,NoSuchMethodError,NullThrownError,OutOfMemoryError,RangeError,RuntimeError,StackOverflowError,StateError,TypeError,UnimplementedError,UnsupportedError');
 /**
  * Order of operation ENUMs.
  * http://www.dartlang.org/docs/dart-up-and-running/ch02.html#operator_table
@@ -65,6 +64,14 @@ Blockly.Dart.ORDER_ASSIGNMENT = 14;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Dart.ORDER_NONE = 99;          // (...)
 
 /**
+ * Arbitrary code to inject into locations that risk causing infinite loops.
+ * Any instances of '%1' will be replaced by the block ID that failed.
+ * E.g. '  checkTimeout(%1);\n'
+ * @type ?string
+ */
+Blockly.Dart.INFINITE_LOOP_TRAP = null;
+
+/**
  * Initialise the database of variable names.
  */
 Blockly.Dart.init = function() {
@@ -83,7 +90,7 @@ Blockly.Dart.init = function() {
     var variables = Blockly.Variables.allVariables();
     for (var x = 0; x < variables.length; x++) {
       defvars[x] = 'var ' +
-          Blockly.Dart.variableDB_.getDistinctName(variables[x],
+          Blockly.Dart.variableDB_.getName(variables[x],
           Blockly.Variables.NAME_TYPE) + ';';
     }
     Blockly.Dart.definitions_['variables'] = defvars.join('\n');

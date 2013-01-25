@@ -2,7 +2,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://code.google.com/p/blockly/
+ * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,23 @@
 
 /**
  * @fileoverview Generating Python for math blocks.
- * @author fraser@google.com (Neil Fraser)
+ * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 
-Blockly.Python = Blockly.Generator.get('Python');
+goog.provide('Blockly.Python.math');
 
-if (!Blockly.Python.RESERVED_WORDS_) {
-  Blockly.Python.RESERVED_WORDS_ = '';
-}
-Blockly.Python.RESERVED_WORDS_ += 'math,random,';
+goog.require('Blockly.Python');
+
+// If any new block imports any library, add that library name here.
+Blockly.Python.addReservedWords('math,random');
 
 Blockly.Python.math_number = function() {
   // Numeric value.
   var code = window.parseFloat(this.getTitleValue('NUM'));
-  return [code, Blockly.Python.ORDER_UNARY_SIGN];
+  var order = code < 0 ? Blockly.Python.ORDER_UNARY_SIGN :
+              Blockly.Python.ORDER_ATOMIC;
+  return [code, order];
 };
 
 Blockly.Python.math_arithmetic = function() {
@@ -60,16 +62,6 @@ Blockly.Python.math_arithmetic.OPERATORS = {
   MULTIPLY: [' * ', Blockly.Python.ORDER_MULTIPLICATIVE],
   DIVIDE: [' / ', Blockly.Python.ORDER_MULTIPLICATIVE],
   POWER: [' ** ', Blockly.Python.ORDER_EXPONENTIATION]
-};
-
-Blockly.Python.math_change = function() {
-  // Add to a variable in place.
-  var argument0 = Blockly.Python.valueToCode(this, 'DELTA',
-      Blockly.Python.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Python.variableDB_.getName(this.getTitleValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
-  return varName + ' = (' + varName + ' if type(' + varName +
-      ') in (int, float) else 0) + ' + argument0 + '\n';
 };
 
 Blockly.Python.math_single = function() {
@@ -152,6 +144,104 @@ Blockly.Python.math_single = function() {
   return [code, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
 
+Blockly.Python.math_constant = function() {
+  // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
+  var constant = this.getTitleValue('CONSTANT');
+  if (constant != 'INFINITY') {
+    Blockly.Python.definitions_['import_math'] = 'import math';
+  }
+  return Blockly.Python.math_constant.CONSTANTS[constant];
+};
+
+Blockly.Python.math_constant.CONSTANTS = {
+  PI: ['math.pi', Blockly.Python.ORDER_MEMBER],
+  E: ['math.e', Blockly.Python.ORDER_MEMBER],
+  GOLDEN_RATIO: ['(1 + math.sqrt(5)) / 2', Blockly.Python.ORDER_MULTIPLICATIVE],
+  SQRT2: ['math.sqrt(2)', Blockly.Python.ORDER_MEMBER],
+  SQRT1_2: ['math.sqrt(1 / 2)', Blockly.Python.ORDER_MEMBER],
+  INFINITY: ['float(\'inf\')', Blockly.Python.ORDER_ATOMIC]
+};
+
+Blockly.Python.math_number_property = function() {
+  // Check if a number is even, odd, prime, whole, positive, or negative
+  // or if it is divisible by certain number. Returns true or false.
+  var number_to_check = Blockly.Python.valueToCode(this, 'NUMBER_TO_CHECK',
+      Blockly.Python.ORDER_MULTIPLICATIVE);
+  if (!number_to_check) {
+    return ['False', Blockly.Python.ORDER_ATOMIC];
+  }
+  var dropdown_property = this.getTitleValue('PROPERTY');
+  var code;
+  if (dropdown_property == 'PRIME') {
+    // Prime is a special case as it is not a one-liner test.
+    if (!Blockly.Python.definitions_['isPrime']) {
+      var functionName = Blockly.Python.variableDB_.getDistinctName(
+          'isPrime', Blockly.Generator.NAME_TYPE);
+      Blockly.Python.logic_prime= functionName;
+      var func = [];
+      func.push('def ' + functionName + '(n):');
+      func.push('  # http://en.wikipedia.org/wiki/Primality_test#Naive_methods');
+      func.push('  # If n is not a number but a string, try parsing it.');
+      func.push('  if type(n) not in (int, float, long):');
+      func.push('    try:');
+      func.push('      n = float(n)');
+      func.push('    except:');
+      func.push('      return False');
+      func.push('  if n == 2 or n == 3:');
+      func.push('    return True');
+      func.push('  # False if n is negative, is 1, or not whole,' +
+                ' or if n is divisible by 2 or 3.');
+      func.push('  if n <= 1 or n % 1 != 0 or n % 2 == 0 or n % 3 == 0:');
+      func.push('    return False');
+      func.push('  # Check all the numbers of form 6k +/- 1, up to sqrt(n).');
+      func.push('  for x in range(6, int(math.sqrt(n)) + 2, 6):');
+      func.push('    if n % (x - 1) == 0 or n % (x + 1) == 0:');
+      func.push('      return False');
+      func.push('  return True');
+      Blockly.Python.definitions_['isPrime'] = func.join('\n');
+    }
+    code = Blockly.Python.logic_prime + '(' + number_to_check + ')';
+    return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+  }
+  switch (dropdown_property) {
+    case 'EVEN':
+      code = number_to_check + ' % 2 == 0';
+      break;
+    case 'ODD':
+      code = number_to_check + ' % 2 == 1';
+      break;
+    case 'WHOLE':
+      code = number_to_check + ' % 1 == 0';
+      break;
+    case 'POSITIVE':
+      code = number_to_check + ' > 0';
+      break;
+    case 'NEGATIVE':
+      code = number_to_check + ' < 0';
+      break;
+    case 'DIVISIBLE_BY':
+      var divisor = Blockly.Python.valueToCode(this, 'DIVISOR',
+          Blockly.Python.ORDER_MULTIPLICATIVE);
+      // If 'divisor' is some code that evals to 0, Python will raise an error.
+      if (!divisor || divisor == '0') {
+        return ['False', Blockly.Python.ORDER_ATOMIC];
+      }
+      code = number_to_check + ' % ' + divisor + ' == 0';
+      break;
+  }
+  return [code, Blockly.Python.ORDER_RELATIONAL];
+};
+
+Blockly.Python.math_change = function() {
+  // Add to a variable in place.
+  var argument0 = Blockly.Python.valueToCode(this, 'DELTA',
+      Blockly.Python.ORDER_ADDITIVE) || '0';
+  var varName = Blockly.Python.variableDB_.getName(this.getTitleValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  return varName + ' = (' + varName + ' if type(' + varName +
+      ') in (int, float, long) else 0) + ' + argument0 + '\n';
+};
+
 // Rounding functions have a single operand.
 Blockly.Python.math_round = Blockly.Python.math_single;
 // Trigonometry functions have a single operand.
@@ -183,7 +273,7 @@ Blockly.Python.math_on_list = function() {
         var func = [];
         func.push('def ' + functionName + '(myList):');
         func.push('  localList = [e for e in myList ' +
-            'if type(e) in [int, float]]');
+            'if type(e) in (int, float, long)]');
         func.push('  if not localList: return');
         func.push('  return float(sum(localList)) / len(localList)');
         Blockly.Python.definitions_['math_mean'] = func.join('\n');
@@ -200,7 +290,7 @@ Blockly.Python.math_on_list = function() {
         var func = [];
         func.push('def ' + functionName + '(myList):');
         func.push('  localList = sorted([e for e in myList ' +
-            'if type(e) in [int, float]])');
+            'if type(e) in (int, float, long)])');
         func.push('  if not localList: return');
         func.push('  if len(localList) % 2 == 0:');
         func.push('    return (localList[len(localList) / 2 - 1] + ' +
@@ -274,19 +364,6 @@ Blockly.Python.math_on_list = function() {
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
-Blockly.Python.math_constrain = function() {
-  // Constrain a number between two limits.
-  var argument0 = Blockly.Python.valueToCode(this, 'VALUE',
-      Blockly.Python.ORDER_NONE) || '0';
-  var argument1 = Blockly.Python.valueToCode(this, 'LOW',
-      Blockly.Python.ORDER_NONE) || '0';
-  var argument2 = Blockly.Python.valueToCode(this, 'HIGH',
-      Blockly.Python.ORDER_NONE) || '0';
-  var code = 'min(max(' + argument0 + ', ' + argument1 + '), ' +
-      argument2 + ')';
-  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
-};
-
 Blockly.Python.math_modulo = function() {
   // Remainder computation.
   var argument0 = Blockly.Python.valueToCode(this, 'DIVIDEND',
@@ -295,6 +372,19 @@ Blockly.Python.math_modulo = function() {
       Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
   var code = argument0 + ' % ' + argument1;
   return [code, Blockly.Python.ORDER_MULTIPLICATIVE];
+};
+
+Blockly.Python.math_constrain = function() {
+  // Constrain a number between two limits.
+  var argument0 = Blockly.Python.valueToCode(this, 'VALUE',
+      Blockly.Python.ORDER_NONE) || '0';
+  var argument1 = Blockly.Python.valueToCode(this, 'LOW',
+      Blockly.Python.ORDER_NONE) || '0';
+  var argument2 = Blockly.Python.valueToCode(this, 'HIGH',
+      Blockly.Python.ORDER_NONE) || 'float(\'inf\')';
+  var code = 'min(max(' + argument0 + ', ' + argument1 + '), ' +
+      argument2 + ')';
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python.math_random_int = function() {
