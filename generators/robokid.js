@@ -25,6 +25,10 @@
  */
 'use strict';
 
+goog.provide('Blockly.Robokid');
+
+goog.require('Blockly.CodeGenerator');
+
 Blockly.Robokid = Blockly.Generator.get('Robokid');
 
 /**
@@ -34,13 +38,16 @@ Blockly.Robokid = Blockly.Generator.get('Robokid');
  * accidentally clobbering a built-in object or function.
  * @private
  */
- 
- if (!Blockly.Robokid.RESERVED_WORDS_) {
+Blockly.Robokid.addReservedWords(
+    'Blockly,' +  'if, while, else, for, to, leds, motors, speed, wait, display, print,');
+	
+/* if (!Blockly.Robokid.RESERVED_WORDS_) {
   Blockly.Robokid.RESERVED_WORDS_ = '';
 }
 
 Blockly.Robokid.RESERVED_WORDS_ +=
-	'if, while, else, for, to, leds, motors, speed, wait, display, print,';
+	'if, while, else, for, to, leds, motors, speed, wait, display, print,';   */
+	
 /**
  * Order of operation ENUMs.
  * http://docs.Robokid.org/reference/expressions.html#summary

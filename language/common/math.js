@@ -78,6 +78,7 @@ Blockly.Language.math_arithmetic.TOOLTIPS = {
  /* POWER: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_POWER */
 };
 
+/*
 Blockly.Language.math_single = {
   // Advanced math operators with single operand.
   category: Blockly.LANG_CATEGORY_MATH,
