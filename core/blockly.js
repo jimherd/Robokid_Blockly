@@ -27,6 +27,7 @@
 goog.provide('Blockly');
 
 // Closure dependencies.
+goog.require('goog.async.Deferred');
 goog.require('goog.dom');
 goog.require('goog.color');
 goog.require('goog.events');
@@ -211,23 +212,26 @@ Blockly.svgSize = function() {
 };
 
 /**
- * Size the SVG image to completely fill its container.
- * Record both the height/width and the absolute position of the SVG image.
+ * Size the SVG image to completely fill its container.  Record both
+ * the height/width and the absolute position of the SVG image.
+ * @param {Element=} opt_svg The svg element to resize; Blockly.svg if
+ *     not provided.
  */
-Blockly.svgResize = function() {
-  var width = Blockly.svg.parentNode.offsetWidth;
-  var height = Blockly.svg.parentNode.offsetHeight;
-  if (Blockly.svg.cachedWidth_ != width) {
-    Blockly.svg.setAttribute('width', width + 'px');
-    Blockly.svg.cachedWidth_ = width;
+Blockly.svgResize = function(opt_svg) {
+  var svg = opt_svg ? opt_svg : Blockly.svg;
+  var width = svg.parentNode.offsetWidth;
+  var height = svg.parentNode.offsetHeight;
+  if (svg.cachedWidth_ != width) {
+    svg.setAttribute('width', width + 'px');
+    svg.cachedWidth_ = width;
   }
-  if (Blockly.svg.cachedHeight_ != height) {
-    Blockly.svg.setAttribute('height', height + 'px');
-    Blockly.svg.cachedHeight_ = height;
+  if (svg.cachedHeight_ != height) {
+    svg.setAttribute('height', height + 'px');
+    svg.cachedHeight_ = height;
   }
-  var bBox = Blockly.svg.getBoundingClientRect();
-  Blockly.svg.cachedLeft_ = bBox.left;
-  Blockly.svg.cachedTop_ = bBox.top;
+  var bBox = svg.getBoundingClientRect();
+  svg.cachedLeft_ = bBox.left;
+  svg.cachedTop_ = bBox.top;
 };
 
 /**
@@ -595,4 +599,42 @@ Blockly.removeChangeListener = function(bindData) {
 Blockly.cssLoaded = function() {
   Blockly.Field && (Blockly.Field.textLengthCache = {});
   Blockly.Toolbox && Blockly.Toolbox.redraw();
+};
+
+/**
+ * Loads the CSS once, returning a deferred to addCallbacks.
+ * @return {goog.async.Deferred}
+ */
+Blockly.loadCss = function() {
+  if (Blockly.loadCss.loading_)
+    return Blockly.loadCss.loading_;
+
+  /** @type {goog.async.Deferred} */
+  var d;
+
+  /** @type {Element} */
+  var head = document.head || document.getElementsByTagName('head')[0];
+
+  if (!head) {
+    d = fail(new Error('No head in document.'));
+  } else {
+    d = new goog.async.Deferred();
+
+    var link = goog.dom.createDom('link', {
+        'href': Blockly.pathToBlockly + 'media/blockly.css',
+        'rel': 'stylesheet',
+        'type': 'text/css'});
+    goog.events.listenOnce(link, goog.events.EventType.LOAD, function(e) {
+                             d.callback(link);
+                           });
+
+    /**
+     * @type {goog.async.Deferred}
+     * @private
+     */
+    Blockly.loadCss.loading_ = d;
+    head.appendChild(link);
+  }
+
+  return d.addCallback(Blockly.cssLoaded);
 };

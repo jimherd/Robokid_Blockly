@@ -25,8 +25,12 @@
  */
 
 'use strict';
+
+goog.provide('Blockly.Robokid.robokid');
+
+goog.require('Blockly.Robokid');
  
-Blockly.Robokid = Blockly.Generator.get('Robokid');
+// Blockly.Robokid = Blockly.Generator.get('Robokid');
 
 
 Blockly.Robokid.LEDS_set = function() {
@@ -105,7 +109,7 @@ Blockly.Robokid.LEDS_set = function() {
 Blockly.Robokid.set_speed = function() {
   // 
   var argument0 = Blockly.Robokid.valueToCode(this, 'Motor_L',
-      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+      Blockly.Robokid.ORDER_NONE) || '0';
 	if (argument0 > 100) {
 		argument0 = '100';
 	}
@@ -113,7 +117,7 @@ Blockly.Robokid.set_speed = function() {
 		argument0 = '0';
 	}	
 	var argument1 = Blockly.Robokid.valueToCode(this, 'Motor_R',
-      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+      Blockly.Robokid.ORDER_NONE) || '0';
 	if (argument1 > 100) {
 		argument1 = '100';
 	}
@@ -162,7 +166,7 @@ Blockly.Robokid.comment = function() {
 Blockly.Robokid.wait = function() {
   // 
   var argument0 = Blockly.Robokid.valueToCode(this, 'TIME',
-      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+      Blockly.Robokid.ORDER_NONE) || '0';
 	if (argument0 > 255) {
 		argument0 = '0';
 	}
@@ -237,7 +241,7 @@ Blockly.Robokid.play_note = function() {
   // Read a sensor and assign to a variable
   var code = (this.getTitleValue('NOTE'));
   var argument0 = Blockly.Robokid.valueToCode(this, 'duration',
-      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+      Blockly.Robokid.ORDER_NONE) || '0';
 	  return 'note ' + code + ' ' + argument0 + ';\n';
 };
 
