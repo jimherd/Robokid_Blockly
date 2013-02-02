@@ -27,7 +27,7 @@
 if (!Blockly.Language) Blockly.Language = {};
 
  Blockly.Language.LEDS_set = {
-	category: Blockly.LANG_CATEGORY_ROBOKID,
+//	category: Blockly.LANG_CATEGORY_ROBOKID,
 	helpUrl: Blockly.LANG_ROBOKID_LEDS_SET_HELPURL,
 	init: function() {
 		this.setColour(210);
@@ -59,7 +59,7 @@ if (!Blockly.Language) Blockly.Language = {};
  };
  
   Blockly.Language.set_speed = {
-	category: Blockly.LANG_CATEGORY_ROBOKID,
+//	category: Blockly.LANG_CATEGORY_ROBOKID,
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
 		this.setColour(210);
@@ -80,7 +80,7 @@ if (!Blockly.Language) Blockly.Language = {};
 };
 
   Blockly.Language.motors = {
-	category: Blockly.LANG_CATEGORY_ROBOKID,
+//	category: Blockly.LANG_CATEGORY_ROBOKID,
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
 		this.setColour(210);
@@ -106,7 +106,7 @@ if (!Blockly.Language) Blockly.Language = {};
 
 Blockly.Language.comment = {
   // Allow user to input a comment block
-  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  category: Blockly.LANG_CATEGORY_ROBOKID,
   helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
     this.setColour(210);
@@ -127,7 +127,7 @@ Blockly.Language.comment = {
 
 Blockly.Language.display = {
   // show string on 2-character display on the robot
-  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  category: Blockly.LANG_CATEGORY_ROBOKID,
   helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
     this.setColour(210);
@@ -148,7 +148,7 @@ Blockly.Language.display = {
 
 Blockly.Language.wait = {
   // Allow user to input a comment block
-  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  category: Blockly.LANG_CATEGORY_ROBOKID,
 //  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
     this.setColour(210);
@@ -167,7 +167,7 @@ Blockly.Language.wait = {
 
 Blockly.Language.read_sensor = {
   // Read a sensor and load into a variable
-  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  category: Blockly.LANG_CATEGORY_ROBOKID,
 //  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
   init: function() {
     this.setColour(210);
@@ -223,7 +223,7 @@ Blockly.Language.read_sensor.SENSORS =
 
 Blockly.Language.read_sysvar = {
   // Read an internal system variable
-  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  category: Blockly.LANG_CATEGORY_ROBOKID,
 //  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
   init: function() {
     this.setColour(210);
@@ -266,7 +266,7 @@ Blockly.Language.read_sysvar.SYSVARS =
 
 Blockly.Language.print = {
   // Create a string made up of any number of elements of any type.
-  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  category: Blockly.LANG_CATEGORY_ROBOKID,
   helpUrl: Blockly.LANG_TEXT_JOIN_HELPURL,
   init: function() {
     this.setColour(210);
@@ -390,7 +390,7 @@ Blockly.Language.print_create_join_item = {
 
 Blockly.Language.calibrate = {
   // Allow user to input a comment block
-  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  category: Blockly.LANG_CATEGORY_ROBOKID,
 //  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
     this.setColour(210);
@@ -405,7 +405,7 @@ Blockly.Language.calibrate = {
 
 Blockly.Language.play_note = {
   // play a tone for a period of time
-  category: Blockly.LANG_CATEGORY_ROBOKID,
+//  category: Blockly.LANG_CATEGORY_ROBOKID,
 //  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
   init: function() {
     this.setColour(210);
