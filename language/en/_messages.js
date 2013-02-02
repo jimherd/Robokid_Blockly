@@ -450,12 +450,12 @@ Blockly.LANG_LISTS_SET_INDEX_TOOLTIP = 'Sets the value at the specified position
 // Variables Blocks.
 Blockly.LANG_VARIABLES_GET_HELPURL = 'http://en.wikipedia.org/wiki/Variable_(computer_science)';
 Blockly.LANG_VARIABLES_GET_TITLE = 'get';
-Blockly.LANG_VARIABLES_GET_ITEM = 'item';
+Blockly.LANG_VARIABLES_GET_ITEM = 'a';  // item -> a
 Blockly.LANG_VARIABLES_GET_TOOLTIP = 'Returns the value of this variable.';
 
 Blockly.LANG_VARIABLES_SET_HELPURL = 'http://en.wikipedia.org/wiki/Variable_(computer_science)';
 Blockly.LANG_VARIABLES_SET_TITLE = 'set';
-Blockly.LANG_VARIABLES_SET_ITEM = 'item';
+Blockly.LANG_VARIABLES_SET_ITEM = 'a';   // item -> a
 Blockly.LANG_VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input.';
 
 // Procedures Blocks.
