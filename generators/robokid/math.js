@@ -24,7 +24,13 @@
  * to language files.
  */
 
-Blockly.Robokid = Blockly.Generator.get('Robokid');
+ 'use strict';
+
+goog.provide('Blockly.Robokid.math');
+
+goog.require('Blockly.Robokid');
+ 
+// Blockly.Robokid = Blockly.Generator.get('Robokid');
 
 Blockly.Robokid.math_number = function() {
   // Numeric value.

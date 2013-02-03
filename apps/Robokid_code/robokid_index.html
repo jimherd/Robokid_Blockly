@@ -79,7 +79,18 @@ document.getElementById('content_blocks').src = 'frame.html?' + src.join('&');
     <xml id="toolbox" style="display: none">
     <category name="Robokid">
       <block type="LEDS_set"></block>
-	  <block type="set_speed"></block>
+	  <block type="set_speed">
+	    <value name="Motor_R">
+          <block type="math_number">
+            <title name="NUM">0</title>
+          </block>
+        </value>
+        <value name="Motor_L">
+          <block type="math_number">
+            <title name="NUM">0</title>
+          </block>
+        </value>
+	  </block>
 	  <block type="motors"></block>
 	  <block type="comment"></block>
 	  <block type="display"></block>
