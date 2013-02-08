@@ -174,10 +174,10 @@ Blockly.Block.terminateDrag_ = function() {
     Blockly.unbindEvent_(Blockly.Block.onMouseMoveWrapper_);
     Blockly.Block.onMouseMoveWrapper_ = null;
   }
+  var selected = Blockly.selected;
   if (Blockly.Block.dragMode_ == 2) {
     // Terminate a drag operation.
-    if (Blockly.selected) {
-      var selected = Blockly.selected;
+    if (selected) {
       // Update the connection locations.
       var xy = selected.getRelativeToSurfaceXY();
       var dx = xy.x - selected.startDragX;
@@ -190,8 +190,10 @@ Blockly.Block.terminateDrag_ = function() {
           selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
       // Fire an event to allow scrollbars to resize.
       Blockly.fireUiEvent(window, 'resize');
-      selected.workspace.fireChangeEvent();
     }
+  }
+  if (selected) {
+    selected.workspace.fireChangeEvent();
   }
   Blockly.Block.dragMode_ = 0;
 };
@@ -604,7 +606,7 @@ Blockly.Block.prototype.showContextMenu_ = function(x, y) {
     }
     var deleteOption = {
       text: descendantCount == 1 ? Blockly.MSG_DELETE_BLOCK :
-          Blockly.MSG_DELETE_X_BLOCKS.replace('%1', descendantCount),
+          Blockly.MSG_DELETE_X_BLOCKS.replace('%1', descendantCount.toString()),
       enabled: true,
       callback: function() {
         block.dispose(true, true);
@@ -1474,3 +1476,37 @@ Blockly.Block.prototype.setWarningText = function(text) {
 Blockly.Block.prototype.render = function() {
   this.svg_.render();
 };
+
+
+/**
+ * @type {?function(): Array}
+ */
+Blockly.Block.prototype.getProcedureDef = null;
+
+
+/**
+ * @type {?function(string, string)}
+ */
+Blockly.Block.prototype.renameVar = null;
+
+
+/**
+ * @type {?function(string, string)}
+ */
+Blockly.Block.prototype.renameProcedure = null;
+
+
+/**
+ * @type {?function(Array.<string>, Array.<string>)}
+ */
+Blockly.Block.prototype.setProcedureParameters = null;
+
+/**
+ * @type {?function(): string}
+ */
+Blockly.Block.prototype.getProcedureCall = null;
+
+/**
+ * @type {?function(): Array.<string>}
+ */
+Blockly.Block.prototype.getVars = null;

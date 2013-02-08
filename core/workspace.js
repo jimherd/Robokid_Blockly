@@ -45,7 +45,7 @@ Blockly.Workspace = function(editable) {
 
   /** @type {boolean} */
   this.editable = editable;
-  
+
   /**
    * @type {!Array.<Blockly.Block>}
    * @private
@@ -161,7 +161,7 @@ Blockly.Workspace.prototype.addTrashcan = function(getMetrics) {
 
 /**
  * Get the SVG element that forms the drawing surface.
- * @return {!Element} SVG element.
+ * @return {!SVGGElement} SVG element.
  */
 Blockly.Workspace.prototype.getCanvas = function() {
   return this.svgBlockCanvas_;
