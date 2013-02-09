@@ -30,6 +30,7 @@ goog.provide('Blockly.FieldDropdown');
 goog.require('Blockly.Field');
 
 
+
 /**
  * Class for an editable dropdown field.
  * @param {(!Array.<string>|!Function)} menuGenerator An array of options
@@ -40,16 +41,19 @@ goog.require('Blockly.Field');
  * @constructor
  */
 Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
+  // TODO(scr): Find a way to call superclass's constructor at the
+  //     beginning.
+
   this.menuGenerator_ = menuGenerator;
   this.changeHandler_ = opt_changeHandler;
   var firstTuple = this.getOptions_()[0];
   this.value_ = firstTuple[1];
-  // Call parent's constructor.
-  Blockly.Field.call(this, firstTuple[0]);
-};
 
-// FieldDropdown is a subclass of Field.
+  // Call parent's constructor.
+  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[0]);
+};
 goog.inherits(Blockly.FieldDropdown, Blockly.Field);
+
 
 /**
  * Create the dropdown field's elements.  Only needs to be called once.
@@ -57,14 +61,14 @@ goog.inherits(Blockly.FieldDropdown, Blockly.Field);
  */
 Blockly.FieldDropdown.createDom = function() {
   /*
-  <g class="blocklyHidden">
+  <g class="blocklyHidden blocklyFieldDropdown">
     <rect class="blocklyDropdownMenuShadow" x="0" y="1" rx="2" ry="2"/>
     <rect x="-2" y="-1" rx="2" ry="2"/>
     <g class="blocklyDropdownMenuOptions">
     </g>
   </g>
   */
-  var svgGroup = Blockly.createSvgElement('g', {'class': 'blocklyHidden'},
+  var svgGroup = Blockly.createSvgElement('g', {'class': 'blocklyHidden blocklyFieldDropdown'},
                                           null);
   Blockly.FieldDropdown.svgGroup_ = svgGroup;
   Blockly.FieldDropdown.svgShadow_ = Blockly.createSvgElement('rect',
@@ -80,13 +84,14 @@ Blockly.FieldDropdown.createDom = function() {
 
 /**
  * Close the dropdown and dispose of all UI.
+ * @override
  */
-Blockly.FieldDropdown.prototype.dispose = function() {
+Blockly.FieldDropdown.prototype.disposeInternal = function() {
   if (Blockly.FieldDropdown.openDropdown_ == this) {
     Blockly.FieldDropdown.hide();
   }
-  // Call parent's destructor.
-  Blockly.Field.prototype.dispose.call(this);
+
+  Blockly.FieldDropdown.superClass_.disposeInternal.call(this);
 };
 
 /**
@@ -119,7 +124,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   goog.dom.removeChildren(svgOptions);
   // The menu must be made visible early since otherwise BBox and
   // getComputedTextLength will return 0.
-  svgGroup.style.display = 'block';
+  svgGroup.setAttribute('class', 'blocklyFieldDropdown');
   Blockly.FieldDropdown.openDropdown_ = this;
 
   function callbackFactory(value) {
@@ -262,6 +267,8 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
  * Hide the dropdown menu.
  */
 Blockly.FieldDropdown.hide = function() {
-  Blockly.FieldDropdown.svgGroup_.style.display = 'none';
+  var svgGroup = Blockly.FieldDropdown.svgGroup_;
+  if (svgGroup)
+    svgGroup.setAttribute('class', 'blocklyHidden blocklyFieldDropdown');
   Blockly.FieldDropdown.openDropdown_ = null;
 };
