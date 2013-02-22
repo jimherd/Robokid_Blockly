@@ -53,7 +53,7 @@ Blockly.MSG_RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
 
 // Colour Blocks.
 Blockly.LANG_COLOUR_PICKER_HELPURL = 'http://en.wikipedia.org/wiki/Color';
-Blockly.LANG_COLOUR_PICKER_TOOLTIP = 'Choose a colour form the palette.';
+Blockly.LANG_COLOUR_PICKER_TOOLTIP = 'Choose a colour from the palette.';
 
 Blockly.LANG_COLOUR_RGB_HELPURL = 'http://en.wikipedia.org/wiki/RGB_color_model';
 Blockly.LANG_COLOUR_RGB_TITLE = 'colour with';
@@ -223,7 +223,7 @@ Blockly.LANG_MATH_IS_DIVISIBLE_BY = 'is divisible by';
 Blockly.LANG_MATH_IS_TOOLTIP = 'Check if a number is an even, odd, prime, whole, positive, negative,\n' +
     'or if it is divisible by certain number.  Returns true or false.';
 
-Blockly.LANG_MATH_CHANGE_HELPURL = 'http://en.wikipedia.org/wiki/Negation';
+Blockly.LANG_MATH_CHANGE_HELPURL = 'http://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter';
 Blockly.LANG_MATH_CHANGE_TITLE_CHANGE = 'change';
 Blockly.LANG_MATH_CHANGE_TITLE_ITEM = 'item';
 Blockly.LANG_MATH_CHANGE_INPUT_BY = 'by';
@@ -256,7 +256,7 @@ Blockly.LANG_MATH_ONLIST_TOOLTIP_RANDOM = 'Return a random element from the list
 
 Blockly.LANG_MATH_MODULO_HELPURL = 'http://en.wikipedia.org/wiki/Modulo_operation';
 Blockly.LANG_MATH_MODULO_INPUT_DIVIDEND = 'remainder of';
-Blockly.LANG_MATH_MODULO_TOOLTIP = 'Return the remainder of dividing both numbers.';
+Blockly.LANG_MATH_MODULO_TOOLTIP = 'Return the remainder from dividing the two numbers.';
 
 Blockly.LANG_MATH_CONSTRAIN_HELPURL = 'http://en.wikipedia.org/wiki/Clamping_%28graphics%29';
 Blockly.LANG_MATH_CONSTRAIN_INPUT_CONSTRAIN = 'constrain';
@@ -297,7 +297,7 @@ Blockly.LANG_TEXT_APPEND_VARIABLE = 'item';
 Blockly.LANG_TEXT_APPEND_TOOLTIP = 'Append some text to variable "%1".';
 
 Blockly.LANG_TEXT_LENGTH_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';
-Blockly.LANG_TEXT_LENGTH_INPUT_LENGTH = 'length';
+Blockly.LANG_TEXT_LENGTH_INPUT_LENGTH = 'length of';
 Blockly.LANG_TEXT_LENGTH_TOOLTIP = 'Returns number of letters (including spaces)\n' +
     'in the provided text.';
 
@@ -356,7 +356,8 @@ Blockly.LANG_TEXT_PRINT_TOOLTIP = 'Print the specified text, number or other val
 Blockly.LANG_TEXT_PROMPT_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode92.html';
 Blockly.LANG_TEXT_PROMPT_TITLE_PROMPT_FOR = 'prompt for';
 Blockly.LANG_TEXT_PROMPT_TITILE_WITH_MESSAGE = 'with message';
-Blockly.LANG_TEXT_PROMPT_TOOLTIP = 'Prompt for user input with the specified text.';
+Blockly.LANG_TEXT_PROMPT_TOOLTIP_NUMBER = 'Prompt for user for a number.';
+Blockly.LANG_TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
 Blockly.LANG_TEXT_PROMPT_TYPE_TEXT = 'text';
 Blockly.LANG_TEXT_PROMPT_TYPE_NUMBER = 'number';
 
@@ -382,7 +383,7 @@ Blockly.LANG_LISTS_REPEAT_TOOLTIP = 'Creates a list consisting of the given valu
     'repeated the specified number of times.';
 
 Blockly.LANG_LISTS_LENGTH_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';
-Blockly.LANG_LISTS_LENGTH_INPUT_LENGTH = 'length';
+Blockly.LANG_LISTS_LENGTH_INPUT_LENGTH = 'length of';
 Blockly.LANG_LISTS_LENGTH_TOOLTIP = 'Returns the length of a list.';
 
 Blockly.LANG_LISTS_IS_EMPTY_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';
@@ -440,13 +441,13 @@ Blockly.LANG_LISTS_SET_INDEX_TOOLTIP = 'Sets the value at the specified position
 // Variables Blocks.
 Blockly.LANG_VARIABLES_GET_HELPURL = 'http://en.wikipedia.org/wiki/Variable_(computer_science)';
 Blockly.LANG_VARIABLES_GET_TITLE = 'get';
-Blockly.LANG_VARIABLES_GET_ITEM = 'a';  // item -> a
+Blockly.LANG_VARIABLES_GET_ITEM = 'item';
 Blockly.LANG_VARIABLES_GET_TOOLTIP = 'Returns the value of this variable.';
 Blockly.LANG_VARIABLES_GET_CREATE_SET = 'Create "set %1"';
 
 Blockly.LANG_VARIABLES_SET_HELPURL = 'http://en.wikipedia.org/wiki/Variable_(computer_science)';
 Blockly.LANG_VARIABLES_SET_TITLE = 'set';
-Blockly.LANG_VARIABLES_SET_ITEM = 'a';   // item -> a
+Blockly.LANG_VARIABLES_SET_ITEM = 'item';
 Blockly.LANG_VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input.';
 Blockly.LANG_VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 

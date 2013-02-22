@@ -1,0 +1,53 @@
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Code</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="/storage.js"></script>
+  <script type="text/javascript" src="../_soy/soyutils.js"></script>
+  <script type="text/javascript" src="template.js"></script>
+  <script>
+    var MSG = {
+      // Tooltips.
+      trashTooltip: 'Alle Blöcke löschen.',
+      linkTooltip: 'Speichern und verbinden der Blöcke.',
+      runTooltip: 'Programm ausführen.',
+      // Toolbox categories.
+      catControl: 'Steuerung',
+      catLogic: 'Logik',
+      catMath: 'Mathe',
+      catText: 'Text',
+      catLists: 'Listen',
+      catColour: 'Farbe',
+      catVariables: 'Variablen',
+      catProcedures: 'Funktionen',
+      // Misc text.
+      blocks: 'Blöcke',
+      badXml: 'Fehler beim XML parsen:\n%1\n\nÄnderungen verwerfen?',
+      badCode: 'Programmfehler:\n%1',
+      timeout: 'Maximum execution iterations exceeded.',
+      discard: 'Alle "%1" Blöcke löschen?',
+      title: 'Code'
+    };
+    if ('BlocklyStorage' in window) {
+      BlocklyStorage.HTTPREQUEST_ERROR = 'Es gab ein Problem während der HTTP Anfrage.\n';
+      BlocklyStorage.LINK_ALERT = 'Blöcke mit diesem Link teilen:\n\n';
+      BlocklyStorage.HASH_ERROR = 'Entschuldigung, konnte die gespeicherten Blöcke für "%1" nicht finden.';
+      BlocklyStorage.XML_ERROR = 'Kann Sicherungsdatei nicht laden.\n'+
+          'Diese wurde vermutlich mit einer veralteten Version von Blockly erstellt?\nXML: ';
+    }
+    var frameSrc = ['de/_messages.js',
+        'common/control.js',
+        'common/logic.js',
+        'common/math.js',
+        'common/text.js',
+        'common/lists.js',
+        'common/colour.js',
+        'common/variables.js',
+        'common/procedures.js'];
+  </script>
+</head>
+<body>
+  <script type="text/javascript" src="common.js"></script>
+</body>
+</html>

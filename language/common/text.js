@@ -43,7 +43,6 @@ Blockly.Language.text = {
   }
 };
 
-/*
 Blockly.Language.text_join = {
   // Create a string made up of any number of elements of any type.
   helpUrl: Blockly.LANG_TEXT_JOIN_HELPURL,
@@ -214,8 +213,10 @@ Blockly.Language.text_isEmpty = {
   init: function() {
     this.setColour(160);
     this.appendValueInput('VALUE')
-        .setCheck([String, Array])
+        .setCheck([String, Array]);
+    this.appendDummyInput()
         .appendTitle(Blockly.LANG_TEXT_ISEMPTY_INPUT_ISEMPTY);
+    this.setInputsInline(true);
     this.setOutput(true, Boolean);
     this.setTooltip(Blockly.LANG_TEXT_ISEMPTY_TOOLTIP);
   }
@@ -249,14 +250,14 @@ Blockly.Language.text_indexOf = {
   init: function() {
     this.setColour(160);
     this.setOutput(true, Number);
+    this.appendValueInput('VALUE')
+        .setCheck(String)
+        .appendTitle(Blockly.LANG_TEXT_INDEXOF_INPUT_INTEXT);
     this.appendValueInput('FIND')
         .setCheck(String)
         .appendTitle(Blockly.LANG_TEXT_INDEXOF_TITLE_FIND)
         .appendTitle(new Blockly.FieldDropdown(this.OPERATORS), 'END')
         .appendTitle(Blockly.LANG_TEXT_INDEXOF_INPUT_OCCURRENCE);
-    this.appendValueInput('VALUE')
-        .setCheck(String)
-        .appendTitle(Blockly.LANG_TEXT_INDEXOF_INPUT_INTEXT);
     this.setInputsInline(true);
     this.setTooltip(Blockly.LANG_TEXT_INDEXOF_TOOLTIP);
   }
@@ -272,10 +273,10 @@ Blockly.Language.text_charAt = {
   init: function() {
     this.setColour(160);
     this.setOutput(true, String);
-    this.appendDummyInput('AT');
     this.appendValueInput('VALUE')
         .setCheck(String)
         .appendTitle(Blockly.LANG_TEXT_CHARAT_INPUT_INTEXT);
+    this.appendDummyInput('AT');
     this.setInputsInline(true);
     this.updateAt(true);
     this.setTooltip(Blockly.LANG_TEXT_CHARAT_TOOLTIP);
@@ -304,7 +305,6 @@ Blockly.Language.text_charAt = {
     } else {
       this.appendDummyInput('AT');
     }
-    this.moveInputBefore('AT', 'VALUE');
     var menu = new Blockly.FieldDropdown(this.WHERE, function(value) {
       var newAt = (value == 'FROM_START') || (value == 'FROM_END');
       // The 'isAt' variable is available due to this function being a closure.
@@ -417,12 +417,16 @@ Blockly.Language.text_prompt = {
         .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
         'media/quote1.png', 12, 12));
     this.setOutput(true, [Number, String]);
-    this.setTooltip(Blockly.LANG_TEXT_PROMPT_TOOLTIP);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      return (thisBlock.getTitleValue('TYPE') == 'TEXT') ?
+          Blockly.LANG_TEXT_PROMPT_TOOLTIP_TEXT :
+          Blockly.LANG_TEXT_PROMPT_TOOLTIP_NUMBER;
+    });
   }
 };
 
 Blockly.Language.text_prompt.TYPES =
     [[Blockly.LANG_TEXT_PROMPT_TYPE_TEXT, 'TEXT'],
      [Blockly.LANG_TEXT_PROMPT_TYPE_NUMBER, 'NUMBER']];
-	 
-*/

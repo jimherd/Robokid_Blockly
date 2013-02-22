@@ -1,0 +1,110 @@
+<html lang="vn">
+<head>
+  <meta charset="utf-8">
+  <title>Ma Trận Blockly</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript" src="/storage.js"></script>
+  <script type="text/javascript" src="../_soy/soyutils.js"></script>
+  <script type="text/javascript" src="template.js"></script>
+  <script>
+    var MSG = {
+      // Block text.
+      moveForward: 'đi tới',
+      move: 'đi',
+      forward: 'tới',
+      backward: 'lui',
+      turn: 'quay',
+      left: 'qua trái',
+      right: 'qua phải',
+      randomly: 'tùy hứng',
+      path: 'đường',
+      ifPath: 'nếu có đường',
+      do: 'hãy',
+      else: 'nếu không',
+      ahead: 'phía trước',
+      toTheLeft: 'bên trái',
+      toTheRight: 'bên phải',
+      behind: 'đằng sau',
+      repeatUntilFinished: 'lặp lại cho đến đích',
+      getX: 'định vị theo X',
+      getY: 'định vị theo Y',
+      getDirection: 'định hướng',
+      // Tooltips.
+      moveForwardTooltip: 'Di chuyển Pegman tới một bước.',
+      moveTooltip: 'Di chuyển Pegman tới hoặc lùi một bước.',
+      turnTooltip: 'Quay Pegman qua bên trái hoặc bên phải 90 độ.',
+      ifTooltip: 'Nếu có đường ở hướng đấy,\n' +
+          'hãy thực hiện các lệnh đưa ra.',
+      ifelseTooltip: 'Nếu có đường ở hướng đấy,\n' +
+          'hãy thực hiện các lệnh thứ nhất.\n' +
+          'Nếu không, thực hiện các lệnh thứ hai.',
+      whileTooltip: 'Thực hiện các lệnh được bao gồm cho đến khi đến đích',
+      codeTooltip: 'Xem code đã tạo bằng JavaScript.',
+      linkTooltip: 'Lưu và lấy địa chỉ liên kết.',
+      isPathTooltip: 'Hoàn trả “đúng" nếu có đường đi\n' +
+          'về hướng được chọn.',
+      getXTooltip: 'Hoàn trả vị trí của Pegman theo chiều ngang.\n' +
+          'Sát mép trái là 1, sát mép phải là 8.',
+      getYTooltip: 'Hoàn trả vị trí của Pegman theo chiều dọc.\n' +
+          'Sát mép trên là 1, sát mép dưới là 8.',
+      getDirectionTooltip: 'Hoàn trả hướng Pegman đang quay mặt tới.\n' +
+          'Bắc: 0, Đông: 1, Nam: 2, Tây: 3.',
+      // Level hints.
+      hints: [undefined, // There is no level 0.
+          "Một chương trình là một chuỗi các lệnh.  Chồng hai mảnh 'đi tới' lên nhau để giúp tớ đến đích.",
+          "Chuỗi lệnh gì sẽ giải ma trận này?",
+          "Bộ nhớ của máy vi tính có hạn. Ở vòng này bạn chỉ được dùng hai mảnh để đến đích.  Mảnh 'lặp lại' sẽ chạy một lệnh nhiều lần.",
+          "Để giải ma trận này, bạn chỉ được dùng năm mảnh.",
+          "Mảnh 'nếu [điều kiện]' nhìn vào điều kiện rồi chỉ thực hiện lệnh nếu có điều kiện ấy. Hãy thử rẽ trái nếu có đường bên trái.",
+          "Ma trận này nhìn rắc rối hơn cái trước, nhưng thực sự chúng cũng khá giống nhau.",
+          "Bạn có thể dùng hơn một mảnh 'nếu...', để xử lý nhiều điều kiện khác nhau.",
+          "Mảnh 'nếu-nếu không' sẽ giúp bạn. Nó sẽ thực hiện một trong hai lệnh hoặc nhóm lệnh đưa ra. Lệnh ở 'nếu không' chỉ chạy khi điều kiện ấy không có thật.",
+          "Bạn có thể giải cái ma trận rắc rối này? Gợi ý: Thử đi sát theo một bức tường, y như bạn đang giữ một tay theo suốt bức tường ấy, dù nó rẻ phải hay trái.",
+          "Ma trận này đòi hỏi phải dùng cấu trúc dữ liệu. Chỉ dành cho người lập trình nâng cao!"
+      ],
+      // Level 10 categories.
+      catMaze: 'Ma trận',
+      catControl: 'Điều khiển',
+      catLogic: 'Lôgit',
+      catMath: 'Toán',
+      catLists: 'Danh sách',
+      catVariables: 'Biến',
+      catProcedures: 'Thủ tục',
+      // Misc text.
+      level: 'Vòng',
+      capacity0: 'Bạn còn <span id="capacityNumber">0</span> mảnh.',
+      capacity1: 'Bạn còn <span id="capacityNumber">1</span> mảnh.',
+      capacity2: 'Bạn còn <span id="capacityNumber">%1</span> mảnh.',
+      runProgram: '\u00A0 \u00A0 Chạy \u00A0 \u00A0',
+      resetProgram: 'Về Điểm Khởi Đầu',
+      nextLevel: 'Chúc mừng!\n\nBạn đã sẵn sàng qua vòng %1?',
+      finalLevel: 'Chúc mừng!\n\nBạn đã giải xong vòng cuối cùng.',
+      title: 'Ma trận'
+    };
+    if ('BlocklyStorage' in window) {
+      BlocklyStorage.HTTPREQUEST_ERROR = 'Hoạt động bị trục trặc, không thực hiện được yêu cầu của bạn.\n';
+      BlocklyStorage.LINK_ALERT = 'Dùng liên kết này để chia sẽ chương trình của bạn:\n\n';
+      BlocklyStorage.HASH_ERROR = 'Không tìm thấy chương trình được lưu ở "%1".';
+      BlocklyStorage.XML_ERROR = 'Không mở được chương trình của bạn.\n'+
+          'Có thể nó nằm trong một phiên bản khác của Blockly?\nXML là: ';
+    }
+    var frameSrc9 = ['language/vn/_messages.js'];
+    var frameSrc10 = ['language/vn/_messages.js',
+        'language/common/control.js',
+        'language/common/logic.js',
+        'language/common/math.js',
+        'language/common/lists.js',
+        'language/common/variables.js',
+        'language/common/procedures.js',
+        'generators/javascript/control.js',
+        'generators/javascript/logic.js',
+        'generators/javascript/math.js',
+        'generators/javascript/lists.js',
+        'generators/javascript/variables.js',
+        'generators/javascript/procedures.js'];
+  </script>
+</head>
+<body>
+  <script type="text/javascript" src="maze.js"></script>
+</body>
+</html>

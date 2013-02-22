@@ -1,0 +1,75 @@
+<html lang="vn">
+<head>
+  <meta charset="utf-8">
+  <title>Đồ Họa Con Rùa Blockly</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript" src="/storage.js"></script>
+  <script type="text/javascript" src="../_soy/soyutils.js"></script>
+  <script type="text/javascript" src="template.js"></script>
+  <script type="text/javascript" src="slider.js"></script>
+  <script>
+    var MSG = {
+      // Block text.
+      // Parts for: 'move forward by 10'.
+      move: 'đi',
+      moveBy: '',
+      forward: 'tới',
+      backward: 'lui',
+      // Parts for: 'quay qua phải 90 (độ)'.
+      turn: 'quay qua',
+      turnBy: '',
+      right: 'tay phải',
+      left: 'tay trái',
+      setWidth: 'đặt chiều rộng',
+      setColour: 'gán màu',
+      pen: 'bút vẽ',
+      up: 'nhấc lên',
+      down: 'đặt xuống',
+      // Tooltips.
+      moveTooltip: 'Di chuyển con rùa tới hoặc lui\n' +
+          'một đoạn tùy ý.',
+      turnTooltip: 'Quay con rùa qua tay trái hoặc tay phải \n' +
+          'một số độ tùy ý.',
+      widthTooltip: 'Thay đổi độ rộng của bút vẽ.',
+      penTooltip: 'Nhất bút vẽ lên hoặc đặt xuống,\n' +
+          'để bắt đầu hoặc ngưng nét vẽ.',
+      colourTooltip: 'Thay màu của bút vẽ.',
+      codeTooltip: 'Xem code đã tạo bằng JavaScript.',
+      linkTooltip: 'Lưu và lấy địa chỉ liên kết.',
+      // Toolbox categories.
+      catDraw: 'Đồ họa',
+      catControl: 'Điều khiển',
+      catLogic: 'Lôgit',
+      catMath: 'Toán',
+      catLists: 'Danh sách',
+      catColour: 'Màu',
+      catVariables: 'Biến',
+      catProcedures: 'Thủ tục',
+      // Misc text.
+      unloadWarning: 'Nếu rời khỏi trang này bạn sẽ mất kết quả hiện tại.',
+      runProgram: '\u00A0 \u00A0 Chạy \u00A0 \u00A0',
+      resetProgram: '\u00A0 Trở Về \u00A0',
+      title: 'Đồ Họa Con Rùa'
+    };
+    if ('BlocklyStorage' in window) {
+      BlocklyStorage.HTTPREQUEST_ERROR = 'Hoạt động bị trục trặc, không thực hiện được yêu cầu của bạn.\n';
+      BlocklyStorage.LINK_ALERT = 'Dùng liên kết này để chia sẽ chương trình của bạn:\n\n';
+      BlocklyStorage.HASH_ERROR = 'Không tìm thấy chương trình được lưu ở "%1".';
+      BlocklyStorage.XML_ERROR = 'Không mở được chương trình của bạn.\n'+
+          'Có thể nó nằm trong một phiên bản khác của Blockly?\nXML là: ';
+    }
+
+    var frameSrc = ['vn/_messages.js',
+        'common/control.js',
+        'common/logic.js',
+        'common/math.js',
+        'common/lists.js',
+        'common/colour.js',
+        'common/variables.js',
+        'common/procedures.js'];
+  </script>
+</head>
+<body>
+  <script type="text/javascript" src="turtle.js"></script>
+</body>
+</html>
