@@ -24,8 +24,6 @@
             <td class="tabmin">&nbsp;</td>
             <td id="tab_javascript" class="taboff" onclick="tabClick(this.id)">JavaScript</td>
             <td class="tabmin">&nbsp;</td>
-            <td id="tab_dart" class="taboff" onclick="tabClick(this.id)">Dart</td>
-            <td class="tabmin">&nbsp;</td>
             <td id="tab_python" class="taboff" onclick="tabClick(this.id)">Python</td>
             <td class="tabmin">&nbsp;</td>
             <td id="tab_xml" class="taboff" onclick="tabClick(this.id)">XML</td>
@@ -49,7 +47,6 @@
         {call .toolbox /}
         <iframe id="content_blocks" src="frame.html?{$ij.frameSrc}"></iframe>
         <pre id="content_javascript"></pre>
-        <pre id="content_dart"></pre>
         <pre id="content_python"></pre>
         <div id="content_xml">
           <textarea id="textarea_xml"></textarea>
@@ -145,8 +142,20 @@
       <block type="text_length"></block>
       <block type="text_isEmpty"></block>
       <block type="text_endString"></block>
-      <block type="text_indexOf"></block>
-      <block type="text_charAt"></block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
       <block type="text_changeCase"></block>
       <block type="text_trim"></block>
       <block type="text_print"></block>
@@ -164,9 +173,27 @@
       </block>
       <block type="lists_length"></block>
       <block type="lists_isEmpty"></block>
-      <block type="lists_indexOf"></block>
-      <block type="lists_getIndex"></block>
-      <block type="lists_setIndex"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
     </category>
     <category name="{$ij.MSG.catColour}">
       <block type="colour_picker"></block>

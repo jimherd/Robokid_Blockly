@@ -56,7 +56,7 @@ Blockly.Language.math_arithmetic = {
     var thisBlock = this;
     this.setTooltip(function() {
       var mode = thisBlock.getTitleValue('OP');
-      return Blockly.Language.math_arithmetic.TOOLTIPS[mode];
+      return thisBlock.TOOLTIPS[mode];
     });
   }
 };
@@ -66,17 +66,16 @@ Blockly.Language.math_arithmetic.OPERATORS =
      ['-', 'MINUS'],
      ['\u00D7', 'MULTIPLY'],
      ['\u00F7', 'DIVIDE'],
-     /* ['^', 'POWER'] */ ];
+     ['^', 'POWER']];
 
 Blockly.Language.math_arithmetic.TOOLTIPS = {
   ADD: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_ADD,
   MINUS: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_MINUS,
   MULTIPLY: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_MULTIPLY,
   DIVIDE: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_DIVIDE,
- /* POWER: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_POWER */
+  POWER: Blockly.LANG_MATH_ARITHMETIC_TOOLTIP_POWER
 };
 
-/*
 Blockly.Language.math_single = {
   // Advanced math operators with single operand.
   helpUrl: Blockly.LANG_MATH_SINGLE_HELPURL,
@@ -90,7 +89,7 @@ Blockly.Language.math_single = {
     var thisBlock = this;
     this.setTooltip(function() {
       var mode = thisBlock.getTitleValue('OP');
-      return Blockly.Language.math_single.TOOLTIPS[mode];
+      return thisBlock.TOOLTIPS[mode];
     });
   }
 };
@@ -127,7 +126,7 @@ Blockly.Language.math_trig = {
     var thisBlock = this;
     this.setTooltip(function() {
       var mode = thisBlock.getTitleValue('OP');
-      return Blockly.Language.math_trig.TOOLTIPS[mode];
+      return thisBlock.TOOLTIPS[mode];
     });
   }
 };
@@ -292,7 +291,7 @@ Blockly.Language.math_on_list = {
         .appendTitle(Blockly.LANG_MATH_ONLIST_INPUT_OFLIST);
     this.setTooltip(function() {
       var mode = thisBlock.getTitleValue('OP');
-      return Blockly.Language.math_on_list.TOOLTIPS[mode];
+      return thisBlock.TOOLTIPS[mode];
     });
   }
 };
@@ -385,5 +384,3 @@ Blockly.Language.math_random_float = {
     this.setTooltip(Blockly.LANG_MATH_RANDOM_FLOAT_TOOLTIP);
   }
 };
-
-*/

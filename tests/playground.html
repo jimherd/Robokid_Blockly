@@ -3,15 +3,6 @@
 <meta charset="utf-8">
 <title>Blockly Playground</title>
 <script type="text/javascript" src="../blockly_uncompressed.js"></script>
-<script type="text/javascript" src="../generators/dart.js"></script>
-<script type="text/javascript" src="../generators/dart/control.js"></script>
-<script type="text/javascript" src="../generators/dart/logic.js"></script>
-<script type="text/javascript" src="../generators/dart/math.js"></script>
-<script type="text/javascript" src="../generators/dart/text.js"></script>
-<script type="text/javascript" src="../generators/dart/lists.js"></script>
-<script type="text/javascript" src="../generators/dart/colour.js"></script>
-<script type="text/javascript" src="../generators/dart/variables.js"></script>
-<script type="text/javascript" src="../generators/dart/procedures.js"></script>
 <script type="text/javascript" src="../generators/javascript.js"></script>
 <script type="text/javascript" src="../generators/javascript/control.js"></script>
 <script type="text/javascript" src="../generators/javascript/logic.js"></script>
@@ -72,10 +63,10 @@ function toCode(lang) {
 
 function airstrike(n) {
   var prototypes = [];
-  for (var prototype in Blockly.Language) {
-    if (Blockly.Language[prototype].category) {
-      prototypes.push(prototype);
-    }
+  var toolbox = document.getElementById('toolbox');
+  var blocks = toolbox.getElementsByTagName('block');
+  for (var x = 0, block; block = blocks[x]; x++) {
+    prototypes.push(block.getAttribute('type'));
   }
   for (var x = 0; x < n; x++) {
     var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
@@ -194,8 +185,20 @@ h1 {
       <block type="text_length"></block>
       <block type="text_isEmpty"></block>
       <block type="text_endString"></block>
-      <block type="text_indexOf"></block>
-      <block type="text_charAt"></block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
       <block type="text_changeCase"></block>
       <block type="text_trim"></block>
       <block type="text_print"></block>
@@ -213,9 +216,27 @@ h1 {
       </block>
       <block type="lists_length"></block>
       <block type="lists_isEmpty"></block>
-      <block type="lists_indexOf"></block>
-      <block type="lists_getIndex"></block>
-      <block type="lists_setIndex"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
     </category>
     <category name="Colour">
       <block type="colour_picker"></block>
@@ -245,8 +266,6 @@ h1 {
     <input type="button" value="Import from XML" onclick="fromXml()">
     <br>
     <input type="button" value="Generate JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="Generate Dart" onclick="toCode('Dart')">
     &nbsp;
     <input type="button" value="Generate Python" onclick="toCode('Python')">
     <br>

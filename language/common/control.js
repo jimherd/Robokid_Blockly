@@ -251,19 +251,18 @@ Blockly.Language.controls_whileUntil = {
     var thisBlock = this;
     this.setTooltip(function() {
       var op = thisBlock.getTitleValue('MODE');
-      return Blockly.Language.controls_whileUntil.TOOLTIPS[op];
+      return thisBlock.TOOLTIPS[op];
     });
   }
 };
 
 Blockly.Language.controls_whileUntil.OPERATORS =
     [[Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_WHILE, 'WHILE'],
-    /* [Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL, 'UNTIL'] */
-	];
+     [Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL, 'UNTIL']];
 
 Blockly.Language.controls_whileUntil.TOOLTIPS = {
   WHILE: Blockly.LANG_CONTROLS_WHILEUNTIL_TOOLTIP_WHILE,
- /* UNTIL: Blockly.LANG_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL */
+  UNTIL: Blockly.LANG_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL
 };
 
 Blockly.Language.controls_for = {
@@ -312,7 +311,6 @@ Blockly.Language.controls_for = {
   }
 };
 
-/*
 Blockly.Language.controls_forEach = {
   // For each loop.
   helpUrl: Blockly.LANG_CONTROLS_FOREACH_HELPURL,
@@ -366,7 +364,7 @@ Blockly.Language.controls_flow_statements = {
     var thisBlock = this;
     this.setTooltip(function() {
       var op = thisBlock.getTitleValue('FLOW');
-      return Blockly.Language.controls_flow_statements.TOOLTIPS[op];
+      return thisBlock.TOOLTIPS[op];
     });
   },
   onchange: function() {
@@ -403,5 +401,3 @@ Blockly.Language.controls_flow_statements.TOOLTIPS = {
   BREAK: Blockly.LANG_CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK,
   CONTINUE: Blockly.LANG_CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE
 };
-
-*/
