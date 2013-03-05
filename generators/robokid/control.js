@@ -73,9 +73,9 @@ Blockly.Robokid.controls_for = function() {
   var variable0 = Blockly.Robokid.variableDB_.getName(
       this.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.Robokid.valueToCode(this, 'FROM',
-      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+      Blockly.Robokid.ORDER_NONE) || 'false';
   var argument1 = Blockly.Robokid.valueToCode(this, 'TO',
-      Blockly.Robokid.ORDER_ASSIGNMENT) || '0';
+      Blockly.Robokid.ORDER_NONE) || 'false';
   var branch0 = Blockly.Robokid.statementToCode(this, 'DO');
   var code;
   if (argument0.match(/^-?\d+(\.\d+)?$/) &&
