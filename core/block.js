@@ -532,6 +532,9 @@ Blockly.Block.prototype.showContextMenu_ = function(x, y) {
         block.duplicate_();
       }
     };
+    if (this.getDescendants().length > this.workspace.remainingCapacity()) {
+      duplicateOption.enabled = false;
+    }
     options.push(duplicateOption);
 
     if (Blockly.Comment && !this.collapsed) {
@@ -981,6 +984,12 @@ Blockly.Block.prototype.setColour = function(colourHue) {
     this.warning.updateColour();
   }
   if (this.rendered) {
+    // Bump every dropdown to change its colour.
+    for (var x = 0, input; input = this.inputList[x]; x++) {
+      for (var y = 0, title; title = this.titleRow[y]; y++) {
+        title.setText(null);
+      }
+    }
     this.render();
   }
 };

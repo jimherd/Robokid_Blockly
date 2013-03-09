@@ -229,7 +229,6 @@ h1 {
       </block>
       <block type="text_length"></block>
       <block type="text_isEmpty"></block>
-      <block type="text_endString"></block>
       <block type="text_indexOf">
         <value name="VALUE">
           <block type="variables_get">
@@ -239,6 +238,13 @@ h1 {
       </block>
       <block type="text_charAt">
         <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
           <block type="variables_get">
             <title name="VAR">text</title>
           </block>
@@ -276,6 +282,13 @@ h1 {
         </value>
       </block>
       <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
         <value name="LIST">
           <block type="variables_get">
             <title name="VAR">list</title>
