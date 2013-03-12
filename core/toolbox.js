@@ -26,13 +26,13 @@
 goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.Flyout');
-goog.require('goog.asserts');
 goog.require('goog.style');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
 
 /**
  * Width of the toolbox.
+ * @type {number}
  */
 Blockly.Toolbox.width = 0;
 
@@ -45,6 +45,8 @@ Blockly.Toolbox.selectedOption_ = null;
 
 /**
  * Configuration constants for Closure's tree UI.
+ * @type {Object.<string,*>}
+ * @const
  * @private
  */
 Blockly.Toolbox.CONFIG_ = {
@@ -67,21 +69,17 @@ Blockly.Toolbox.CONFIG_ = {
  */
 Blockly.Toolbox.createDom = function(svg, container) {
   // Create an HTML container for the Toolbox menu.
-  Blockly.Toolbox.HtmlDiv = goog.dom.createDom('div', {
-      'class': 'blocklyToolboxDiv'});
+  Blockly.Toolbox.HtmlDiv = goog.dom.createDom('div',
+      {'class': 'blocklyToolboxDiv'});
   Blockly.Toolbox.HtmlDiv.setAttribute('dir', Blockly.RTL ? 'RTL' : 'LTR');
   container.appendChild(Blockly.Toolbox.HtmlDiv);
 
-  var mainWorkspace = Blockly.mainWorkspace;
-  goog.asserts.assertObject(mainWorkspace);
-
   /**
-   * @type {Blockly.Flyout}
+   * @type {!Blockly.Flyout}
    * @private
    */
-  Blockly.Toolbox.flyout_ = new Blockly.Flyout(
-      mainWorkspace, Blockly.getMainWorkspaceMetrics, true);
-  Blockly.Toolbox.flyout_.render(svg);
+  Blockly.Toolbox.flyout_ = new Blockly.Flyout();
+  svg.appendChild(Blockly.Toolbox.flyout_.createDom());
 
   // Clicking on toolbar closes popups.
   Blockly.bindEvent_(Blockly.Toolbox.HtmlDiv, 'mousedown', null,
@@ -112,13 +110,15 @@ Blockly.Toolbox.init = function() {
   tree.setSelectedItem(null);
 
   Blockly.Toolbox.HtmlDiv.style.display = 'block';
-  Blockly.Toolbox.flyout_.init();
+  Blockly.Toolbox.flyout_.init(Blockly.mainWorkspace,
+      Blockly.getMainWorkspaceMetrics, true);
   Blockly.Toolbox.populate_();
   tree.render(Blockly.Toolbox.HtmlDiv);
 
   // If the document resizes, reposition the toolbox.
   goog.events.listen(window, goog.events.EventType.RESIZE,
                      Blockly.Toolbox.position_);
+  Blockly.Toolbox.position_();
 };
 
 /**
@@ -136,8 +136,7 @@ Blockly.Toolbox.position_ = function() {
   } else {
     treeDiv.style.marginLeft = svgBox.left;
   }
-  var y = svgSize.top +
-      parseInt(svgBox.top, 10);
+  var y = svgSize.top + parseInt(svgBox.top, 10);
   treeDiv.style.top = y + 'px';
   treeDiv.style.height = svgSize.height + 'px';
   Blockly.Toolbox.width = treeDiv.offsetWidth;

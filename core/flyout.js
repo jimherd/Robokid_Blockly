@@ -27,23 +27,13 @@ goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Comment');
-goog.require('Blockly.Component');
-
 
 
 /**
  * Class for a flyout.
- * @param {!Blockly.Workspace} workspace The workspace in which to create new
- *     blocks.
- * @param {!Function} workspaceMetrics Function which returns size information
- *     regarding the flyout's target workspace.
- * @param {boolean} withScrollbar True if a scrollbar should be displayed.
  * @constructor
- * @extends {Blockly.Component}
  */
-Blockly.Flyout = function(workspace, workspaceMetrics, withScrollbar) {
-  Blockly.Flyout.superClass_.constructor.call(this);
-
+Blockly.Flyout = function() {
   /**
    * @type {!Blockly.Workspace}
    * @private
@@ -51,22 +41,11 @@ Blockly.Flyout = function(workspace, workspaceMetrics, withScrollbar) {
   this.workspace_ = new Blockly.Workspace(false);
 
   /**
-   * @type {!Blockly.Workspace}
+   * Opaque data that can be passed to removeChangeListener.
+   * @type {Array.<!Array>}
    * @private
    */
-  this.targetWorkspace_ = workspace;
-
-  /**
-   * @type {!Function}
-   * @private
-   */
-  this.targetWorkspaceMetrics_ = workspaceMetrics;
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.withScrollbar_ = withScrollbar;
+  this.changeWrapper_ = null;
 
   /**
    * @type {number}
@@ -88,15 +67,12 @@ Blockly.Flyout = function(workspace, workspaceMetrics, withScrollbar) {
    */
   this.buttons_ = [];
 };
-goog.inherits(Blockly.Flyout, Blockly.Component);
-
 
 /**
  * Does the flyout automatically close when a block is created?
  * @type {boolean}
  */
 Blockly.Flyout.prototype.autoClose = true;
-
 
 /**
  * Corner radius of the flyout background.
@@ -105,9 +81,16 @@ Blockly.Flyout.prototype.autoClose = true;
  */
 Blockly.Flyout.prototype.CORNER_RADIUS = 8;
 
+/**
+ * Wrapper function called when a resize occurs.
+ * @type {Array.<!Array>}
+ * @private
+ */
+Blockly.Flyout.prototype.onResizeWrapper_ = null;
 
 /**
  * Creates the flyout's DOM.  Only needs to be called once.
+ * @return {!Element} The flyout's SVG group.
  */
 Blockly.Flyout.prototype.createDom = function() {
   /*
@@ -120,28 +103,38 @@ Blockly.Flyout.prototype.createDom = function() {
   this.svgBackground_ = Blockly.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgOptions_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
-  this.addChild(this.workspace_);
-  this.workspace_.render(this.svgOptions_);
-  this.setElementInternal(this.svgGroup_);
+  this.svgOptions_.appendChild(this.workspace_.createDom());
+  return this.svgGroup_;
 };
-
 
 /**
  * Dispose of this flyout.
  * Unlink from all DOM elements to prevent memory leaks.
- * @override
  */
-Blockly.Flyout.prototype.disposeInternal = function() {
+Blockly.Flyout.prototype.dispose = function() {
+  if (this.onResizeWrapper_) {
+    Blockly.unbindEvent_(this.onResizeWrapper_);
+    this.onResizeWrapper_ = null;
+  }
+  if (this.changeWrapper_) {
+    Blockly.unbindEvent_(this.changeWrapper_);
+    this.changeWrapper_ = null;
+  }
+  if (this.scrollbar_) {
+    this.scrollbar_.dispose();
+    this.scrollbar_ = null;
+  }
+  this.workspace_ = null;
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgBackground_ = null;
   this.svgOptions_ = null;
-
-  Blockly.Flyout.superClass_.disposeInternal.call(this);
+  this.targetWorkspace_ = null;
+  this.targetWorkspaceMetrics_ = null;
+  this.buttons_.splice(0);
 };
-
 
 /**
  * Return an object with all the metrics required to size scrollbars for the
@@ -194,37 +187,36 @@ Blockly.Flyout.prototype.setMetrics = function(yRatio) {
   this.svgOptions_.setAttribute('transform', 'translate(0,' + y + ')');
 };
 
-
 /**
  * Initializes the flyout.
+ * @param {!Blockly.Workspace} workspace The workspace in which to create new
+ *     blocks.
+ * @param {!Function} workspaceMetrics Function which returns size information
+ *     regarding the flyout's target workspace.
+ * @param {boolean} withScrollbar True if a scrollbar should be displayed.
  */
-Blockly.Flyout.prototype.init = function() {
-  // TODO(scr): when Blockly.Toolbox becomes a component, change this
-  // to enterDocument and call its superclass method.
-  // Blockly.Flyout.superClass_.enterDocument.call(this);
-
+Blockly.Flyout.prototype.init =
+    function(workspace, workspaceMetrics, withScrollbar) {
+  this.targetWorkspace_ = workspace;
+  this.targetWorkspaceMetrics_ = workspaceMetrics;
   // Add scrollbars.
-  if (this.withScrollbar_) {
-    /**
-     * @type {Blockly.Scrollbar}
-     * @private
-     */
-    this.scrollbar_ = new Blockly.Scrollbar(
-        this.svgOptions_,
-        goog.bind(this.getMetrics, this),
-        goog.bind(this.setMetrics, this),
+  var flyout = this;
+  if (withScrollbar) {
+    this.scrollbar_ = new Blockly.Scrollbar(this.svgOptions_,
+        function() {return flyout.getMetrics();},
+        function(ratio) {return flyout.setMetrics(ratio);},
         false, false);
-    this.registerDisposable(this.scrollbar_);
   }
 
   this.hide();
 
   // If the document resizes, reposition the flyout.
-  this.getHandler().listen(
-      goog.global, goog.events.EventType.RESIZE, this.position_);
+  this.onResizeWrapper_ = Blockly.bindEvent_(window,
+      goog.events.EventType.RESIZE, this, this.position_);
   this.position_();
+  this.changeWrapper_ = Blockly.bindEvent_(this.targetWorkspace_.getCanvas(),
+      'blocklyWorkspaceChange', this, this.filterForCapacity_);
 };
-
 
 /**
  * Move the toolbox to the edge of the workspace.
@@ -270,7 +262,6 @@ Blockly.Flyout.prototype.position_ = function() {
   this.height_ = metrics.viewHeight;
 };
 
-
 /**
  * Is the flyout visible?
  * @return {boolean} True if visible.
@@ -278,7 +269,6 @@ Blockly.Flyout.prototype.position_ = function() {
 Blockly.Flyout.prototype.isVisible = function() {
   return this.svgGroup_.style.display == 'block';
 };
-
 
 /**
  * Hide and empty the flyout.
@@ -300,7 +290,6 @@ Blockly.Flyout.prototype.hide = function() {
   }
   this.buttons_.splice(0);
 };
-
 
 /**
  * Show and populate the flyout.
@@ -354,8 +343,10 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     block.moveBy(x, cursorY);
     flyoutWidth = Math.max(flyoutWidth, bBox.width);
     cursorY += bBox.height + gaps[i];
-    Blockly.bindEvent_(block.getSvgRoot(), 'mousedown', null,
-                       Blockly.Flyout.createBlockFunc_(this, block));
+    if (!block.disabled) {
+      Blockly.bindEvent_(block.getSvgRoot(), 'mousedown', null,
+                         Blockly.Flyout.createBlockFunc_(this, block));
+    }
   }
   flyoutWidth += margin + Blockly.BlockSvg.TAB_WIDTH + margin / 2 +
                  Blockly.Scrollbar.scrollbarThickness;
@@ -382,10 +373,11 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // Record the width for .getMetrics and .position_.
   this.width_ = flyoutWidth;
 
+  this.filterForCapacity_();
+
   // Fire a resize event to update the flyout's scrollbar.
   Blockly.fireUiEvent(window, 'resize');
 };
-
 
 /**
  * Create a copy of this block on the workspace.
@@ -398,6 +390,10 @@ Blockly.Flyout.createBlockFunc_ = function(flyout, originBlock) {
   return function(e) {
     if (Blockly.isRightButton(e)) {
       // Right-click.  Don't create a block, let the context menu show.
+      return;
+    }
+    if (originBlock.disabled) {
+      // Beyond capacity.
       return;
     }
     // Create the new block by cloning the block in the flyout (via XML).
@@ -414,8 +410,24 @@ Blockly.Flyout.createBlockFunc_ = function(flyout, originBlock) {
     block.render();
     if (flyout.autoClose) {
       flyout.hide();
+    } else {
+      flyout.filterForCapacity_();
     }
     // Start a dragging operation on the new block.
     block.onMouseDown_(e);
   };
+};
+
+/**
+ * Filter the blocks on the flyout to disable the ones that are above the
+ * capacity limit.
+ */
+Blockly.Flyout.prototype.filterForCapacity_ = function() {
+  var remainingCapacity = this.targetWorkspace_.remainingCapacity();
+  var blocks = this.workspace_.getTopBlocks(false);
+  for (var i = 0, block; block = blocks[i]; i++) {
+    var allBlocks = block.getDescendants();
+    var disabled = allBlocks.length > remainingCapacity;
+    block.setDisabled(disabled);
+  }
 };

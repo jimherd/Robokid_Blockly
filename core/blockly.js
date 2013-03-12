@@ -27,7 +27,6 @@
 goog.provide('Blockly');
 
 // Closure dependencies.
-goog.require('goog.async.Deferred');
 goog.require('goog.dom');
 goog.require('goog.color');
 goog.require('goog.events');
@@ -36,13 +35,21 @@ goog.require('goog.ui.ColorPicker');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.userAgent');
 
-// Blockly dependencies.
+// Blockly core dependencies.
 goog.require('Blockly.Block');
 goog.require('Blockly.Connection');
-goog.require('Blockly.utils');
+goog.require('Blockly.Generator');
+goog.require('Blockly.inject');
+goog.require('Blockly.FieldCheckbox');
+goog.require('Blockly.FieldColour');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.FieldImage');
+goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.FieldVariable');
+goog.require('Blockly.Procedures');
 goog.require('Blockly.Toolbox');
+goog.require('Blockly.utils');
 goog.require('Blockly.Workspace');
-goog.require('Blockly.renaming_map');
 
 
 /**
@@ -215,11 +222,9 @@ Blockly.svgSize = function() {
 /**
  * Size the SVG image to completely fill its container.  Record both
  * the height/width and the absolute position of the SVG image.
- * @param {Element=} opt_svg The svg element to resize; Blockly.svg if
- *     not provided.
  */
-Blockly.svgResize = function(opt_svg) {
-  var svg = opt_svg ? opt_svg : Blockly.svg;
+Blockly.svgResize = function() {
+  var svg = Blockly.svg;
   var div = svg.parentNode;
   var width = div.offsetWidth;
   var height = div.offsetHeight;
@@ -502,8 +507,17 @@ Blockly.setCursorHand_ = function(closed) {
 /**
  * Return an object with all the metrics required to size scrollbars for the
  * main workspace.  The following properties are computed:
- * @return {Blockly.Metrics} Contains size and position metrics of main
- *     workspace.
+ * .viewHeight: Height of the visible rectangle,
+ * .viewWidth: Width of the visible rectangle,
+ * .contentHeight: Height of the contents,
+ * .contentWidth: Width of the content,
+ * .viewTop: Offset of top edge of visible rectangle from parent,
+ * .viewLeft: Offset of left edge of visible rectangle from parent,
+ * .contentTop: Offset of the top-most content from the y=0 coordinate,
+ * .contentLeft: Offset of the left-most content from the x=0 coordinate.
+ * .absoluteTop: Top-edge of view.
+ * .absoluteLeft: Left-edge of view.
+ * @return {Object} Contains size and position metrics of main workspace.
  */
 Blockly.getMainWorkspaceMetrics = function() {
   var hwView = Blockly.svgSize();
@@ -535,7 +549,7 @@ Blockly.getMainWorkspaceMetrics = function() {
   if (Blockly.Toolbox && !Blockly.RTL) {
     absoluteLeft = Blockly.Toolbox.width;
   }
-  return new Blockly.Metrics({
+  return {
     viewHeight: hwView.height,
     viewWidth: hwView.width,
     contentHeight: bottomEdge - topEdge,
@@ -546,7 +560,7 @@ Blockly.getMainWorkspaceMetrics = function() {
     contentLeft: leftEdge,
     absoluteTop: 0,
     absoluteLeft: absoluteLeft
-  });
+  };
 };
 
 /**
@@ -589,52 +603,4 @@ Blockly.addChangeListener = function(func) {
  */
 Blockly.removeChangeListener = function(bindData) {
   Blockly.unbindEvent_(bindData);
-};
-
-/**
- * Rerender certain elements which might have had their sizes changed by the
- * CSS file and thus need realigning.
- * Called when the CSS file has finally loaded.
- */
-Blockly.cssLoaded = function() {
-  Blockly.Field && (Blockly.Field.textLengthCache = {});
-  Blockly.fireUiEvent(window, 'resize');
-};
-
-/**
- * Loads the CSS once, returning a deferred to addCallbacks.
- * @return {goog.async.Deferred}
- */
-Blockly.loadCss = function() {
-  if (Blockly.loadCss.loading_)
-    return Blockly.loadCss.loading_;
-
-  /** @type {goog.async.Deferred} */
-  var d;
-
-  /** @type {Element} */
-  var head = document.head || document.getElementsByTagName('head')[0];
-
-  if (!head) {
-    d = goog.async.Deferred.fail(new Error('No head in document.'));
-  } else {
-    d = new goog.async.Deferred();
-
-    var link = goog.dom.createDom('link', {
-        'href': Blockly.pathToBlockly + 'media/blockly.css',
-        'rel': 'stylesheet',
-        'type': 'text/css'});
-    goog.events.listenOnce(link, goog.events.EventType.LOAD, function(e) {
-                             d.callback(link);
-                           });
-
-    /**
-     * @type {goog.async.Deferred}
-     * @private
-     */
-    Blockly.loadCss.loading_ = d;
-    head.appendChild(link);
-  }
-
-  return d.addCallback(Blockly.cssLoaded);
 };
