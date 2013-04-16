@@ -33,8 +33,25 @@ Blockly.JavaScript.colour_picker = function() {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript.colour_random = function() {
+  // Generate a random colour.
+  if (!Blockly.JavaScript.definitions_['colour_random']) {
+    var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
+        'colour_random', Blockly.Generator.NAME_TYPE);
+    Blockly.JavaScript.colour_random.functionName = functionName;
+    var func = [];
+    func.push('function ' + functionName + '() {');
+    func.push('  var num = Math.floor(Math.random() * Math.pow(2, 24));');
+    func.push('  return \'#\' + (\'00000\' + num.toString(16)).substr(-6);');
+    func.push('}');
+    Blockly.JavaScript.definitions_['colour_random'] = func.join('\n');
+  }
+  var code = Blockly.JavaScript.colour_random.functionName + '()';
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
 Blockly.JavaScript.colour_rgb = function() {
-  // Compose a colour from RGB components.
+  // Compose a colour from RGB components expressed as percentages.
   var red = Blockly.JavaScript.valueToCode(this, 'RED',
       Blockly.JavaScript.ORDER_COMMA) || 0;
   var green = Blockly.JavaScript.valueToCode(this, 'GREEN',
@@ -48,9 +65,9 @@ Blockly.JavaScript.colour_rgb = function() {
     Blockly.JavaScript.colour_rgb.functionName = functionName;
     var func = [];
     func.push('function ' + functionName + '(r, g, b) {');
-    func.push('  r = Math.round(Math.max(Math.min(Number(r), 1), 0) * 255);');
-    func.push('  g = Math.round(Math.max(Math.min(Number(g), 1), 0) * 255);');
-    func.push('  b = Math.round(Math.max(Math.min(Number(b), 1), 0) * 255);');
+    func.push('  r = Math.round(Math.max(Math.min(Number(r), 100), 0) * 2.55);');
+    func.push('  g = Math.round(Math.max(Math.min(Number(g), 100), 0) * 2.55);');
+    func.push('  b = Math.round(Math.max(Math.min(Number(b), 100), 0) * 2.55);');
     func.push('  r = (\'0\' + (r || 0).toString(16)).slice(-2);');
     func.push('  g = (\'0\' + (g || 0).toString(16)).slice(-2);');
     func.push('  b = (\'0\' + (b || 0).toString(16)).slice(-2);');

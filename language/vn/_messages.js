@@ -19,7 +19,7 @@
 
 /**
  * @fileoverview Vietnamese strings.
- * @author fraser@google.com (Quynh Neutron)
+ * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 
@@ -55,21 +55,24 @@ Blockly.MSG_RENAME_VARIABLE_TITLE = 'Thay tên tất cả "%1" biến này thàn
 Blockly.LANG_COLOUR_PICKER_HELPURL = 'http://en.wikipedia.org/wiki/Color';
 Blockly.LANG_COLOUR_PICKER_TOOLTIP = 'Chọn một màu từ bảng màu.';
 
-Blockly.LANG_COLOUR_RGB_HELPURL = 'http://en.wikipedia.org/wiki/RGB_color_model';
+Blockly.LANG_COLOUR_RANDOM_HELPURL = 'http://randomcolour.com';
+Blockly.LANG_COLOUR_RANDOM_TOOLTIP = 'Choose a colour at random.';
+
+Blockly.LANG_COLOUR_RGB_HELPURL = 'http://www.december.com/html/spec/colorper.html';
 Blockly.LANG_COLOUR_RGB_TITLE = 'Tạo màu từ';
 Blockly.LANG_COLOUR_RGB_RED = 'màu đỏ';
 Blockly.LANG_COLOUR_RGB_GREEN = 'màu xanh lá cây';
 Blockly.LANG_COLOUR_RGB_BLUE = 'màu xanh dương';
 Blockly.LANG_COLOUR_RGB_TOOLTIP = 'Tạo màu từ ba màu: đỏ, xanh lá cây,\n' +
     'xanh dương với số lượng cụ thể.\n' +
-    'Mỗi số phải có giá trị từ 0.0 đến 1.0.';
+    'Mỗi số phải có giá trị từ 0 đến 100.';
 
 Blockly.LANG_COLOUR_BLEND_HELPURL = 'http://meyerweb.com/eric/tools/color-blend/';
 Blockly.LANG_COLOUR_BLEND_TITLE = 'pha';
 Blockly.LANG_COLOUR_BLEND_COLOUR1 = 'màu 1';
 Blockly.LANG_COLOUR_BLEND_COLOUR2 = 'màu 2';
 Blockly.LANG_COLOUR_BLEND_RATIO = 'tỉ lệ';
-Blockly.LANG_COLOUR_BLEND_TOOLTIP = 'Pha hai màu với nhau theo tỉ lệ (0.0 - 1.0).';
+Blockly.LANG_COLOUR_BLEND_TOOLTIP = 'Pha hai màu với nhau theo tỉ lệ (0 - 100).';
 
 // Control Blocks.
 Blockly.LANG_CONTROLS_IF_HELPURL = 'http://code.google.com/p/blockly/wiki/If_Then';
@@ -103,10 +106,9 @@ Blockly.LANG_CONTROLS_REPEAT_INPUT_DO = 'thực hiện';
 Blockly.LANG_CONTROLS_REPEAT_TOOLTIP = 'Thực hiện các lệnh vài lần.';
 
 Blockly.LANG_CONTROLS_WHILEUNTIL_HELPURL = 'http://code.google.com/p/blockly/wiki/Repeat';
-Blockly.LANG_CONTROLS_WHILEUNTIL_TITLE_REPEAT = 'lặp lại';
+Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_WHILE = 'lặp lại trong\u00A0khi';
+Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = 'lặp lại cho đến\u00A0khi';
 Blockly.LANG_CONTROLS_WHILEUNTIL_INPUT_DO = 'thực hiện';
-Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_WHILE = 'trong khi';
-Blockly.LANG_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = 'cho đến khi';
 Blockly.LANG_CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = 'Miễn là điều kiện còn đúng, thì thực hiện các lệnh.';
 Blockly.LANG_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = 'Miễn là điều kiện còn sai, thì thực hiện các lệnh\n' +
     'Khi điều kiện đúng thì ngưng.';
@@ -239,15 +241,14 @@ Blockly.LANG_MATH_ROUND_OPERATOR_ROUNDUP = 'làm tròn lên';
 Blockly.LANG_MATH_ROUND_OPERATOR_ROUNDDOWN = 'làm tròn xuống';
 
 Blockly.LANG_MATH_ONLIST_HELPURL = '';
-Blockly.LANG_MATH_ONLIST_INPUT_OFLIST = 'của một danh sách';
-Blockly.LANG_MATH_ONLIST_OPERATOR_SUM = 'tổng';
-Blockly.LANG_MATH_ONLIST_OPERATOR_MIN = 'số nhỏ nhất';
-Blockly.LANG_MATH_ONLIST_OPERATOR_MAX = 'số lớn nhât';
-Blockly.LANG_MATH_ONLIST_OPERATOR_AVERAGE = 'giá trị trung bình';
-Blockly.LANG_MATH_ONLIST_OPERATOR_MEDIAN = 'số trung vị';
-Blockly.LANG_MATH_ONLIST_OPERATOR_MODE = 'các mode';
-Blockly.LANG_MATH_ONLIST_OPERATOR_STD_DEV = 'độ lệch chuẩn';
-Blockly.LANG_MATH_ONLIST_OPERATOR_RANDOM = 'một số bất kỳ';
+Blockly.LANG_MATH_ONLIST_OPERATOR_SUM = 'tổng của một danh sách';
+Blockly.LANG_MATH_ONLIST_OPERATOR_MIN = 'số nhỏ nhất của một danh sách';
+Blockly.LANG_MATH_ONLIST_OPERATOR_MAX = 'số lớn nhât của một danh sách';
+Blockly.LANG_MATH_ONLIST_OPERATOR_AVERAGE = 'giá trị trung bình của một danh sách';
+Blockly.LANG_MATH_ONLIST_OPERATOR_MEDIAN = 'số trung vị của một danh sách';
+Blockly.LANG_MATH_ONLIST_OPERATOR_MODE = 'các mode của một danh sách';
+Blockly.LANG_MATH_ONLIST_OPERATOR_STD_DEV = 'độ lệch chuẩn của một danh sách';
+Blockly.LANG_MATH_ONLIST_OPERATOR_RANDOM = 'một số bất kỳ của một danh sách';
 Blockly.LANG_MATH_ONLIST_TOOLTIP_SUM = 'Hoàn trả tổng số của tất cả các số trong danh sách.';
 Blockly.LANG_MATH_ONLIST_TOOLTIP_MIN = 'Hoàn trả số nhỏ nhất trong tất cả các số trong danh sách.';
 Blockly.LANG_MATH_ONLIST_TOOLTIP_MAX = 'Hoàn trả số lớn nhất trong tất cả các số trong danh sách.';
@@ -293,7 +294,7 @@ Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = 'vật';
 Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TOOLTIP = 'thêm vật mới vào văn bản.';
 
 Blockly.LANG_TEXT_APPEND_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';
-Blockly.LANG_TEXT_APPEND_TO = 'ở ';
+Blockly.LANG_TEXT_APPEND_TO = 'ở cuối';
 Blockly.LANG_TEXT_APPEND_APPENDTEXT = 'thêm văn bản';
 Blockly.LANG_TEXT_APPEND_VARIABLE = 'vật';
 Blockly.LANG_TEXT_APPEND_TOOLTIP = 'Thêm một mảng văn bản vào biến "%1".';
@@ -308,60 +309,52 @@ Blockly.LANG_TEXT_ISEMPTY_INPUT_ISEMPTY = 'trống không';
 Blockly.LANG_TEXT_ISEMPTY_TOOLTIP = 'Hoàn trả “đúng nếu văn bản không có ký tự nào.';
 
 Blockly.LANG_TEXT_INDEXOF_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
-Blockly.LANG_TEXT_INDEXOF_TITLE_FIND = 'tìm sự có mặt';
-Blockly.LANG_TEXT_INDEXOF_INPUT_OCCURRENCE = 'của';
 Blockly.LANG_TEXT_INDEXOF_INPUT_INTEXT = 'trong văn bản';
+Blockly.LANG_TEXT_INDEXOF_OPERATOR_FIRST = 'tìm sự có mặt đầu tiên của';
+Blockly.LANG_TEXT_INDEXOF_OPERATOR_LAST = 'tìm sự có mặt cuối cùng của';
 Blockly.LANG_TEXT_INDEXOF_TOOLTIP = 'Hoàn trả vị trí xuất hiện đầu/cuối\n' +
     'của văn bản thứ nhất trong văn bản thứ hai.\n' +
     'Nếu không tìm thấy thì hoàn trả số 0.';
-Blockly.LANG_TEXT_INDEXOF_OPERATOR_FIRST = 'đầu tiên';
-Blockly.LANG_TEXT_INDEXOF_OPERATOR_LAST = 'cuối cùng';
 
 Blockly.LANG_TEXT_CHARAT_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
-Blockly.LANG_TEXT_CHARAT_GET = 'lấy';
-Blockly.LANG_TEXT_CHARAT_FROM_START = 'ký tự thứ';
-Blockly.LANG_TEXT_CHARAT_FROM_END = 'từ phía cuối, ký tự thứ ';
-Blockly.LANG_TEXT_CHARAT_FIRST = 'ký tự đầu tiên';
-Blockly.LANG_TEXT_CHARAT_LAST = 'ký tự cuối cùng';
-Blockly.LANG_TEXT_CHARAT_RANDOM = 'ký tự bất kỳ';
 Blockly.LANG_TEXT_CHARAT_INPUT_INTEXT = 'trong văn bản';
+Blockly.LANG_TEXT_CHARAT_FROM_START = 'lấy ký tự thứ';
+Blockly.LANG_TEXT_CHARAT_FROM_END = 'lấy từ phía cuối, ký tự thứ ';
+Blockly.LANG_TEXT_CHARAT_FIRST = 'lấy ký tự đầu tiên';
+Blockly.LANG_TEXT_CHARAT_LAST = 'lấy ký tự cuối cùng';
+Blockly.LANG_TEXT_CHARAT_RANDOM = 'lấy ký tự bất kỳ';
 Blockly.LANG_TEXT_CHARAT_TOOLTIP = 'Hoàn trả ký tự ở vị trí đặt ra.';
 
 Blockly.LANG_TEXT_SUBSTRING_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
-Blockly.LANG_TEXT_SUBSTRING_INPUT_IN_TEXT = 'in text';
-Blockly.LANG_TEXT_SUBSTRING_INPUT_AT1 = 'get substring from';
-Blockly.LANG_TEXT_SUBSTRING_INPUT_AT2 = 'to';
-Blockly.LANG_TEXT_SUBSTRING_TOOLTIP = 'Returns a specified portion of the text.';
+Blockly.LANG_TEXT_SUBSTRING_INPUT_IN_TEXT = 'trong văn bản';
+Blockly.LANG_TEXT_SUBSTRING_INPUT_AT1 = 'lấy từ';
+Blockly.LANG_TEXT_SUBSTRING_INPUT_AT2 = 'đến';
+Blockly.LANG_TEXT_SUBSTRING_TOOLTIP = 'Hoàn trả một mảng ký tự ấn định từ trong văn bản.';
 
 Blockly.LANG_TEXT_CHANGECASE_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';
-Blockly.LANG_TEXT_CHANGECASE_TITLE_TO = 'thành';
+Blockly.LANG_TEXT_CHANGECASE_OPERATOR_UPPERCASE = 'thành CHỮ IN HOA';
+Blockly.LANG_TEXT_CHANGECASE_OPERATOR_LOWERCASE = 'thành chữ thường';
+Blockly.LANG_TEXT_CHANGECASE_OPERATOR_TITLECASE = 'thành Chữ In Đầu Mỗi Từ';
 Blockly.LANG_TEXT_CHANGECASE_TOOLTIP = 'Hoàn trả văn bản sau khi chuyển đổi chữ in hoa hay thường.';
-Blockly.LANG_TEXT_CHANGECASE_OPERATOR_UPPERCASE = 'CHỮ IN HOA';
-Blockly.LANG_TEXT_CHANGECASE_OPERATOR_LOWERCASE = 'chữ thường';
-Blockly.LANG_TEXT_CHANGECASE_OPERATOR_TITLECASE = 'Chữ In Đầu Mỗi Từ';
 
 Blockly.LANG_TEXT_TRIM_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';
-Blockly.LANG_TEXT_TRIM_TITLE_SPACE = 'xóa khoảng trắng từ bên';
-Blockly.LANG_TEXT_TRIM_TITLE_SIDES = 'hai bên';
-Blockly.LANG_TEXT_TRIM_TOOLTIP = 'Hoàn trả bản sao của văn bản sau khi\n' +
-    'xóa khoảng trắng từ một hoặc hai bên.';
+Blockly.LANG_TEXT_TRIM_OPERATOR_BOTH = 'xóa khoảng trắng từ bên trái và phải';
+Blockly.LANG_TEXT_TRIM_OPERATOR_LEFT = 'xóa khoảng trắng từ bên trái';
+Blockly.LANG_TEXT_TRIM_OPERATOR_RIGHT = 'xóa khoảng trắng từ bên phải';
 Blockly.LANG_TEXT_TRIM_TITLE_SIDES = '';
 Blockly.LANG_TEXT_TRIM_TITLE_SIDE = '';
-Blockly.LANG_TEXT_TRIM_OPERATOR_BOTH = 'trái và phải';
-Blockly.LANG_TEXT_TRIM_OPERATOR_LEFT = 'trái';
-Blockly.LANG_TEXT_TRIM_OPERATOR_RIGHT = 'phải';
+Blockly.LANG_TEXT_TRIM_TOOLTIP = 'Hoàn trả bản sao của văn bản sau khi\n' +
+    'xóa khoảng trắng từ một hoặc hai bên.';
 
 Blockly.LANG_TEXT_PRINT_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';
 Blockly.LANG_TEXT_PRINT_TITLE_PRINT = 'in lên màng hình';
 Blockly.LANG_TEXT_PRINT_TOOLTIP = 'In ra màng hình một văn bản, con số, hay một giá trị đầu vào khác.';
 
 Blockly.LANG_TEXT_PROMPT_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode92.html';
-Blockly.LANG_TEXT_PROMPT_TITLE_PROMPT_FOR = 'Xin người dùng nhập vào';
-Blockly.LANG_TEXT_PROMPT_TITILE_WITH_MESSAGE = 'với dòng hướng dẫn';
-Blockly.LANG_TEXT_PROMPT_TOOLTIP_NUMBER = 'Xin người dùng nhập vào một con số.\n';
-Blockly.LANG_TEXT_PROMPT_TOOLTIP_TEXT = 'Xin người dùng nhập vào một văn bản.\n';
-Blockly.LANG_TEXT_PROMPT_TYPE_TEXT = 'văn bản';
-Blockly.LANG_TEXT_PROMPT_TYPE_NUMBER = 'con số';
+Blockly.LANG_TEXT_PROMPT_TYPE_TEXT = 'Xin người dùng nhập vào văn bản với dòng hướng dẫn';
+Blockly.LANG_TEXT_PROMPT_TYPE_NUMBER = 'Xin người dùng nhập vào con số với dòng hướng dẫn';
+Blockly.LANG_TEXT_PROMPT_TOOLTIP_NUMBER = 'Xin người dùng nhập vào một con số.';
+Blockly.LANG_TEXT_PROMPT_TOOLTIP_TEXT = 'Xin người dùng nhập vào một văn bản.';
 
 // Lists Blocks.
 Blockly.LANG_LISTS_CREATE_EMPTY_HELPURL = 'http://en.wikipedia.org/wiki/Linked_list#Empty_lists';
@@ -393,14 +386,12 @@ Blockly.LANG_LISTS_INPUT_IS_EMPTY = 'trống rỗng';
 Blockly.LANG_LISTS_TOOLTIP = 'Hoàn trả “đúng" nếu danh sách không có thành tử nào.';
 
 Blockly.LANG_LISTS_INDEX_OF_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
-Blockly.LANG_LISTS_INDEX_OF_TITLE_FIND = 'tìm sự có mặt';
-Blockly.LANG_LISTS_INDEX_OF_INPUT_OCCURRENCE = 'của vật';
 Blockly.LANG_LISTS_INDEX_OF_INPUT_IN_LIST = 'trong danh sách';
+Blockly.LANG_LISTS_INDEX_OF_FIRST = 'tìm sự có mặt đầu tiên của vật';
+Blockly.LANG_LISTS_INDEX_OF_LAST = 'tìm sự có mặt cuối cùng của vật';
 Blockly.LANG_LISTS_INDEX_OF_TOOLTIP = 'Hoàn trả vị trí xuất hiện đầu/cuối\n' +
     'của vật trong danh sách.\n' +
     'Nếu không tìm thấy thì hoàn trả số 0.';
-Blockly.LANG_LISTS_INDEX_OF_FIRST = 'đầu tiên';
-Blockly.LANG_LISTS_INDEX_OF_LAST = 'cuối cùng';
 
 Blockly.LANG_LISTS_GET_INDEX_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
 Blockly.LANG_LISTS_GET_INDEX_GET = 'lấy thành tố';
@@ -432,45 +423,45 @@ Blockly.LANG_LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM_END = 'Xóa thành tố trong d
     'Số 1 là thành tố cuối cùng.';
 Blockly.LANG_LISTS_GET_INDEX_TOOLTIP_REMOVE_FIRST = 'Xóa thành tố đầu tiên trong danh sách.';
 Blockly.LANG_LISTS_GET_INDEX_TOOLTIP_REMOVE_LAST = 'Xóa thành tố cuối cùng trong danh sách.';
-Blockly.LANG_LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM = 'Xóa thành tố bất kỳ trong danh sách..';
+Blockly.LANG_LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM = 'Xóa thành tố bất kỳ trong danh sách.';
 
 Blockly.LANG_LISTS_SET_INDEX_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
-Blockly.LANG_LISTS_SET_INDEX_INPUT_IN_LIST = 'in list';
-Blockly.LANG_LISTS_SET_INDEX_SET = 'set';
-Blockly.LANG_LISTS_SET_INDEX_INSERT = 'insert';
-Blockly.LANG_LISTS_SET_INDEX_INPUT_TO = 'thành';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_FROM_START = 'Sets the item at the specified position in a list.\n' +
-    '#1 is the first item.';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_FROM_END = 'Sets the item at the specified position in a list.\n' +
-    '#1 is the last item.';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_FIRST = 'Sets the first item in a list.';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_LAST = 'Sets the last item in a list.';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_RANDOM = 'Sets a random item in a list.';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_START = 'Inserts the item at the specified position in a list.\n' +
-    '#1 is the first item.';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_END = 'Inserts the item at the specified position in a list.\n' +
-    '#1 is the last item.';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST = 'Inserts the item at the start of a list.';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_LAST = 'Append the item to theend of a list.';
-Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM = 'Inserts the item randomly in a list.';
+Blockly.LANG_LISTS_SET_INDEX_INPUT_IN_LIST = 'trong danh sách';
+Blockly.LANG_LISTS_SET_INDEX_SET = 'đặt thành tố';
+Blockly.LANG_LISTS_SET_INDEX_INSERT = 'gắn chèn vào vị trí';
+Blockly.LANG_LISTS_SET_INDEX_INPUT_TO = 'giá trị';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_FROM_START = 'Đặt giá trị của thành tố ở vị trí ấn định trong một danh sách.\n' +
+    '#1 là thành tố đầu tiên.';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_FROM_END = 'Đặt giá trị của thành tố trong một danh sách ở vị trí ấn định từ phía cuối.\n' +
+    '#1 là thành tố cuối cùng.';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_FIRST = 'Đặt giá trị của thành tố đầu tiên trong danh sách.';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_LAST = 'Đặt giá trị của thành tố cuối cùng trong danh sách.';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_SET_RANDOM = 'Đặt giá trị của thành tố ngẫu nhiên trong danh sách.';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_START = 'Gắn chèn vật vào danh sách theo vị trí ấn định.\n' +
+    '#1 là thành tố đầu tiên.';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_END = 'Gắn chèn vật vào danh sách theo vị trí ấn định từ phía cuối.\n' +
+    '#1 là thành tố cuối cùng.';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST = 'Gắn chèn vật vào đầu danh sách.';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_LAST = 'Gắn thêm vật vào cuối danh sách.';
+Blockly.LANG_LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM = 'Gắn chèn vật vào danh sách ở vị trí ngẫu nhiên.';
 
 Blockly.LANG_LISTS_GET_SUBLIST_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
-Blockly.LANG_LISTS_GET_SUBLIST_INPUT_IN_LIST = 'in list';
-Blockly.LANG_LISTS_GET_SUBLIST_INPUT_AT1 = 'get sub-list from';
-Blockly.LANG_LISTS_GET_SUBLIST_INPUT_AT2 = 'to';
-Blockly.LANG_LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
+Blockly.LANG_LISTS_GET_SUBLIST_INPUT_IN_LIST = 'từ danh sách';
+Blockly.LANG_LISTS_GET_SUBLIST_INPUT_AT1 = 'lấy một danh sách con từ';
+Blockly.LANG_LISTS_GET_SUBLIST_INPUT_AT2 = 'đến';
+Blockly.LANG_LISTS_GET_SUBLIST_TOOLTIP = 'Lấy một mảng của danh sách này để tạo danh sách con.';
 
 // Variables Blocks.
 Blockly.LANG_VARIABLES_GET_HELPURL = 'http://en.wikipedia.org/wiki/Variable_(computer_science)';
 Blockly.LANG_VARIABLES_GET_TITLE = 'lấy';
 Blockly.LANG_VARIABLES_GET_ITEM = 'vật';
 Blockly.LANG_VARIABLES_GET_TOOLTIP = 'Hoàn trả giá trị của.';
-Blockly.LANG_VARIABLES_GET_CREATE_SET = 'Tạo mảnh "gán vào %1"';
+Blockly.LANG_VARIABLES_GET_CREATE_SET = 'Tạo mảnh "đặt vào %1"';
 
 Blockly.LANG_VARIABLES_SET_HELPURL = 'http://en.wikipedia.org/wiki/Variable_(computer_science)';
-Blockly.LANG_VARIABLES_SET_TITLE = 'gán vào';
+Blockly.LANG_VARIABLES_SET_TITLE = 'đặt vào';
 Blockly.LANG_VARIABLES_SET_ITEM = 'vật';
-Blockly.LANG_VARIABLES_SET_TOOLTIP = 'Gán vào biến này giá trị của đầu vào.';
+Blockly.LANG_VARIABLES_SET_TOOLTIP = 'Đặt giá trị của biến này thành...';
 Blockly.LANG_VARIABLES_SET_CREATE_GET = 'Tạo mảnh "lấy %1"';
 
 // Procedures Blocks.
@@ -484,7 +475,6 @@ Blockly.LANG_PROCEDURES_DEFRETURN_PROCEDURE = Blockly.LANG_PROCEDURES_DEFNORETUR
 Blockly.LANG_PROCEDURES_DEFRETURN_DO = Blockly.LANG_PROCEDURES_DEFNORETURN_DO;
 Blockly.LANG_PROCEDURES_DEFRETURN_RETURN = 'hoàn trả';
 Blockly.LANG_PROCEDURES_DEFRETURN_TOOLTIP = 'Một thủ tục có giá trị hoàn trả.';
-
 Blockly.LANG_PROCEDURES_DEF_DUPLICATE_WARNING = 'Cẩn thận:\n' +
     'Thủ tục này có lặp lại\n' +
     'tên các tham số.';

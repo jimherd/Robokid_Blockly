@@ -26,8 +26,17 @@
         </div>
       </td>
       <td valign="top">
+        <script type="text/javascript" src="../../blockly_compressed.js"></script>
+        <script type="text/javascript" src="../../generators/javascript.js"></script>
+        <script type="text/javascript" src="../../generators/javascript/logic.js"></script>
+        <script type="text/javascript" src="../../generators/javascript/math.js"></script>
+        <script type="text/javascript" src="../common.js"></script>
+        <script type="text/javascript">
+          Blockly.Apps.loadLanguageScripts(languageSrc);
+        </script>
+        <script type="text/javascript" src="blocks.js"></script>
         {call .toolbox /}
-        <iframe src="frame.html?{$ij.frameSrc}"></iframe>
+        <div id="blockly"></div>
       </td>
     </tr>
   </table>

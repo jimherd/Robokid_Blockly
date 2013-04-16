@@ -57,7 +57,7 @@ Blockly.Language.variables_get = {
     var xmlTitle = goog.dom.createDom('title', null, name);
     xmlTitle.setAttribute('name', 'VAR');
     var xmlBlock = goog.dom.createDom('block', null, xmlTitle);
-    xmlBlock.setAttribute('type', 'variables_set');
+    xmlBlock.setAttribute('type', this.contextMenuType_);
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
     options.push(option);
   }
@@ -85,7 +85,7 @@ Blockly.Language.variables_set = {
       this.setTitleValue(newName, 'VAR');
     }
   },
-  contextMenuMsg_: Blockly.LANG_VARIABLES_GET_CREATE_GET,
+  contextMenuMsg_: Blockly.LANG_VARIABLES_SET_CREATE_GET,
   contextMenuType_: 'variables_get',
   customContextMenu: Blockly.Language.variables_get.customContextMenu
 };

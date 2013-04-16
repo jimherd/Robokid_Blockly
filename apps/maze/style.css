@@ -23,9 +23,15 @@ a:hover {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-#hint,
-#capacity {
+#hint {
   font-style: italic;
+}
+#capacity {
+  padding: 15px 1ex 0;
+  float: right;
+}
+html[dir=rtl] #capacity {
+  float: left;
 }
 #capacityNumber {
   font-weight: bold;
@@ -41,6 +47,10 @@ a:hover {
   position: relative;
   top: -1px;
   margin-left: 20px;
+  margin-right: 20px;
+}
+html[dir=rtl] #pegman_bubble {
+  transform: scaleX(-1);
 }
 
 /* Buttons */
@@ -72,15 +82,12 @@ button>img {
 button.disabled {
   visibility: hidden;
 }
-#buttonDiv, #toolbarDiv {
+#toolbarDiv {
   text-align: center;
   padding-top: 1em;
-  width: 50%;
 }
-iframe {
-  height: 100%;
-  width: 100%;
-  border: 1px solid #ccc;
+#blockly {
+  position: fixed;
 }
 
 /* Sprited icons. */

@@ -58,8 +58,6 @@ button.disabled {
 #y1 {
   background-color: #36c;
 }
-iframe {
-  height: 100%;
-  width: 100%;
-  border: 1px solid #ccc;
+#blockly {
+  position: fixed;
 }
