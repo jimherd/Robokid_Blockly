@@ -23,8 +23,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.messages.vn');
-
 /**
  * Due to the frequency of long strings, the 80-column wrap rule need not apply
  * to message files.
@@ -56,6 +54,7 @@ Blockly.LANG_COLOUR_PICKER_HELPURL = 'http://en.wikipedia.org/wiki/Color';
 Blockly.LANG_COLOUR_PICKER_TOOLTIP = 'Chọn một màu từ bảng màu.';
 
 Blockly.LANG_COLOUR_RANDOM_HELPURL = 'http://randomcolour.com';
+Blockly.LANG_COLOUR_RANDOM_TITLE = 'random colour';
 Blockly.LANG_COLOUR_RANDOM_TOOLTIP = 'Choose a colour at random.';
 
 Blockly.LANG_COLOUR_RGB_HELPURL = 'http://www.december.com/html/spec/colorper.html';
@@ -319,7 +318,7 @@ Blockly.LANG_TEXT_INDEXOF_TOOLTIP = 'Hoàn trả vị trí xuất hiện đầu/
 Blockly.LANG_TEXT_CHARAT_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
 Blockly.LANG_TEXT_CHARAT_INPUT_INTEXT = 'trong văn bản';
 Blockly.LANG_TEXT_CHARAT_FROM_START = 'lấy ký tự thứ';
-Blockly.LANG_TEXT_CHARAT_FROM_END = 'lấy từ phía cuối, ký tự thứ ';
+Blockly.LANG_TEXT_CHARAT_FROM_END = 'lấy từ phía cuối, ký tự thứ';
 Blockly.LANG_TEXT_CHARAT_FIRST = 'lấy ký tự đầu tiên';
 Blockly.LANG_TEXT_CHARAT_LAST = 'lấy ký tự cuối cùng';
 Blockly.LANG_TEXT_CHARAT_RANDOM = 'lấy ký tự bất kỳ';
@@ -329,6 +328,10 @@ Blockly.LANG_TEXT_SUBSTRING_HELPURL = 'http://publib.boulder.ibm.com/infocenter/
 Blockly.LANG_TEXT_SUBSTRING_INPUT_IN_TEXT = 'trong văn bản';
 Blockly.LANG_TEXT_SUBSTRING_INPUT_AT1 = 'lấy từ';
 Blockly.LANG_TEXT_SUBSTRING_INPUT_AT2 = 'đến';
+Blockly.LANG_TEXT_SUBSTRING_FROM_START = 'ký tự thứ';
+Blockly.LANG_TEXT_SUBSTRING_FROM_END = 'từ phía cuối, ký tự thứ';
+Blockly.LANG_TEXT_SUBSTRING_FIRST = 'ký tự đầu tiên';
+Blockly.LANG_TEXT_SUBSTRING_LAST = 'ký tự cuối cùng';
 Blockly.LANG_TEXT_SUBSTRING_TOOLTIP = 'Hoàn trả một mảng ký tự ấn định từ trong văn bản.';
 
 Blockly.LANG_TEXT_CHANGECASE_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';

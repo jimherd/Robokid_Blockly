@@ -28,20 +28,8 @@
  */
 var Turtle = {};
 
-Turtle.MAX_LEVEL = 3;
-Turtle.level = window.location.search.match(/[?&]level=(\d+)/);
-Turtle.level = Turtle.level ? Turtle.level[1] : 1;
-Turtle.level = Math.min(Math.max(1, Turtle.level), Turtle.MAX_LEVEL);
-
-// Temp disabling of levels.
-Turtle.level = Turtle.MAX_LEVEL;
-
 document.write(turtlepage.start({}, null,
-    {MSG: MSG,
-    level: Turtle.level,
-    maxLevel: Turtle.MAX_LEVEL}));
-var maxBlocks = [undefined, // Level 0.
-    7, 3, Infinity][Turtle.level];
+    {MSG: MSG}));
 
 Turtle.HEIGHT = 400;
 Turtle.WIDTH = 400;
@@ -66,7 +54,6 @@ Turtle.init = function() {
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blockly'),
       {path: '../../',
-       maxBlocks: maxBlocks,
        rtl: rtl,
        toolbox: toolbox,
        trashcan: true});
@@ -106,23 +93,16 @@ Turtle.init = function() {
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1));
   } else {
-    var xml;
-    if (Turtle.level <= 2) {
-      xml = '<xml>' +
-          '  <block type="draw_move_forward_100" x="70" y="70"></block>' +
-          '</xml>';
-    } else {
-      // Load the editor with starting blocks.
-      xml = '<xml>' +
-          '  <block type="draw_move" x="70" y="70">' +
-          '    <value name="VALUE">' +
-          '      <block type="math_number">' +
-          '        <title name="NUM">10</title>' +
-          '      </block>' +
-          '    </value>' +
-          '  </block>' +
-          '</xml>';
-    }
+    // Load the editor with starting blocks.
+    var xml = '<xml>' +
+        '  <block type="draw_move" x="70" y="70">' +
+        '    <value name="VALUE">' +
+        '      <block type="math_number">' +
+        '        <title name="NUM">10</title>' +
+        '      </block>' +
+        '    </value>' +
+        '  </block>' +
+        '</xml>';
     xml = Blockly.Xml.textToDom(xml);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   }
@@ -130,7 +110,6 @@ Turtle.init = function() {
   Turtle.ctxDisplay = document.getElementById('display').getContext('2d');
   Turtle.ctxScratch = document.getElementById('scratch').getContext('2d');
   Turtle.reset();
-  //Blockly.addChangeListener(function() {Blockly.Apps.updateCapacity(MSG)});
 };
 
 window.addEventListener('load', Turtle.init);
@@ -257,16 +236,6 @@ Turtle.execute = function() {
 };
 
 /**
- * Show the user's code in raw JavaScript.
- */
-Turtle.showCode = function() {
-  var code = Blockly.Generator.workspaceToCode('JavaScript');
-  // Strip out serial numbers.
-  code = code.replace(/(,\s*)?'\d+'\)/g, ')');
-  alert(code);
-};
-
-/**
  * Iterate through the recorded path and animate the turtle's actions.
  */
 Turtle.animate = function() {
@@ -279,15 +248,30 @@ Turtle.animate = function() {
     Blockly.mainWorkspace.highlightBlock(null);
     return;
   }
-  Blockly.mainWorkspace.highlightBlock(tuple.pop());
+  var command = tuple.shift();
+  var id = tuple.pop();
+  Blockly.mainWorkspace.highlightBlock(id);
+  Turtle.step(command, tuple);
+  Turtle.display();
 
-  switch (tuple[0]) {
+  // Scale the speed non-linearly, to give better precision at the fast end.
+  var stepSpeed = 1000 * Math.pow(Turtle.speedSlider.getValue(), 2);
+  Turtle.pid = window.setTimeout(Turtle.animate, stepSpeed);
+};
+
+/**
+ * Execute one step.
+ * @param {string} command Logo-style command (e.g. 'FD' or 'RT').
+ * @param {!Array} values List of arguments for the cammand.
+ */
+Turtle.step = function(command, values) {
+  switch (command) {
     case 'FD':  // Forward
       if (Turtle.penDownValue) {
         Turtle.ctxScratch.beginPath();
         Turtle.ctxScratch.moveTo(Turtle.x, Turtle.y);
       }
-      var distance = tuple[1];
+      var distance = values[0];
       if (distance) {
         Turtle.x += distance * Math.sin(2 * Math.PI * Turtle.heading / 360);
         Turtle.y -= distance * Math.cos(2 * Math.PI * Turtle.heading / 360);
@@ -302,7 +286,7 @@ Turtle.animate = function() {
       }
       break;
     case 'RT':  // Right Turn
-      Turtle.heading += tuple[1];
+      Turtle.heading += values[0];
       Turtle.heading %= 360;
       if (Turtle.heading < 0) {
         Turtle.heading += 360;
@@ -315,10 +299,10 @@ Turtle.animate = function() {
       Turtle.penDownValue = true;
       break;
     case 'PW':  // Pen Width
-      Turtle.ctxScratch.lineWidth = tuple[1];
+      Turtle.ctxScratch.lineWidth = values[0];
       break;
     case 'PC':  // Pen Color
-      Turtle.ctxScratch.strokeStyle = tuple[1];
+      Turtle.ctxScratch.strokeStyle = values[0];
       break;
     case 'HT':  // Hide Turtle
       Turtle.visible = false;
@@ -327,11 +311,6 @@ Turtle.animate = function() {
       Turtle.visible = true;
       break;
   }
-  Turtle.display();
-
-  // Scale the speed non-linearly, to give better precision at the fast end.
-  var stepSpeed = 1000 * Math.pow(Turtle.speedSlider.getValue(), 2);
-  Turtle.pid = window.setTimeout(Turtle.animate, stepSpeed);
 };
 
 // Turtle API.

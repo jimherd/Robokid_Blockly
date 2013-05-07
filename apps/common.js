@@ -33,9 +33,9 @@ Blockly.Apps = {};
 Blockly.Apps.loadLanguageScripts = function(languageSrc) {
   for (var x = 0; x < languageSrc.length; x++) {
     var file = languageSrc[x];
-    if (file.match(/^\w+\/\w+\.js$/)) {
+    if (file.match(/^(\w+\/)*\w+\.js$/)) {
       document.writeln('<script type="text/javascript" ' +
-          'src="../../language/' + file + '"><' + '/script>');
+          'src="../../' + file + '"><' + '/script>');
     } else {
       console.error('Illegal language file: ' + file);
     }
@@ -67,13 +67,12 @@ Blockly.Apps.updateCapacity = function(MSG) {
 /**
  * Congratulates the user for completing the level and offers to
  * direct them to the next level, if available.
- * @param {!Object} window
  * @param {number} level The current level.
  * @param {number} maxLevel The maxmium available level.
  * @param {!Object} MSG An object with appropriate text properties for
  *     MSG.nextLevel and MSG.finalLevel.
  */
-Blockly.Apps.congratulations = function(window, level, maxLevel, MSG) {
+Blockly.Apps.congratulations = function(level, maxLevel, MSG) {
   if (level < maxLevel) {
     var proceed = window.confirm(MSG.nextLevel.replace('%1', level + 1));
     if (proceed) {
@@ -82,7 +81,7 @@ Blockly.Apps.congratulations = function(window, level, maxLevel, MSG) {
           '?level=' + (level + 1);
     }
   } else {
-    alert(MSG.finalLevel);
+    window.alert(MSG.finalLevel);
   }
 };
 
@@ -97,11 +96,11 @@ Blockly.Apps.highlight = function(id) {
 /**
  * If the user has executed too many actions, we're probably in an infinite
  * loop.  Sadly I wasn't able to solve the Halting Problem.
- * @param {string} id ID of loop block to highlight if timeout is reached.
+ * @param {?string} opt_id ID of loop block to highlight if timeout is reached.
  * @throws {false} Throws an error to terminate the user's program.
  */
-Blockly.Apps.checkTimeout = function(id) {
-  Blockly.Apps.highlight(id);
+Blockly.Apps.checkTimeout = function(opt_id) {
+  opt_id && Blockly.Apps.highlight(opt_id);
   if (Blockly.Apps.ticks-- < 0) {
     // Highlight an infinite loop on death.
     throw false;
@@ -114,11 +113,11 @@ Blockly.Apps.checkTimeout = function(id) {
  * @return {string} The code without serial numbers and timeout checks.
  */
 Blockly.Apps.stripCode = function(code) {
-  // Strip out tracking commands.
-  code = code.replace(/ *Blockly\.Apps\.highlight\('\d+'\);\n/g, '');
+  // Strip out serial numbers.
+  code = code.replace(/(,\s*)?'\d+'\);/g, ');');
   // Remove timeouts.
   var regex = new RegExp(Blockly.JavaScript.INFINITE_LOOP_TRAP
-      .replace('(%1)', '\\(\'\\d+\'\\)'), 'g');
+      .replace('(%1)', '\\(\\)'), 'g');
   return code.replace(regex, '');
 };
 
@@ -128,5 +127,5 @@ Blockly.Apps.stripCode = function(code) {
 Blockly.Apps.showCode = function() {
   var code = Blockly.Generator.workspaceToCode('JavaScript');
   code = Blockly.Apps.stripCode(code);
-  alert(code);
+  window.alert(code);
 };

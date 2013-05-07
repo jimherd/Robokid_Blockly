@@ -23,10 +23,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Language.colour');
-
-goog.require('Blockly.Language');
-
 Blockly.Language.colour_picker = {
   // Colour picker.
   helpUrl: Blockly.LANG_COLOUR_PICKER_HELPURL,
@@ -45,7 +41,7 @@ Blockly.Language.colour_random = {
   init: function() {
     this.setColour(20);
     this.appendDummyInput()
-        .appendTitle("random colour");
+        .appendTitle(Blockly.LANG_COLOUR_RANDOM_TITLE);
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.LANG_COLOUR_RANDOM_TOOLTIP);
   }

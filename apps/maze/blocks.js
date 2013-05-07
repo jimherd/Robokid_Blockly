@@ -59,7 +59,8 @@ Blockly.Language.maze_turn = {
 };
 
 Blockly.Language.maze_turn.DIRECTIONS =
-    [[MSG.turnLeft, 'turnLeft'], [MSG.turnRight, 'turnRight']];
+    [[MSG.turnLeft + ' \u27F2', 'turnLeft'],
+     [MSG.turnRight + ' \u27F3', 'turnRight']];
 
 Blockly.JavaScript.maze_turn = function() {
   // Generate JavaScript for turning left or right.
@@ -81,8 +82,8 @@ Blockly.Language.maze_isPath = {
 
 Blockly.Language.maze_isPath.DIRECTIONS =
     [[MSG.pathAhead, 'isPathForward'],
-     [MSG.pathLeft, 'isPathLeft'],
-     [MSG.pathRight, 'isPathRight']];
+     [MSG.pathLeft + ' \u27F2', 'isPathLeft'],
+     [MSG.pathRight + ' \u27F3', 'isPathRight']];
 
 Blockly.JavaScript.maze_isPath = function() {
   // Generate JavaScript for checking if there is a path.
@@ -111,10 +112,9 @@ Blockly.Language.maze_if.DIRECTIONS =
 
 Blockly.JavaScript.maze_if = function() {
   // Generate JavaScript for 'if' conditional if there is a path.
-  var argument = 'Maze.' + this.getTitleValue('DIR') + '()';
+  var argument = 'Maze.' + this.getTitleValue('DIR') + '(\'' + this.id + '\')';
   var branch = Blockly.JavaScript.statementToCode(this, 'DO');
-  var code = 'Blockly.Apps.highlight(\'' + this.id + '\');\n' +
-             'if (' + argument + ') {\n' + branch + '}';
+  var code = 'if (' + argument + ') {\n' + branch + '}';
   return code;
 };
 
@@ -140,11 +140,10 @@ Blockly.Language.maze_ifElse.DIRECTIONS =
 
 Blockly.JavaScript.maze_ifElse = function() {
   // Generate JavaScript for 'if/else' conditional if there is a path.
-  var argument = 'Maze.' + this.getTitleValue('DIR') + '()';
+  var argument = 'Maze.' + this.getTitleValue('DIR') + '(\'' + this.id + '\')';
   var branch0 = Blockly.JavaScript.statementToCode(this, 'DO');
   var branch1 = Blockly.JavaScript.statementToCode(this, 'ELSE');
-  var code = 'Blockly.Apps.highlight(\'' + this.id + '\');\n' +
-             'if (' + argument + ') {\n' + branch0 +
+  var code = 'if (' + argument + ') {\n' + branch0 +
              '} else {\n' + branch1 + '}';
   return code;
 };

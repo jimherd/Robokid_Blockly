@@ -44,21 +44,10 @@
       catVariables: 'Variables',
       catProcedures: 'Procedures',
       // Misc text.
-      level: 'Level',
-      capacity0: 'You have <span id="capacityNumber">0</span> blocks left.',
-      capacity1: 'You have <span id="capacityNumber">1</span> block left.',
-      capacity2: 'You have <span id="capacityNumber">%1</span> blocks left.',
       unloadWarning: 'Leaving this page will result in the loss of your work.',
       runProgram: 'Run Program',
       resetProgram: '\u00A0 \u00A0 Reset \u00A0 \u00A0',
-      title: 'Turtle Graphics',
-      // Level hints.
-      hints: ['level 0', // There is no level 0.
-         'I\'m a turtle holding a pen in my tail. Help me draw a square.',
-         'Now help me draw a square using only 3 blocks.\n' +
-             'Hint: It doesn\'t matter which way I face at the end.',
-         'Have fun!'
-      ]
+      title: 'Turtle Graphics'
     };
     if ('BlocklyStorage' in window) {
       BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
@@ -68,14 +57,7 @@
       BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
           'Perhaps it was created with a different version of Blockly?\nXML: ';
     }
-    var languageSrc = ['en/_messages.js',
-        'common/control.js',
-        'common/logic.js',
-        'common/math.js',
-        'common/lists.js',
-        'common/colour.js',
-        'common/variables.js',
-        'common/procedures.js'];
+    var languageSrc = ['en_compressed.js'];
   </script>
 </head>
 <body>

@@ -23,8 +23,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.messages.de');
-
 /**
  * Due to the frequency of long strings, the 80-column wrap rule need not apply
  * to message files.
@@ -56,6 +54,7 @@ Blockly.LANG_COLOUR_PICKER_HELPURL = 'http://de.wikipedia.org/wiki/Farbe';
 Blockly.LANG_COLOUR_PICKER_TOOLTIP = 'Wählen eine Farbe von der Palette.';
 
 Blockly.LANG_COLOUR_RANDOM_HELPURL = 'http://randomcolour.com';
+Blockly.LANG_COLOUR_RANDOM_TITLE = 'random colour';
 Blockly.LANG_COLOUR_RANDOM_TOOLTIP = 'Choose a colour at random.';
 
 Blockly.LANG_COLOUR_RGB_HELPURL = 'http://de.wikipedia.org/wiki/RGB-Farbraum';
@@ -329,6 +328,10 @@ Blockly.LANG_TEXT_SUBSTRING_HELPURL = 'http://publib.boulder.ibm.com/infocenter/
 Blockly.LANG_TEXT_SUBSTRING_INPUT_IN_TEXT = 'in text';
 Blockly.LANG_TEXT_SUBSTRING_INPUT_AT1 = 'get substring from';
 Blockly.LANG_TEXT_SUBSTRING_INPUT_AT2 = 'to';
+Blockly.LANG_TEXT_SUBSTRING_FROM_START = 'Buchstabe #ten';
+Blockly.LANG_TEXT_SUBSTRING_FROM_END = '#te Buchstabe von hinten';
+Blockly.LANG_TEXT_SUBSTRING_FIRST = 'ersten Buchstabe';
+Blockly.LANG_TEXT_SUBSTRING_LAST = 'letzten Buchstabe';
 Blockly.LANG_TEXT_SUBSTRING_TOOLTIP = 'Returns a specified portion of the text.';
 
 Blockly.LANG_TEXT_CHANGECASE_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';

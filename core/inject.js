@@ -221,6 +221,9 @@ Blockly.createDom_ = function(container) {
           var MARGIN = 20;
           var blocks = Blockly.mainWorkspace.getTopBlocks(false);
           for (var b = 0, block; block = blocks[b]; b++) {
+            if (!block.deletable) {
+              continue;
+            }
             var xy = block.getRelativeToSurfaceXY();
             var bBox = block.getSvgRoot().getBBox();
             var offTop = xy.y < MARGIN - bBox.height;
@@ -265,7 +268,7 @@ Blockly.createDom_ = function(container) {
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.widgetDiv = goog.dom.createDom('div', {
       'class': 'blocklyWidgetDiv'});
-  container.appendChild(Blockly.widgetDiv);
+  document.body.appendChild(Blockly.widgetDiv);
 };
 
 
@@ -274,7 +277,6 @@ Blockly.createDom_ = function(container) {
  * @private
  */
 Blockly.init_ = function() {
-  Blockly.bindEvent_(window, 'resize', document, Blockly.svgResize);
   // Bind events for scrolling the workspace.
   // Most of these events should be bound to the SVG's surface.
   // However, 'mouseup' has to be on the whole document so that a block dragged
@@ -282,10 +284,17 @@ Blockly.init_ = function() {
   // Also, 'keydown' has to be on the whole document since the browser doesn't
   // understand a concept of focus on the SVG image.
   Blockly.bindEvent_(Blockly.svg, 'mousedown', null, Blockly.onMouseDown_);
-  Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
   Blockly.bindEvent_(Blockly.svg, 'mousemove', null, Blockly.onMouseMove_);
   Blockly.bindEvent_(Blockly.svg, 'contextmenu', null, Blockly.onContextMenu_);
-  Blockly.bindEvent_(document, 'keydown', null, Blockly.onKeyDown_);
+
+  if (!Blockly.documentEventsBound_) {
+    // Only bind the window/document events once.
+    // Destroying and reinjecting Blockly should not bind again.
+    Blockly.bindEvent_(window, 'resize', document, Blockly.svgResize);
+    Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
+    Blockly.bindEvent_(document, 'keydown', null, Blockly.onKeyDown_);
+    Blockly.documentEventsBound_ = true;
+  }
 
   var addScrollbars = true;
   if (Blockly.languageTree) {
