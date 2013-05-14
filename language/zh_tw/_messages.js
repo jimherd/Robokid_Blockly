@@ -41,6 +41,8 @@ Blockly.MSG_EXPAND_BLOCK = '展開積木';
 Blockly.MSG_DISABLE_BLOCK = '停用積木';
 Blockly.MSG_ENABLE_BLOCK = '啟用積木';
 Blockly.MSG_HELP = '說明';
+Blockly.MSG_COLLAPSE_ALL = 'Collapse Blocks';
+Blockly.MSG_EXPAND_ALL = 'Expand Blocks';
 
 // Variable renaming.
 Blockly.MSG_CHANGE_VALUE_TITLE = '修改值:';
@@ -116,6 +118,7 @@ Blockly.LANG_CONTROLS_FOR_INPUT_VAR = '變量';
 Blockly.LANG_CONTROLS_FOR_INPUT_FROM = '從範圍';
 Blockly.LANG_CONTROLS_FOR_INPUT_TO = '到';
 Blockly.LANG_CONTROLS_FOR_INPUT_DO = '執行';
+Blockly.LANG_CONTROLS_FOR_TAIL = '';
 Blockly.LANG_CONTROLS_FOR_TOOLTIP = 'Count from a start number to an end number.\n' +
     'For each count, set the current count number to\n' +
     'variable "%1", and then do some statements.';
@@ -124,6 +127,7 @@ Blockly.LANG_CONTROLS_FOREACH_HELPURL = 'http://en.wikipedia.org/wiki/For_loop';
 Blockly.LANG_CONTROLS_FOREACH_INPUT_ITEM = '取出每個';
 Blockly.LANG_CONTROLS_FOREACH_INPUT_VAR = '變量';
 Blockly.LANG_CONTROLS_FOREACH_INPUT_INLIST = '自列表';
+Blockly.LANG_CONTROLS_FOREACH_INPUT_INLIST_TAIL = '';
 Blockly.LANG_CONTROLS_FOREACH_INPUT_DO = '執行';
 Blockly.LANG_CONTROLS_FOREACH_TOOLTIP = 'For each item in a list, set the item to\n' +
     'variable "%1", and then do some statements.';

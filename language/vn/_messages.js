@@ -41,6 +41,8 @@ Blockly.MSG_EXPAND_BLOCK = 'Mở Lớn';
 Blockly.MSG_DISABLE_BLOCK = 'Ngưng Tác Dụng';
 Blockly.MSG_ENABLE_BLOCK = 'Phục Hồi Tác Dụng';
 Blockly.MSG_HELP = 'Trợ Giúp';
+Blockly.MSG_COLLAPSE_ALL = 'Collapse Blocks';
+Blockly.MSG_EXPAND_ALL = 'Expand Blocks';
 
 // Variable renaming.
 Blockly.MSG_CHANGE_VALUE_TITLE = 'Thay giá trị thành:';
@@ -118,6 +120,7 @@ Blockly.LANG_CONTROLS_FOR_INPUT_VAR = 'x';
 Blockly.LANG_CONTROLS_FOR_INPUT_FROM = 'từ';
 Blockly.LANG_CONTROLS_FOR_INPUT_TO = 'đến';
 Blockly.LANG_CONTROLS_FOR_INPUT_DO = 'thực hiện';
+Blockly.LANG_CONTROLS_FOR_TAIL = '';
 Blockly.LANG_CONTROLS_FOR_TOOLTIP = 'Đếm từ số đầu đến số cuối.\n' +
     'Khi đến mỗi số, gán số vào biến "%1"\n' +
     'rồi thực hiện các lệnh.';
@@ -126,6 +129,7 @@ Blockly.LANG_CONTROLS_FOREACH_HELPURL = 'http://en.wikipedia.org/wiki/For_loop';
 Blockly.LANG_CONTROLS_FOREACH_INPUT_ITEM = 'với mỗi thành phần';
 Blockly.LANG_CONTROLS_FOREACH_INPUT_VAR = 'x';
 Blockly.LANG_CONTROLS_FOREACH_INPUT_INLIST = 'trong danh sách';
+Blockly.LANG_CONTROLS_FOREACH_INPUT_INLIST_TAIL = '';
 Blockly.LANG_CONTROLS_FOREACH_INPUT_DO = 'thực hiện';
 Blockly.LANG_CONTROLS_FOREACH_TOOLTIP = 'Trong một danh sách, lấy từng thành phần, gán vào\n' +
     'biến "%1", rồi thực hiện một số lệnh.';
