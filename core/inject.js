@@ -65,13 +65,19 @@ Blockly.parseOptions_ = function(options) {
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
     }
+    var hasCollapse = options['collapse'];
+    if (hasCollapse === undefined) {
+      hasCollapse = hasCategories;
+    }
   } else {
     var hasCategories = false;
     var hasTrashcan = false;
+    var hasCollapse = false;
     var tree = null;
   }
   return {
     RTL: !!options['rtl'],
+    collapse: hasCollapse,
     editable: editable,
     maxBlocks: options['maxBlocks'] || Infinity,
     pathToBlockly: options['path'] || './',
@@ -192,7 +198,7 @@ Blockly.createDom_ = function(container) {
       {'width': 10, 'height': 10, 'fill': '#aaa'}, pattern);
   Blockly.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, pattern);
-  Blockly.mainWorkspace = new Blockly.Workspace(Blockly.editable);
+  Blockly.mainWorkspace = new Blockly.Workspace();
   svg.appendChild(Blockly.mainWorkspace.createDom());
   Blockly.mainWorkspace.maxBlocks = Blockly.maxBlocks;
 

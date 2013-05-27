@@ -29,7 +29,6 @@ Blockly.Language.graph_get_x = {
   init: function() {
     this.setColour(330);
     this.appendDummyInput()
-        .appendTitle(Blockly.LANG_VARIABLES_GET_TITLE)
         .appendTitle('x');
     this.setOutput(true, 'Number');
     this.setTooltip(Blockly.LANG_VARIABLES_GET_TOOLTIP);
@@ -46,12 +45,10 @@ Blockly.JavaScript.graph_get_x = function() {
 Blockly.Language.graph_set_y = {
   // y variable setter.
   helpUrl: Blockly.LANG_VARIABLES_SET_HELPURL,
-  deletable: false,
   init: function() {
     this.setColour(330);
     this.appendValueInput('VALUE')
-        .appendTitle(Blockly.LANG_VARIABLES_SET_TITLE)
-        .appendTitle('y');
+        .appendTitle('y =');
     this.setTooltip(Blockly.LANG_VARIABLES_SET_TOOLTIP);
   }
 };

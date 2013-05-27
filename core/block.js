@@ -61,16 +61,16 @@ Blockly.Block = function(workspace, prototypeName) {
   this.rendered = false;
   this.collapsed = false;
   this.disabled = false;
-  this.editable = workspace.editable;
-  this.deletable = workspace.editable;
+  this.movable = Blockly.editable;
+  this.deletable = Blockly.editable;
   this.tooltip = '';
   this.contextMenu = true;
 
   this.parentBlock_ = null;
   this.childBlocks_ = [];
 
-  this.isInFlyout = false;
   this.workspace = workspace;
+  this.isInFlyout = workspace.isFlyout;
 
   workspace.addTopBlock(this);
 
@@ -88,7 +88,7 @@ Blockly.Block = function(workspace, prototypeName) {
     this.init();
   }
   // Bind an onchange function, if it exists.
-  if (this.editable && goog.isFunction(this.onchange)) {
+  if (goog.isFunction(this.onchange)) {
     Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,
                        this.onchange);
   }
@@ -387,8 +387,8 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
     if (Blockly.ContextMenu) {
       this.showContextMenu_(e.clientX, e.clientY);
     }
-  } else if (!this.editable) {
-    // Allow uneditable blocks to be selected and context menued, but not
+  } else if (!this.movable) {
+    // Allow unmovable blocks to be selected and context menued, but not
     // dragged.  Let this event bubble up to document, so the workspace may be
     // dragged instead.
     return;
@@ -571,21 +571,23 @@ Blockly.Block.prototype.showContextMenu_ = function(x, y) {
       }
     }
 
-    // Option to collapse/expand block.
-    if (this.collapsed) {
-      var expandOption = {enabled: true};
-      expandOption.text = Blockly.MSG_EXPAND_BLOCK;
-      expandOption.callback = function() {
-        block.setCollapsed(false);
-      };
-      options.push(expandOption);
-    } else {
-      var collapseOption = {enabled: true};
-      collapseOption.text = Blockly.MSG_COLLAPSE_BLOCK;
-      collapseOption.callback = function() {
-        block.setCollapsed(true);
-      };
-      options.push(collapseOption);
+    if (Blockly.collapse) {
+      // Option to collapse/expand block.
+      if (this.collapsed) {
+        var expandOption = {enabled: true};
+        expandOption.text = Blockly.MSG_EXPAND_BLOCK;
+        expandOption.callback = function() {
+          block.setCollapsed(false);
+        };
+        options.push(expandOption);
+      } else {
+        var collapseOption = {enabled: true};
+        collapseOption.text = Blockly.MSG_COLLAPSE_BLOCK;
+        collapseOption.callback = function() {
+          block.setCollapsed(true);
+        };
+        options.push(collapseOption);
+      }
     }
 
     // Option to disable/enable block.
@@ -1458,6 +1460,9 @@ Blockly.Block.prototype.setCommentText = function(text) {
 Blockly.Block.prototype.setWarningText = function(text) {
   if (!Blockly.Warning) {
     throw 'Warnings not supported.';
+  }
+  if (this.isInFlyout) {
+    text = null;
   }
   var changedState = false;
   if (goog.isString(text)) {
