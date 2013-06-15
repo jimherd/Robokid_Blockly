@@ -71,10 +71,10 @@ if (!Blockly.Language) Blockly.Language = {};
 		this.appendDummyInput()
 			.appendTitle("Set Speed ");
 		this.appendValueInput('Motor_L')
-			.setCheck(Number)
+			.setCheck('Number')
 			.appendTitle("Left %");
 		this.appendValueInput('Motor_R')
-			.setCheck(Number)
+			.setCheck('Number')
 			.appendTitle("Right %");		
 	}
 };
@@ -158,7 +158,7 @@ Blockly.Language.wait = {
     this.setTooltip('wait a number of tenths of a second');
 	
 	this.appendValueInput('TIME')
-		.setCheck(Number)
+		.setCheck('Number')
 		.appendTitle("Wait ");
 	this.appendDummyInput()
 		.appendTitle(" \u00D7 0.1 sec ");

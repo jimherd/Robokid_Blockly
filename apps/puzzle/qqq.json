@@ -28,7 +28,7 @@
     "Puzzle.language": "Prompt for the user to provide the official language of a country.\n{{Identical|Language}}",
     "Puzzle.languageChoose": "Initial text displayed in a dropdown menu from which the user should choose the language spoken in the indicated country.",
     "Puzzle.cities": "A label preceding a list of cities.\n{{Identical|City}}",
-    "Puzzle.error0": "A congratulatory message displayed if the user placed all %1 blocks correctly, where %1 is an integer greater than 1.  The use of '\n', which indicates a new line, is optional.",
+    "Puzzle.error0": "A congratulatory message displayed if the user placed all %1 blocks correctly, where %1 is an integer greater than 1.\n\nThe use of a new line character is optional.",
     "Puzzle.error1": "an encouraging error message displayed if the user placed all blocks except 1 correctly.\n\nIf the number of incorrect blocks is 2 or more, {{msg-blockly|Puzzle-Puzzle.error2}} is used instead.",
     "Puzzle.error2": "an error message displayed if the user misplaced %1 blocks, where %1 is an integer greater than one.\n\nIf the number of incorrect blocks is 1, {{msg-blockly|Puzzle-Puzzle.error1}} is used.",
     "Puzzle.tryAgain": "A message indicating that a visually distinguished block is incorrect and that the user should try to fix it.  The use of '\n', which indicates a new line, is optional.",

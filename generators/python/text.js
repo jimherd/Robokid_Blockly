@@ -116,12 +116,12 @@ Blockly.Python.text_charAt = function() {
       return [code, Blockly.Python.ORDER_MEMBER];
     case 'FROM_START':
       // Blockly uses one-based indicies.
-      if (at.match(/^-?\d+$/)) {
+      if (Blockly.isNumber(at)) {
         // If the index is a naked number, decrement it right now.
         at = parseInt(at, 10) - 1;
       } else {
         // If the index is dynamic, decrement it in code.
-        at += ' - 1';
+        at = 'int(' + at + ' - 1)';
       }
       var code = text + '[' + at + ']';
       return [code, Blockly.Python.ORDER_MEMBER];
@@ -129,19 +129,13 @@ Blockly.Python.text_charAt = function() {
       var code = text + '[-' + at + ']';
       return [code, Blockly.Python.ORDER_MEMBER];
     case 'RANDOM':
-      if (!Blockly.Python.definitions_['text_random_letter']) {
-        Blockly.Python.definitions_['import_random'] = 'import random';
-        var functionName = Blockly.Python.variableDB_.getDistinctName(
-            'text_random_letter', Blockly.Generator.NAME_TYPE);
-        Blockly.Python.text_charAt.text_random_letter = functionName;
-        var func = [];
-        func.push('def ' + functionName + '(text):');
-        func.push('  x = int(random.random() * len(text))');
-        func.push('  return text[x];');
-        Blockly.Python.definitions_['text_random_letter'] = func.join('\n');
-      }
-      code = Blockly.Python.text_charAt.text_random_letter +
-          '(' + text + ')';
+      Blockly.Python.definitions_['import_random'] = 'import random';
+      var functionName = Blockly.Python.provideFunction_(
+          'text_random_letter',
+          ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(text):',
+           '  x = int(random.random() * len(text))',
+           '  return text[x];']);
+      code = functionName + '(' + text + ')';
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
   }
   throw 'Unhandled option (text_charAt).';
@@ -161,30 +155,41 @@ Blockly.Python.text_getSubstring = function() {
     at1 = '';
   } else if (where1 == 'FROM_START') {
     // Blockly uses one-based indicies.
-    if (at1.match(/^-?\d+$/)) {
+    if (Blockly.isNumber(at1)) {
       // If the index is a naked number, decrement it right now.
       at1 = parseInt(at1, 10) - 1;
     } else {
       // If the index is dynamic, decrement it in code.
-      at1 += ' - 1';
+      at1 = 'int(' + at1 + ' - 1)';
     }
   } else if (where1 == 'FROM_END') {
-    at1 = '-' + at1;
+    if (Blockly.isNumber(at1)) {
+      at1 = -parseInt(at1, 10);
+    } else {
+      at1 = '-int(' + at1 + ')';
+    }
   }
   if (where2 == 'LAST' || (where2 == 'FROM_END' && at2 == '1')) {
     at2 = '';
   } else if (where1 == 'FROM_START') {
-    at2 = at2;
+    if (Blockly.isNumber(at2)) {
+      at2 = parseInt(at2, 10);
+    } else {
+      at2 = 'int(' + at2 + ')';
+    }
   } else if (where1 == 'FROM_END') {
-    if (at2.match(/^-?\d+$/)) {
+    if (Blockly.isNumber(at2)) {
       // If the index is a naked number, increment it right now.
       at2 = 1 - parseInt(at2, 10);
+      if (at2 == 0) {
+        at2 = '';
+      }
     } else {
       // If the index is dynamic, increment it in code.
-      at2 = '1 - ' + at2;
+      // Add special case for -0.
+      Blockly.Python.definitions_['import_sys'] = 'import sys';
+      at2 = 'int(1 - ' + at2 + ') or sys.maxsize';
     }
-    Blockly.Python.definitions_['import_sys'] = 'import sys';
-    at2 += ' or sys.maxsize';
   }
   var code = text + '[' + at1 + ' : ' + at2 + ']';
   return [code, Blockly.Python.ORDER_MEMBER];
@@ -231,20 +236,15 @@ Blockly.Python.text_print = function() {
 
 Blockly.Python.text_prompt = function() {
   // Prompt function.
-  if (!Blockly.Python.definitions_['text_prompt']) {
-    var functionName = Blockly.Python.variableDB_.getDistinctName(
-        'text_prompt', Blockly.Generator.NAME_TYPE);
-    Blockly.Python.text_prompt.text_prompt = functionName;
-    var func = [];
-    func.push('def ' + functionName + '(msg):');
-    func.push('  try:');
-    func.push('    return raw_input(msg)');
-    func.push('  except NameError:');
-    func.push('    return input(msg)');
-    Blockly.Python.definitions_['text_prompt'] = func.join('\n');
-  }
+  var functionName = Blockly.Python.provideFunction_(
+      'text_prompt',
+      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(msg):',
+       '  try:',
+       '    return raw_input(msg)',
+       '  except NameError:',
+       '    return input(msg)']);
   var msg = Blockly.Python.quote_(this.getTitleValue('TEXT'));
-  var code = Blockly.Python.text_prompt.text_prompt + '(' + msg + ')';
+  var code = functionName + '(' + msg + ')';
   var toNumber = this.getTitleValue('TYPE') == 'NUMBER';
   if (toNumber) {
     code = 'float(' + code + ')';

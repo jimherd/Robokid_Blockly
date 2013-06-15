@@ -33,10 +33,10 @@ Blockly.Language.maze_moveForward = {
   init: function() {
     this.setColour(290);
     this.appendDummyInput()
-        .appendTitle(MSG.moveForward);
+        .appendTitle(BlocklyApps.getMsg('moveForward'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip(MSG.moveForwardTooltip);
+    this.setTooltip(BlocklyApps.getMsg('moveForwardTooltip'));
   }
 };
 
@@ -54,13 +54,13 @@ Blockly.Language.maze_turn = {
         .appendTitle(new Blockly.FieldDropdown(this.DIRECTIONS), 'DIR');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip(MSG.turnTooltip);
+    this.setTooltip(BlocklyApps.getMsg('turnTooltip'));
   }
 };
 
 Blockly.Language.maze_turn.DIRECTIONS =
-    [[MSG.turnLeft + ' \u27F2', 'turnLeft'],
-     [MSG.turnRight + ' \u27F3', 'turnRight']];
+    [[BlocklyApps.getMsg('turnLeft') + ' \u27F2', 'turnLeft'],
+     [BlocklyApps.getMsg('turnRight') + ' \u27F3', 'turnRight']];
 
 Blockly.JavaScript.maze_turn = function() {
   // Generate JavaScript for turning left or right.
@@ -76,14 +76,14 @@ Blockly.Language.maze_isPath = {
     this.setOutput(true, 'Boolean');
     this.appendDummyInput()
         .appendTitle(new Blockly.FieldDropdown(this.DIRECTIONS), 'DIR');
-    this.setTooltip(MSG.isPathTooltip);
+    this.setTooltip(BlocklyApps.getMsg('isPathTooltip'));
   }
 };
 
 Blockly.Language.maze_isPath.DIRECTIONS =
-    [[MSG.pathAhead, 'isPathForward'],
-     [MSG.pathLeft + ' \u27F2', 'isPathLeft'],
-     [MSG.pathRight + ' \u27F3', 'isPathRight']];
+    [[BlocklyApps.getMsg('pathAhead'), 'isPathForward'],
+     [BlocklyApps.getMsg('pathLeft') + ' \u27F2', 'isPathLeft'],
+     [BlocklyApps.getMsg('pathRight') + ' \u27F3', 'isPathRight']];
 
 Blockly.JavaScript.maze_isPath = function() {
   // Generate JavaScript for checking if there is a path.
@@ -92,16 +92,15 @@ Blockly.JavaScript.maze_isPath = function() {
 };
 
 Blockly.Language.maze_if = {
-  // Block for 'if' conditional if there a path.
+  // Block for 'if' conditional if there is a path.
   helpUrl: '',
   init: function() {
     this.setColour(120);
     this.appendDummyInput()
-        .appendTitle(MSG.ifPath)
         .appendTitle(new Blockly.FieldDropdown(this.DIRECTIONS), 'DIR');
     this.appendStatementInput('DO')
-        .appendTitle(MSG.doCode);
-    this.setTooltip(MSG.ifTooltip);
+        .appendTitle(BlocklyApps.getMsg('doCode'));
+    this.setTooltip(BlocklyApps.getMsg('ifTooltip'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
   }
@@ -120,17 +119,17 @@ Blockly.JavaScript.maze_if = function() {
 };
 
 Blockly.Language.maze_ifElse = {
-  // Block for 'if/else' conditional if there a path.
+  // Block for 'if/else' conditional if there is a path.
   helpUrl: '',
   init: function() {
     this.setColour(120);
     this.appendDummyInput()
         .appendTitle(new Blockly.FieldDropdown(this.DIRECTIONS), 'DIR');
     this.appendStatementInput('DO')
-        .appendTitle(MSG.doCode);
+        .appendTitle(BlocklyApps.getMsg('doCode'));
     this.appendStatementInput('ELSE')
-        .appendTitle(MSG.elseCode);
-    this.setTooltip(MSG.ifelseTooltip);
+        .appendTitle(BlocklyApps.getMsg('elseCode'));
+    this.setTooltip(BlocklyApps.getMsg('ifelseTooltip'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
   }
@@ -156,11 +155,11 @@ Blockly.Language.maze_forever = {
   init: function() {
     this.setColour(120);
     this.appendDummyInput()
-        .appendTitle(MSG.repeatUntil)
+        .appendTitle(BlocklyApps.getMsg('repeatUntil'))
         .appendTitle(new Blockly.FieldImage('marker.png', 12, 16));
-    this.appendStatementInput('DO').appendTitle(MSG.doCode);
+    this.appendStatementInput('DO').appendTitle(BlocklyApps.getMsg('doCode'));
     this.setPreviousStatement(true);
-    this.setTooltip(MSG.whileTooltip);
+    this.setTooltip(BlocklyApps.getMsg('whileTooltip'));
   }
 };
 

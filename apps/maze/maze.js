@@ -45,18 +45,18 @@ Maze.getNumberFromUrl = function(name, min_value, max_value) {
   return val;
 };
 
-Maze.MAX_LEVEL = MSG.hints.length - 1;
+Maze.MAX_LEVEL = 10;
 Maze.LEVEL = Maze.getNumberFromUrl('level', 1, Maze.MAX_LEVEL);
-document.write(mazepage.start({}, null,
-    {MSG: MSG,
-     level: Maze.LEVEL}));
+document.write(mazepage.start({}, null, {level: Maze.LEVEL}));
 var maxBlocks = [undefined, // Level 0.
     Infinity, Infinity, 2, 5, 5, 5, 5, 10, 7, 10][Maze.LEVEL];
+
+document.write(BlocklyCommonMessages.messages(null, null));
 
 /**
  * Milliseconds between each animation frame.
  */
-Maze.STEP_SPEED = 150;
+Maze.stepSpeed;
 
 /**
  * Display a less-realistic, more mathematical map with grid lines.
@@ -305,14 +305,14 @@ Maze.drawMap = function() {
 
       // Draw the tile.
       if (!Maze.tile_SHAPES[tile]) {
-       if (Maze.GRAPH_UI) {
+        if (Maze.GRAPH_UI) {
           tile = 'null0';
         } else if (tile == '00000' && Math.random() > 0.3) {
           tile = 'null0';
         } else {
           tile = 'null' + Math.floor(1 + Math.random() * 4);
         }
-       }
+      }
       var left = Maze.tile_SHAPES[tile][0];
       var top = Maze.tile_SHAPES[tile][1];
       // Tile's clipPath element.
@@ -375,6 +375,10 @@ Maze.drawMap = function() {
  * Initialize Blockly and the maze.  Called on page load.
  */
 Maze.init = function() {
+  document.title = BlocklyApps.getMsg('blocklyMessage') +
+      ' : ' + BlocklyApps.getMsg('maze');
+  document.getElementById('blocklyName').innerHTML =
+      BlocklyApps.getMsg('blocklyMessage');
   // document.dir fails in Mozilla, use document.body.parentNode.dir instead.
   // https://bugzilla.mozilla.org/show_bug.cgi?id=151407
   var rtl = document.body.parentNode.dir == 'rtl';
@@ -391,14 +395,15 @@ Maze.init = function() {
     Blockly.SNAP_RADIUS *= 2;
   }
 
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = '  Blockly.Apps.checkTimeout(%1);\n';
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = '  BlocklyApps.checkTimeout(%1);\n';
   Maze.drawMap();
 
   var blocklyDiv = document.getElementById('blockly');
   var onresize = function(e) {
     blocklyDiv.style.width = (window.innerWidth - blocklyDiv.offsetLeft - 18) +
         'px';
-    blocklyDiv.style.height = (window.innerHeight - 22) + 'px';
+    blocklyDiv.style.height = (window.innerHeight - blocklyDiv.offsetTop - 18) +
+        'px';
   };
   window.addEventListener('resize', onresize);
   onresize();
@@ -434,7 +439,7 @@ Maze.init = function() {
   }
 
   Maze.reset();
-  Blockly.addChangeListener(function() {Blockly.Apps.updateCapacity(MSG)});
+  Blockly.addChangeListener(function() {BlocklyApps.updateCapacity()});
 };
 
 window.addEventListener('load', Maze.init);
@@ -474,7 +479,7 @@ Maze.reset = function() {
 Maze.runButtonClick = function() {
   // Only allow a single top block on levels 1 and 2.
   if (Maze.LEVEL <= 2 && Blockly.mainWorkspace.getTopBlocks().length > 1) {
-    window.alert(MSG.oneTopBlock);
+    window.alert(BlocklyApps.getMsg('oneTopBlock'));
     return;
   }
   var runButton = document.getElementById('runButton');
@@ -594,8 +599,8 @@ Maze.report = function(app, id, level, result, program) {
  * Execute the user's code.  Heaven help us...
  */
 Maze.execute = function() {
-  Blockly.Apps.log = [];
-  Blockly.Apps.ticks = 1000;
+  BlocklyApps.log = [];
+  BlocklyApps.ticks = 1000;
   var code = Blockly.Generator.workspaceToCode('JavaScript');
   var result = Maze.ResultType.UNSET;
 
@@ -620,13 +625,14 @@ Maze.execute = function() {
     }
   }
 
-
   // Report result to server.
   Maze.report('maze', Maze.LEVEL_ID, Maze.LEVEL, result,
-              Blockly.Apps.stripCode(code));
+              BlocklyApps.stripCode(code));
 
+  // Fast animation if execution is successful.  Slow otherwise.
+  Maze.stepSpeed = (result == Maze.ResultType.SUCCESS) ? 100 : 150;
 
-  // Blockly.Apps.log now contains a transcript of all the user's actions.
+  // BlocklyApps.log now contains a transcript of all the user's actions.
   // Reset the maze and animate the transcript.
   Maze.reset();
   Maze.pidList.push(window.setTimeout(Maze.animate, 100));
@@ -639,12 +645,12 @@ Maze.animate = function() {
   // All tasks should be complete now.  Clean up the PID list.
   Maze.pidList = [];
 
-  var action = Blockly.Apps.log.shift();
+  var action = BlocklyApps.log.shift();
   if (!action) {
-    Blockly.Apps.highlight(null);
+    BlocklyApps.highlight(null);
     return;
   }
-  Blockly.Apps.highlight(action[1]);
+  BlocklyApps.highlight(action[1]);
 
   switch (action[0]) {
     case 'north':
@@ -700,11 +706,11 @@ Maze.animate = function() {
       window.setTimeout(Maze.congratulations, 1000);
   }
 
-  Maze.pidList.push(window.setTimeout(Maze.animate, Maze.STEP_SPEED * 5));
+  Maze.pidList.push(window.setTimeout(Maze.animate, Maze.stepSpeed * 5));
 };
 
 Maze.congratulations = function() {
-  Blockly.Apps.congratulations(Maze.LEVEL, Maze.MAX_LEVEL, MSG);
+  BlocklyApps.congratulations(Maze.LEVEL, Maze.MAX_LEVEL);
 };
 
 /**
@@ -723,16 +729,16 @@ Maze.schedule = function(startPos, endPos) {
       Maze.displayPegman(startPos[0] + deltas[0] * 2,
           startPos[1] + deltas[1] * 2,
           Maze.constrainDirection16(startPos[2] + deltas[2] * 2));
-    }, Maze.STEP_SPEED));
+    }, Maze.stepSpeed));
   Maze.pidList.push(window.setTimeout(function() {
       Maze.displayPegman(startPos[0] + deltas[0] * 3,
           startPos[1] + deltas[1] * 3,
           Maze.constrainDirection16(startPos[2] + deltas[2] * 3));
-    }, Maze.STEP_SPEED * 2));
+    }, Maze.stepSpeed * 2));
   Maze.pidList.push(window.setTimeout(function() {
       Maze.displayPegman(endPos[0], endPos[1],
           Maze.constrainDirection16(endPos[2]));
-    }, Maze.STEP_SPEED * 3));
+    }, Maze.stepSpeed * 3));
 };
 
 /**
@@ -769,16 +775,16 @@ Maze.scheduleFail = function(forward) {
     Maze.displayPegman(Maze.pegmanX,
                        Maze.pegmanY,
                        direction16);
-    }, Maze.STEP_SPEED));
+    }, Maze.stepSpeed));
   Maze.pidList.push(window.setTimeout(function() {
     Maze.displayPegman(Maze.pegmanX + deltaX,
                        Maze.pegmanY + deltaY,
                        direction16);
     Blockly.playAudio('whack', .5);
-  }, Maze.STEP_SPEED * 2));
+  }, Maze.stepSpeed * 2));
   Maze.pidList.push(window.setTimeout(function() {
       Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, direction16);
-    }, Maze.STEP_SPEED * 3));
+    }, Maze.stepSpeed * 3));
 };
 
 /**
@@ -788,15 +794,16 @@ Maze.scheduleFinish = function() {
   var direction16 = Maze.constrainDirection16(Maze.pegmanD * 4);
   Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, 16);
   Blockly.playAudio('win', .5);
+  Maze.stepSpeed = 150;  // Slow down victory animation a bit.
   Maze.pidList.push(window.setTimeout(function() {
     Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, 17);
-    }, Maze.STEP_SPEED));
+    }, Maze.stepSpeed));
   Maze.pidList.push(window.setTimeout(function() {
     Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, 16);
-    }, Maze.STEP_SPEED * 2));
+    }, Maze.stepSpeed * 2));
   Maze.pidList.push(window.setTimeout(function() {
       Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, direction16);
-    }, Maze.STEP_SPEED * 3));
+    }, Maze.stepSpeed * 3));
 };
 
 /**
@@ -852,7 +859,7 @@ Maze.scheduleLook = function(d) {
   var paths = lookIcon.getElementsByTagName('path');
   lookIcon.style.display = 'inline';
   for (var x = 0, path; path = paths[x]; x++) {
-    Maze.scheduleLookStep(path, Maze.STEP_SPEED * x);
+    Maze.scheduleLookStep(path, Maze.stepSpeed * x);
   }
 };
 
@@ -866,7 +873,7 @@ Maze.scheduleLookStep = function(path, delay) {
     path.style.display = 'inline';
     window.setTimeout(function() {
       path.style.display = 'none';
-    }, Maze.STEP_SPEED * 2);
+    }, Maze.stepSpeed * 2);
   }, delay));
 };
 
@@ -944,7 +951,7 @@ Maze.isPathLeft = function(id) {
  */
 Maze.move = function(direction, id) {
   if (!Maze.isPath(direction, null)) {
-    Blockly.Apps.log.push(['fail_' + (direction ? 'backward' : 'forward'), id]);
+    BlocklyApps.log.push(['fail_' + (direction ? 'backward' : 'forward'), id]);
     throw false;
   }
   // If moving backward, flip the effective direction.
@@ -968,10 +975,10 @@ Maze.move = function(direction, id) {
       command = 'west';
       break;
   }
-  Blockly.Apps.log.push([command, id]);
+  BlocklyApps.log.push([command, id]);
   if (Maze.pegmanX == Maze.finish_.x && Maze.pegmanY == Maze.finish_.y) {
     // Finished.  Terminate the user's program.
-    Blockly.Apps.log.push(['finish', null]);
+    BlocklyApps.log.push(['finish', null]);
     throw true;
   }
 };
@@ -985,11 +992,11 @@ Maze.turn = function(direction, id) {
   if (direction) {
     // Right turn (clockwise).
     Maze.pegmanD++;
-    Blockly.Apps.log.push(['right', id]);
+    BlocklyApps.log.push(['right', id]);
   } else {
     // Left turn (counterclockwise).
     Maze.pegmanD--;
-    Blockly.Apps.log.push(['left', id]);
+    BlocklyApps.log.push(['left', id]);
   }
   Maze.pegmanD = Maze.constrainDirection4(Maze.pegmanD);
 };
@@ -1027,7 +1034,7 @@ Maze.isPath = function(direction, id) {
       break;
   }
   if (id) {
-    Blockly.Apps.log.push([command, id]);
+    BlocklyApps.log.push([command, id]);
   }
   return square !== Maze.SquareType.WALL && square !== undefined;
 };
