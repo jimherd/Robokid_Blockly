@@ -36,3 +36,4 @@ Blockly.LANG_NOTE_AS = 'A_sharp';
 Blockly.LANG_NOTE_B = 'B';
 Blockly.LANG_NOTE_s = 'no_tone';
 
+Blockly.HSV_SATURATION = 1.0; 
