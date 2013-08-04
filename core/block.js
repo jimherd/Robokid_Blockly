@@ -28,10 +28,10 @@ goog.provide('Blockly.Block');
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
+goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Input');
 goog.require('Blockly.Language');
 goog.require('Blockly.Mutator');
-goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
@@ -61,8 +61,9 @@ Blockly.Block = function(workspace, prototypeName) {
   this.rendered = false;
   this.collapsed = false;
   this.disabled = false;
-  this.movable = Blockly.editable;
-  this.deletable = Blockly.editable;
+  this.deletable = !Blockly.readOnly;
+  this.movable = !Blockly.readOnly;
+  this.editable = !Blockly.readOnly;
   this.tooltip = '';
   this.contextMenu = true;
 
@@ -125,8 +126,10 @@ Blockly.Block.prototype.warning = null;
 Blockly.Block.prototype.initSvg = function() {
   this.svg_ = new Blockly.BlockSvg(this);
   this.svg_.init();
-  Blockly.bindEvent_(this.svg_.getRootElement(), 'mousedown', this,
-                     this.onMouseDown_);
+  if (!Blockly.readOnly) {
+    Blockly.bindEvent_(this.svg_.getRootElement(), 'mousedown', this,
+                       this.onMouseDown_);
+  }
   this.workspace.getCanvas().appendChild(this.svg_.getRootElement());
 };
 
@@ -203,7 +206,7 @@ Blockly.Block.terminateDrag_ = function() {
  */
 Blockly.Block.prototype.select = function() {
   if (!this.svg_) {
-    throw 'Block is not rendered.'
+    throw 'Block is not rendered.';
   }
   if (Blockly.selected) {
     // Unselect any previously selected block.
@@ -219,7 +222,7 @@ Blockly.Block.prototype.select = function() {
  */
 Blockly.Block.prototype.unselect = function() {
   if (!this.svg_) {
-    throw 'Block is not rendered.'
+    throw 'Block is not rendered.';
   }
   Blockly.selected = null;
   this.svg_.removeSelect();
@@ -350,7 +353,7 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
       var xy = Blockly.getRelativeXY_(element);
       x += xy.x;
       y += xy.y;
-      element = element.parentElement;
+      element = element.parentNode;
     } while (element && element != this.workspace.getCanvas());
   }
   return {x: x, y: y};
@@ -516,7 +519,7 @@ Blockly.Block.prototype.duplicate_ = function() {
  * @private
  */
 Blockly.Block.prototype.showContextMenu_ = function(x, y) {
-  if (!this.contextMenu) {
+  if (Blockly.readOnly || !this.contextMenu) {
     return;
   }
   // Save the current block in a variable for use in closures.
@@ -723,13 +726,12 @@ Blockly.Block.prototype.setDragging_ = function(adding) {
  * @private
  */
 Blockly.Block.prototype.onMouseMove_ = function(e) {
-  if (e.type == 'mousemove' && e.x == 1 && e.y == 0 && e.button == 0) {
+  if (e.type == 'mousemove' && e.x <= 1 && e.y == 0 && e.button == 0) {
     /* HACK:
-     The current versions of Chrome for Android (18.0) has a bug where finger-
-     swipes trigger a rogue 'mousemove' event with invalid x/y coordinates.
-     Ignore events with this signature.  This may result in a one-pixel blind
-     spot in other browsers, but this shouldn't be noticable.
-    */
+     Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
+     on certain touch actions. Ignore events with these signatures.
+     This may result in a one-pixel blind spot in other browsers,
+     but this shouldn't be noticable. */
     e.stopPropagation();
     return;
   }

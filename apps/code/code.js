@@ -1,5 +1,5 @@
 /**
- * Visual Blocks Editor
+ * Blockly Apps: Code
  *
  * Copyright 2012 Google Inc.
  * http://blockly.googlecode.com/
@@ -18,12 +18,23 @@
  */
 
 /**
- * @fileoverview JavaScript for Blockly code demo (language-neutral).
+ * @fileoverview JavaScript for Blockly's Code application.
  * @author fraser@google.com (Neil Fraser)
  */
 
-document.write(codepage.start({}, null,
-    {MSG: MSG, frameSrc: frameSrc.join('&')}));
+// Supported languages.
+BlocklyApps.LANGUAGES = {
+  // Format: ['Language name', 'direction', 'XX_compressed.js']
+  en: ['English', 'ltr', 'en_compressed.js'],
+  de: ['Deutsch', 'ltr', 'de_compressed.js'],
+  hu: ['Magyar', 'ltr', 'en_compressed.js'],
+  vi: ['Tiếng Việt', 'ltr', 'vi_compressed.js'],
+  'zh-tw': ['中國的', 'ltr', 'zh_tw_compressed.js']
+};
+BlocklyApps.LANG = BlocklyApps.getLang();
+
+document.write('<script type="text/javascript" src="generated/' +
+               BlocklyApps.LANG + '.js"></script>\n');
 
 /**
  * List of tab names.
@@ -47,7 +58,7 @@ function tabClick(id) {
       xmlDom = Blockly.Xml.textToDom(xmlText);
     } catch (e) {
       var q =
-          window.confirm(MSG.badXml.replace('%1', e));
+          window.confirm(BlocklyApps.getMsg('badXml').replace('%1', e));
       if (!q) {
         // Leave the user on the XML tab.
         return;
@@ -103,33 +114,26 @@ function renderContent() {
  */
 function init(blockly) {
   window.Blockly = blockly;
+  BlocklyApps.init();
 
   // Add to reserved word list: Local variables in execution evironment (runJS)
   // and the infinite loop detection function.
   Blockly.JavaScript.addReservedWords('code,timeouts,checkTimeout');
 
   // Make the 'Blocks' tab line up with the toolbox.
-  if (Blockly.Toolbox) {
-    window.setTimeout(function() {
+  window.setTimeout(function() {
+      if (Blockly.Toolbox.width) {
         document.getElementById('tab_blocks').style.minWidth =
             (Blockly.Toolbox.width - 38) + 'px';
             // Account for the 19 pixel margin and on each side.
-    }, 1);
-  }
+      }
+  }, 1);
+
+  BlocklyApps.loadBlocks('');
 
   if ('BlocklyStorage' in window) {
-    // An href with #key trigers an AJAX call to retrieve saved blocks.
-    if (window.location.hash.length > 1) {
-      BlocklyStorage.retrieveXml(window.location.hash.substring(1));
-    } else {
-      // Restore saved blocks in a separate thread so that subsequent
-      // initialization is not affected from a failed load.
-      window.setTimeout(BlocklyStorage.restoreBlocks, 0);
-    }
     // Hook a save function onto unload.
     BlocklyStorage.backupOnUnload();
-  } else {
-    document.getElementById('linkButton').className = 'disabled';
   }
 
   tabClick('tab_' + selected);
@@ -144,7 +148,7 @@ function runJS() {
   var timeouts = 0;
   var checkTimeout = function() {
     if (timeouts++ > 1000000) {
-      throw MSG.timeout;
+      throw BlocklyApps.getMsg('timeout');
     }
   };
   var code = Blockly.Generator.workspaceToCode('JavaScript');
@@ -152,7 +156,7 @@ function runJS() {
   try {
     eval(code);
   } catch (e) {
-    alert(MSG.badCode.replace('%1', e));
+    alert(BlocklyApps.getMsg('badCode').replace('%1', e));
   }
 }
 
@@ -162,7 +166,7 @@ function runJS() {
 function discard() {
   var count = Blockly.mainWorkspace.getAllBlocks().length;
   if (count < 2 ||
-      window.confirm(MSG.discard.replace('%1', count))) {
+      window.confirm(BlocklyApps.getMsg('discard').replace('%1', count))) {
     Blockly.mainWorkspace.clear();
     window.location.hash = '';
   }

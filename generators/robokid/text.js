@@ -24,7 +24,11 @@
  * to language files.
  */
 
-Blockly.Robokid = Blockly.Generator.get('Robokid');
+ 'use strict';
+
+Blockly.Robokid.text = {};
+ 
+// Blockly.Robokid = Blockly.Generator.get('Robokid');
 
 Blockly.Robokid.text = function() {
   // Text value.

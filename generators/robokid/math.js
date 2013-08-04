@@ -26,9 +26,11 @@
 
  'use strict';
 
-goog.provide('Blockly.Robokid.math');
+Blockly.Robokid.math = {};
+ 
+// goog.provide('Blockly.Robokid.math');
 
-goog.require('Blockly.Robokid');
+// goog.require('Blockly.Robokid');
  
 // Blockly.Robokid = Blockly.Generator.get('Robokid');
 
@@ -292,7 +294,6 @@ Blockly.Robokid.math_random_int = function() {
   var argument1 = Blockly.Robokid.valueToCode(this, 'TO',
       Blockly.Robokid.ORDER_NONE) || '0';
   code = 'random.randint(' + argument0 + ', ' + argument1 + ')';
-  return code;
   return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
 };
 

@@ -25,9 +25,9 @@
  */
 'use strict';
 
-goog.provide('Blockly.Robokid');
+// goog.provide('Blockly.Robokid');
 
-goog.require('Blockly.CodeGenerator');
+// goog.require('Blockly.CodeGenerator');
 
 Blockly.Robokid = Blockly.Generator.get('Robokid');
 

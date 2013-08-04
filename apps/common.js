@@ -1,5 +1,5 @@
 /**
- * Visual Blocks Editor
+ * Blockly Apps: Common code
  *
  * Copyright 2013 Google Inc.
  * http://blockly.googlecode.com/
@@ -21,7 +21,6 @@
  * @fileoverview Common support code for Blockly apps.
  * @author fraser@google.com (Neil Fraser)
  */
-
 'use strict';
 
 var BlocklyApps = {};
@@ -94,7 +93,7 @@ BlocklyApps.getLang = function() {
     return lang;
   }
   // Sixth choice: Die.
-  throw 'No languages available.'
+  throw 'No languages available.';
 };
 
 /**
@@ -110,19 +109,107 @@ BlocklyApps.LANG = undefined;
 BlocklyApps.LANGUAGES = undefined;
 
 /**
- * Load the specified language file(s).
- * @param {!Array<string>} languageSrc Array of language files.
+ * Common startup tasks for all apps.
  */
-BlocklyApps.loadLanguageScripts = function(languageSrc) {
-  for (var x = 0; x < languageSrc.length; x++) {
-    var file = languageSrc[x];
-    if (file.match(/^(\w+\/)*\w+\.js$/)) {
-      document.writeln('<script type="text/javascript" ' +
-          'src="../../' + file + '"><' + '/script>');
-    } else {
-      console.error('Illegal language file: ' + file);
-    }
+BlocklyApps.init = function() {
+  // Set the page title with the content of the H1 title.
+  document.title = document.getElementById('title').textContent;
+
+  // Set the HTML's language and direction.
+  // document.dir fails in Mozilla, use document.body.parentNode.dir instead.
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=151407
+  var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
+  document.head.parentElement.setAttribute('dir',
+      BlocklyApps.LANGUAGES[BlocklyApps.LANG][1]);
+  document.head.parentElement.setAttribute('lang', BlocklyApps.LANG);
+
+  // Sort languages alphabetically.
+  var languages = [];
+  for (var lang in BlocklyApps.LANGUAGES) {
+    languages.push(BlocklyApps.LANGUAGES[lang].concat(lang));
   }
+  var comp = function(a, b) {
+    // Sort based on first argument ('English', 'Русский', '简体字', etc).
+    if (a[0] > b[0]) return 1;
+    if (a[0] < b[0]) return -1;
+    return 0;
+  };
+  languages.sort(comp);
+  // Populate the language selection menu.
+  var languageMenu = document.getElementById('languageMenu');
+  languageMenu.options.length = 0;
+  for (var i = 0; i < languages.length; i++) {
+    var tuple = languages[i];
+    var lang = tuple[tuple.length - 1];
+    var option = new Option(tuple[0], lang);
+    if (lang == BlocklyApps.LANG) {
+      option.selected = true;
+    }
+    languageMenu.options.add(option);
+  }
+
+  // Disable the link button if page isn't backed by App Engine storage.
+  var linkButton = document.getElementById('linkButton');
+  if (linkButton && !('BlocklyStorage' in window)) {
+    linkButton.className = 'disabled';
+  }
+
+  // Fixes viewport for small screens.
+  var viewport = document.querySelector('meta[name="viewport"]');
+  if (viewport && screen.availWidth < 725) {
+    viewport.setAttribute('content',
+        'width=725, initial-scale=.35, user-scalable=no');
+  }
+};
+
+/**
+ * Load blocks saved on App Engine Storage or in session/local storage.
+ * @param {string} defaultXml Text representation of default blocks.
+ */
+BlocklyApps.loadBlocks = function(defaultXml) {
+  if ('BlocklyStorage' in window && window.location.hash.length > 1) {
+    // An href with #key trigers an AJAX call to retrieve saved blocks.
+    BlocklyStorage.retrieveXml(window.location.hash.substring(1));
+  } else if (window.sessionStorage.loadOnceBlocks) {
+    // Language switching stores the blocks during the reload.
+    var text = window.sessionStorage.loadOnceBlocks;
+    delete window.sessionStorage.loadOnceBlocks;
+    var xml = Blockly.Xml.textToDom(text);
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+  } else if (defaultXml) {
+    // Load the editor with default starting blocks.
+    var xml = Blockly.Xml.textToDom(defaultXml);
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+  } else if ('BlocklyStorage' in window) {
+    // Restore saved blocks in a separate thread so that subsequent
+    // initialization is not affected from a failed load.
+    window.setTimeout(BlocklyStorage.restoreBlocks, 0);
+  }
+};
+
+/**
+ * Save the blocks and reload with a different language.
+ */
+BlocklyApps.changeLanguage = function() {
+  // Store the blocks for the duration of the reload.
+  var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  var text = Blockly.Xml.domToText(xml);
+  window.sessionStorage.loadOnceBlocks = text;
+
+  var languageMenu = document.getElementById('languageMenu');
+  var newLang = encodeURIComponent(
+      languageMenu.options[languageMenu.selectedIndex].value);
+  var search = window.location.search;
+  if (search.length <= 1) {
+    search = '?lang=' + newLang;
+  } else if (search.match(/[?&]lang=[^&]*/)) {
+    search = search.replace(/([?&]lang=)[^&]*/, '$1' + newLang);
+  } else {
+    search = search.replace(/\?/, '?lang=' + newLang + '&');
+  }
+
+  window.location = window.location.protocol + '//' +
+      window.location.host + window.location.pathname + search;
 };
 
 /**
@@ -149,32 +236,12 @@ BlocklyApps.updateCapacity = function() {
 };
 
 /**
- * Congratulates the user for completing the level and offers to
- * direct them to the next level, if available.
- * @param {number} level The current level.
- * @param {number} maxLevel The maxmium available level.
- */
-BlocklyApps.congratulations = function(level, maxLevel) {
-  if (level < maxLevel) {
-    var proceed = window.confirm(BlocklyApps.getMsg('nextLevel')
-        .replace('%1', level + 1));
-    if (proceed) {
-      window.location = window.location.protocol + '//' +
-          window.location.host + window.location.pathname +
-          '?lang=' + BlocklyApps.LANG + '&level=' + (level + 1);
-    }
-  } else {
-    window.alert(BlocklyApps.getMsg('finalLevel'));
-  }
-};
-
-/**
  * Highlight the block (or clear highlighting).
  * @param {?string} id ID of block that triggered this action.
  */
 BlocklyApps.highlight = function(id) {
   if (id) {
-    var m = id.match(/^block_id_(\d+)$/)
+    var m = id.match(/^block_id_(\d+)$/);
     if (m) {
       id = m[1];
     }
@@ -185,16 +252,15 @@ BlocklyApps.highlight = function(id) {
 /**
  * If the user has executed too many actions, we're probably in an infinite
  * loop.  Sadly I wasn't able to solve the Halting Problem.
- * @param {?string} opt_id ID of loop block to highlight if timeout is reached.
- * @throws {false} Throws an error to terminate the user's program.
+ * @param {?string} opt_id ID of loop block to highlight.
+ * @throws {Infinity} Throws an error to terminate the user's program.
  */
 BlocklyApps.checkTimeout = function(opt_id) {
   if (opt_id) {
     BlocklyApps.log.push([null, opt_id]);
   }
   if (BlocklyApps.ticks-- < 0) {
-    // Highlight an infinite loop on death.
-    throw false;
+    throw Infinity;
   }
 };
 
@@ -224,15 +290,29 @@ BlocklyApps.showCode = function() {
 /**
  * Gets the message with the given key from the document.
  * @param {string} key The key of the document element.
- * @return {string} The innerHTML of the specified element, or undefined if the
- *     element was not found.
+ * @return {string} The innerHTML of the specified element,
+ *     or an error message if the element was not found.
  */
 BlocklyApps.getMsg = function(key) {
+  var msg = BlocklyApps.getMsgOrNull(key)
+  return msg === null ? '[Unknown message: ' + key + ']' : msg;
+};
+
+/**
+ * Gets the message with the given key from the document.
+ * @param {string} key The key of the document element.
+ * @return {string} The innerHTML of the specified element,
+ *     or null if the element was not found.
+ */
+BlocklyApps.getMsgOrNull = function(key) {
   var element = document.getElementById(key);
   if (element) {
-    return element.innerHTML;
+    var text = element.innerHTML;
+    // Convert newline sequences.
+    text = text.replace(/\\n/g, '\n');
+    return text;
   } else {
-    return '[Unknown message: ' +  key + ']';
+    return null;
   }
 };
 

@@ -1,5 +1,5 @@
 /**
- * Blockly Demo: Puzzle
+ * Blockly Apps: Puzzle
  *
  * Copyright 2013 Google Inc.
  * http://blockly.googlecode.com/
@@ -18,7 +18,7 @@
  */
 
 /**
- * @fileoverview Demonstration of Blockly: Puzzle.
+ * @fileoverview JavaScript for Blockly's Puzzle application.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -32,92 +32,83 @@ var Puzzle = {};
 BlocklyApps.LANGUAGES = {
   // Format: ['Language name', 'direction', 'XX_compressed.js']
   af: ['Afrikaans', 'ltr', 'en_compressed.js'],
-  ms: ['Bahasa Melayu', 'ltr', 'en_compressed.js'],
+  ar: ['العربية', 'rtl', 'en_compressed.js'],
   cs: ['Česky', 'ltr', 'en_compressed.js'],
+  'be-tarask': ['Taraškievica', 'ltr', 'en_compressed.js'],
+  br: ['Brezhoneg', 'ltr', 'en_compressed.js'],
+  ca: ['Català', 'ltr', 'en_compressed.js'],
+  cdo: ['閩東語', 'ltr', 'zh_tw_compressed.js'],
+  da: ['Dansk', 'ltr', 'en_compressed.js'],
   de: ['Deutsch', 'ltr', 'de_compressed.js'],
-  en: ['English', 'ltr', 'en_compressed.js'],
-  gl: ['Galego', 'ltr', 'en_compressed.js'],
   el: ['Ελληνικά', 'ltr', 'en_compressed.js'],
+  en: ['English', 'ltr', 'en_compressed.js'],
+  eu: ['Euskara', 'ltr', 'en_compressed.js'],
+  fa: ['یسراف', 'rtl', 'en_compressed.js'],
+  fi: ['Suomi', 'ltr', 'en_compressed.js'],
+  fo: ['Føroyskt', 'ltr', 'en_compressed.js'],
+  fr: ['Français', 'ltr', 'en_compressed.js'],
+  frr: ['Frasch', 'ltr',  'de_compressed.js'],
+  gl: ['Galego', 'ltr', 'en_compressed.js'],
+  hak: ['客家話', 'ltr', 'en_compressed.js'],
   he: ['עברית', 'rtl', 'en_compressed.js'],
   hu: ['Magyar', 'ltr', 'en_compressed.js'],
   ia: ['Interlingua', 'ltr', 'en_compressed.js'],
   it: ['Italiano', 'ltr', 'en_compressed.js'],
-  sw: ['Kishwahili', 'ltr', 'en_compressed.js'],
-  la: ['Latine', 'ltr', 'en_compressed.js'],
-  lv: ['Latviešu', 'ltr', 'en_compressed.js'],
-  lb: ['Lëtzebuergesch', 'ltr', 'en_compressed.js'],
-  mk: ['македонски јазик', 'ltr', 'en_compressed.js'],
-  nl: ['Nederlands, Vlaams', 'ltr', 'en_compressed.js'],
-  pl: ['Polski', 'ltr', 'en_compressed.js'],
-  'pt-br': ['Português', 'ltr', 'en_compressed.js'],
-  ru: ['русский язык', 'ltr', 'en_compressed.js'],
-  ksh: ['Ripoarėsch', 'ltr', 'en_compressed.js'],
-  sv: ['Svenska', 'ltr', 'en_compressed.js'],
-  vi: ['Tiếng Việt', 'ltr', 'vi_compressed.js'],
-  tr: ['Türkçe', 'ltr', 'en_compressed.js'],
-  'zh-hans': ['简体字', 'ltr', 'zh_tw_compressed.js'],
-  hak: ['客家話', 'ltr', 'en_compressed.js'],
   ja: ['日本語', 'ltr', 'en_compressed.js'],
-  ko: ['한국어', 'ltr', 'en_compressed.js']};
+  ka: ['ქართული', 'ltr', 'en_compressed.js'],
+  km: ['ភាសាខ្មែរ', 'ltr', 'en_compressed.js'],
+  ko: ['한국어', 'ltr', 'en_compressed.js'],
+  ksh: ['Ripoarėsch', 'ltr', 'de_compressed.js'],
+  ky: ['Кыргызча', 'ltr', 'en_compressed.js'],
+  la: ['Latine', 'ltr', 'en_compressed.js'],
+  lb: ['Lëtzebuergesch', 'ltr', 'de_compressed.js'],
+  lt: ['Lietuvių', 'ltr', 'en_compressed.js'],
+  lv: ['Latviešu', 'ltr', 'en_compressed.js'],
+  ml: ['മലയാളം', 'ltr', 'en_compressed.js'],
+  mk: ['Македонски', 'ltr', 'en_compressed.js'],
+  ms: ['Bahasa Melayu', 'ltr', 'en_compressed.js'],
+  mzn: ['مازِرونی', 'rtl', 'en_compressed.js'],
+  nb: ['Norsk Bokmål', 'ltr', 'en_compressed.js'],
+  nl: ['Nederlands, Vlaams', 'ltr', 'en_compressed.js'],
+  oc: ['Lenga d\'òc', 'ltr', 'en_compressed.js'],
+  pa: ['पंजाबी', 'ltr', 'en_compressed.js'],
+  pl: ['Polski', 'ltr', 'en_compressed.js'],
+  pms: ['Piemontèis', 'ltr', 'en_compressed.js'],
+  ps: ['پښتو', 'rtl', 'en_compressed.js'],
+  'pt-br': ['Português', 'ltr', 'pt_br_compressed.js'],
+  ru: ['Русский', 'ltr', 'en_compressed.js'],
+  sk: ['Slovenčina', 'ltr', 'en_compressed.js'],
+  sv: ['Svenska', 'ltr', 'en_compressed.js'],
+  sw: ['Kishwahili', 'ltr', 'en_compressed.js'],
+  tr: ['Türkçe', 'ltr', 'en_compressed.js'],
+  uk: ['Українська', 'ltr', 'en_compressed.js'],
+  vi: ['Tiếng Việt', 'ltr', 'vi_compressed.js'],
+  'zh-hans': ['简体字', 'ltr', 'zh_tw_compressed.js'],
+  'zh-hant': ['中文', 'ltr', 'zh_tw_compressed.js']
+};
 BlocklyApps.LANG = BlocklyApps.getLang();
 
-document.write('<script type="text/javascript" src="' +
+document.write('<script type="text/javascript" src="generated/' +
                BlocklyApps.LANG + '.js"></script>\n');
-
-var MSG = {};
 
 /**
  * Initialize Blockly and the puzzle.  Called on page load.
  */
 Puzzle.init = function() {
-  var spans = document.getElementById('MSG').getElementsByTagName('span');
-  for (var x = 0, span; span = spans[x]; x++) {
-    MSG[span.id] = span.innerHTML;
-    // Convert newline sequences.
-    MSG[span.id] = MSG[span.id].replace(/\\n/g, '\n');
-  }
-  document.title = document.getElementById('title').textContent;
-  // document.dir fails in Mozilla, use document.body.parentNode.dir instead.
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=151407
+  BlocklyApps.init();
+
   var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
-  document.head.parentElement.setAttribute('dir',
-      BlocklyApps.LANGUAGES[BlocklyApps.LANG][1]);
-  document.head.parentElement.setAttribute('lang', BlocklyApps.LANG);
-
-  // Populate the language selection menu.
-  var languageMenu = document.getElementById('languageMenu');
-  languageMenu.options.length = 0;
-  for (var lang in BlocklyApps.LANGUAGES) {
-    var option = new Option(BlocklyApps.LANGUAGES[lang][0], lang);
-    if (lang == BlocklyApps.LANG) {
-      option.selected = true;
-    }
-    languageMenu.options.add(option);
-  }
-  // HACK: Firefox v21 does not allow the setting of style.float.
-  // Use setAttribute instead.
-  //languageMenu.parentElement.style.display = 'block';
-  //languageMenu.parentElement.style.float = rtl ? 'left' : 'right';
-  languageMenu.parentElement.setAttribute('style',
-      'display: block; float: ' + (rtl ? 'left' : 'right') + ';');
-
   Blockly.inject(document.getElementById('blockly'),
       {path: '../../',
        rtl: rtl,
+       scrollbars: false,
        trashcan: false});
 
-  // window.addEventListener('beforeunload', function(e) {
-  //   if (Blockly.mainWorkspace.getAllBlocks().length > 2) {
-  //     e.returnValue = MSG.unloadWarning;  // Gecko.
-  //     return MSG.unloadWarning;  // Webkit.
-  //   }
-  //   return null;
-  // });
   var blocklyDiv = document.getElementById('blockly');
   var onresize = function(e) {
     blocklyDiv.style.width = (window.innerWidth - 20) + 'px';
-    blocklyDiv.style.height = (window.innerHeight - blocklyDiv.offsetTop - 22) +
-        'px';
+    blocklyDiv.style.height =
+        (window.innerHeight - blocklyDiv.offsetTop - 22) + 'px';
   };
   onresize();
   window.addEventListener('resize', onresize);
@@ -129,28 +120,36 @@ Puzzle.init = function() {
     delete window.sessionStorage.loadOnceBlocks;
     var xml = Blockly.Xml.textToDom(text);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+    Puzzle.hideHelp(false);
   } else {
     // Create one of every block.
     var blocksCountries = [];
     var blocksFlags = [];
     var blocksCities = [];
-    for (var i = 1, country; country = MSG['country' + i]; i++) {
+    var i = 1;
+    while (BlocklyApps.getMsgOrNull('country' + i)) {
       var block = new Blockly.Block(Blockly.mainWorkspace, 'country');
       block.populate(i);
       blocksCountries.push(block);
       var block = new Blockly.Block(Blockly.mainWorkspace, 'flag');
       block.populate(i);
       blocksFlags.push(block);
-      for (var j = 1; MSG['country' + i + 'City' + j]; j++) {
+      var j = 1;
+      while (BlocklyApps.getMsgOrNull('country' + i + 'City' + j)) {
         var block = new Blockly.Block(Blockly.mainWorkspace, 'city');
         block.populate(i, j);
         blocksCities.push(block);
+        j++;
       }
+      i++;
     }
-    blocksCountries.sort(Puzzle.shuffleComp);
-    blocksFlags.sort(Puzzle.shuffleComp);
-    blocksCities.sort(Puzzle.shuffleComp);
+    Puzzle.shuffle(blocksCountries);
+    Puzzle.shuffle(blocksFlags);
+    Puzzle.shuffle(blocksCities);
     var blocks = [].concat(blocksCountries, blocksFlags, blocksCities);
+    if (rtl) {
+      blocks.reverse();
+    }
     // Initialize all the blocks.
     for (var i = 0, block; block = blocks[i]; i++) {
       block.deletable = false;
@@ -170,36 +169,67 @@ Puzzle.init = function() {
     var MARGIN = 50;
     Blockly.svgResize();
     var workspaceBox = Blockly.svgSize();
-    workspaceBox.width -= 2 * MARGIN;
+    workspaceBox.width -= MARGIN;
     workspaceBox.height -= MARGIN;
     var countedArea = 0;
     for (var i = 0, block; block = blocks[i]; i++) {
       var blockBox = block.svg_.getRootElement().getBBox();
       // Spread the blocks horizontally, grouped by type.
       // Spacing is proportional to block's area.
-      var dx = Math.round((countedArea / totalArea) *
-                          (workspaceBox.width - blockBox.width) +
-                          Math.random() * MARGIN);
+      if (rtl) {
+        var dx = blockBox.width +
+                 (countedArea / totalArea) * workspaceBox.width;
+      } else {
+        var dx = (countedArea / totalArea) *
+                 (workspaceBox.width - blockBox.width);
+      }
+      dx = Math.round(dx + Math.random() * MARGIN);
       var dy = Math.round(Math.random() *
                           (workspaceBox.height - blockBox.height));
       block.moveBy(dx, dy);
       countedArea += block.cached_area_;
     }
-    Puzzle.showHelp();
+    Puzzle.showHelp(false);
   }
 };
 
-window.addEventListener('load', Puzzle.init);
+/**
+ * Initialize Blockly for the help.  Called on page load.
+ */
+Puzzle.initHelp = function() {
+  var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
+  Blockly.inject(document.getElementById('blockly'),
+      {path: '../../',
+       readOnly: true,
+       rtl: rtl,
+       scrollbars: false});
+
+  // Add the blocks.
+  var xml = document.getElementById('blocks');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+};
+
+if (window.location.pathname.match(/help.html$/)) {
+  window.addEventListener('load', Puzzle.initHelp);
+} else {
+  window.addEventListener('load', Puzzle.init);
+}
 
 /**
- * Comparison function for shuffling an array.
- * Warning: This is not a true shuffle, do not use for non-trivial purposes.
- * @param {Object} a First object.
- * @param {Object} b Second object.
- * @return {number} Ordering result.
+ * Shuffles the values in the specified array using the Fisher-Yates in-place
+ * shuffle (also known as the Knuth Shuffle).
+ * Runtime: O(n)
+ * Based on Closure's goog.array.shuffle.
+ * @param {!Array} arr The array to be shuffled.
  */
-Puzzle.shuffleComp = function(a, b) {
-  return Math.random() - 0.5;
+Puzzle.shuffle = function(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    // Choose a random array index in [0, i] (inclusive with i).
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
 };
 
 /**
@@ -208,9 +238,12 @@ Puzzle.shuffleComp = function(a, b) {
  *   language-neutral tuples.
  */
 Puzzle.languages = function() {
-  var list = [[MSG.languageChoose, '0']];
-  for (var i = 1, lang; lang = MSG['country' + i + 'Language']; i++) {
+  var list = [[BlocklyApps.getMsg('languageChoose'), '0']];
+  var i = 1;
+  var lang;
+  while (lang = BlocklyApps.getMsgOrNull('country' + i + 'Language')) {
     list[i] = [lang, String(i)];
+    i++;
   }
   return list;
 };
@@ -227,15 +260,16 @@ Puzzle.checkAnswers = function() {
       // Bring the offending block to the front.
       block.select();
     }
-
   }
   var message;
   if (errors == 1) {
-    message = MSG.error1 + '\n' + MSG.tryAgain;
+    message = BlocklyApps.getMsg('error1') + '\n' +
+        BlocklyApps.getMsg('tryAgain');
   } else if (errors) {
-    message = MSG.error2.replace('%1', errors) + '\n' + MSG.tryAgain;
+    message = BlocklyApps.getMsg('error2').replace('%1', errors) + '\n' +
+        BlocklyApps.getMsg('tryAgain');
   } else {
-    message = MSG.error0.replace('%1', blocks.length);
+    message = BlocklyApps.getMsg('error0').replace('%1', blocks.length);
   }
   alert(message);
 };
@@ -248,22 +282,78 @@ Puzzle.keyDownHandler_ = null;
 
 /**
  * Show the help pop-up.
+ * @param {boolean} animate Animate the pop-up opening.
  */
-Puzzle.showHelp = function() {
-  document.getElementById('help').style.display = 'block';
-  document.getElementById('shadow').style.display = 'block';
+Puzzle.showHelp = function(animate) {
+  var help = document.getElementById('help');
+  var shadow = document.getElementById('shadow');
+  shadow.style.visibility = 'visible';
+  shadow.style.opacity = 0.3;
+  var border = document.getElementById('helpBorder');
+  function endResult() {
+    help.style.visibility = 'visible';
+    help.style.zIndex = 1;
+    border.style.visibility = 'hidden';
+  }
+  if (animate) {
+    border.style.visibility = 'visible';
+    // In 100ms show the help and hide the animated border.
+    window.setTimeout(endResult, 100);
+  } else {
+    // No animation.  Just set the final state.
+    endResult();
+  }
+  // Match the animated border to the help window's size and location.
+  border.style.width = help.offsetWidth + 'px';
+  border.style.height = help.offsetHeight + 'px';
+  border.style.left = help.offsetLeft + 'px';
+  border.style.top = help.offsetTop + 'px';
+  border.style.opacity = 0.8;
   Puzzle.keyDownHandler_ =
       Blockly.bindEvent_(document, 'keydown', null, Puzzle.keyDown);
 };
 
 /**
  * Hide the help pop-up.
+ * @param {boolean} animate Animate the pop-up closing.
  */
-Puzzle.hideHelp = function () {
-  document.getElementById('help').style.display = 'none';
-  document.getElementById('shadow').style.display = 'none';
-  Blockly.unbindEvent_(Puzzle.keyDownHandler_);
-  Puzzle.keyDownHandler_ = null;
+Puzzle.hideHelp = function(animate) {
+  var help = document.getElementById('help');
+  var shadow = document.getElementById('shadow');
+  shadow.style.opacity = 0;
+  var border = document.getElementById('helpBorder');
+  // Match the animated border to the help button's size and width.
+  var button = document.getElementById('helpButton');
+  border.style.width = (button.offsetWidth - 2) + 'px';
+  border.style.height = (button.offsetHeight - 2) + 'px';
+  var left = 0;
+  var top = 0;
+  do {
+    left += button.offsetLeft;
+    top += button.offsetTop;
+    button = button.offsetParent;
+  } while (button);
+  border.style.left = left + 'px';
+  border.style.top = top + 'px';
+  border.style.opacity = 0.2;
+  function endResult() {
+    shadow.style.visibility = 'hidden';
+    border.style.visibility = 'hidden';
+  }
+  if (animate) {
+    // In 100ms hide both the shadow and the animated border.
+    border.style.visibility = 'visible';
+    window.setTimeout(endResult, 100);
+  } else {
+    // No animation.  Just set the final state.
+    endResult();
+  }
+  help.style.visibility = 'hidden';
+  help.style.zIndex = -1;
+  if (Puzzle.keyDownHandler_) {
+    Blockly.unbindEvent_(Puzzle.keyDownHandler_);
+    Puzzle.keyDownHandler_ = null;
+  }
 };
 
 /**
@@ -272,19 +362,6 @@ Puzzle.hideHelp = function () {
  */
 Puzzle.keyDown = function(e) {
   if (e.keyCode == 13 || e.keyCode == 27 || e.keyCode == 32) {
-    Puzzle.hideHelp();
+    Puzzle.hideHelp(true);
   }
-};
-
- /**
-  * Save the blocks and reload with a different language.
-  */
-Puzzle.changeLanguage = function() {
-  var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  var text = Blockly.Xml.domToText(xml);
-  window.sessionStorage.loadOnceBlocks = text;
-  var languageMenu = document.getElementById('languageMenu');
-  var newLang = languageMenu.options[languageMenu.selectedIndex].value;
-  window.location = window.location.protocol + '//' +
-      window.location.host + window.location.pathname + '?lang=' + newLang;
 };

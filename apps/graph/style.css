@@ -1,10 +1,20 @@
 body {
-  background-color: white;
+  background-color: #fff;
   font-family: sans-serif;
+  margin-top: 0;
 }
 h1 {
   font-weight: normal;
   font-size: 140%;
+}
+a:hover {
+  color: #f00;
+}
+.farSide {
+  text-align: right;
+}
+html[dir="RTL"] .farSide {
+  text-align: left;
 }
 
 /* Buttons */
@@ -13,7 +23,7 @@ button {
   margin-right: 12px;
   margin-left: 0;
   padding: 5px 10px;
-  font-size: large;
+  font-size: 10%;
   border-radius: 5px;
   border: 1px solid #ddd;
   background-color: #eee;
@@ -40,9 +50,6 @@ button.disabled:hover>img {
 button.disabled {
   display: none;
 }
-#visualization {
-  margin-top: 1em;
-}
 #funcText {
   margin-top: 1em;
   margin-left: 1.5em;
@@ -59,5 +66,9 @@ button.disabled {
   background-color: #36c;
 }
 #blockly {
-  position: fixed;
+  position: absolute;
+}
+#languageMenu {
+  vertical-align: top;
+  margin-top: 12px;
 }

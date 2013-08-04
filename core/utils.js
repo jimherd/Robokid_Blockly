@@ -196,9 +196,12 @@ Blockly.getRelativeXY_ = function(element) {
   }
   // Second, check for transform="translate(...)" attribute.
   var transform = element.getAttribute('transform');
-  // Note that Firefox returns 'translate(12)' instead of 'translate(12, 0)'.
+  // Note that Firefox and IE (9,10) return 'translate(12)' instead of
+  // 'translate(12, 0)'.
+  // Note that IE (9,10) returns 'translate(16 8)' instead of
+  // 'translate(16, 8)'.
   var r = transform &&
-          transform.match(/translate\(\s*([-\d.]+)(,\s*([-\d.]+)\s*\))?/);
+          transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
   if (r) {
     xy.x += parseInt(r[1], 10);
     if (r[3]) {
@@ -252,6 +255,12 @@ Blockly.createSvgElement = function(name, attrs, opt_parent) {
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
     e.setAttribute(key, attrs[key]);
+  }
+  // IE defines a unique attribute "runtimeStyle", it is NOT applied to
+  // elements created with createElementNS. However, Closure checks for IE
+  // and assumes the presence of the attribute and crashes.
+  if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
+    e.runtimeStyle = e.currentStyle = e.style;
   }
   if (opt_parent) {
     opt_parent.appendChild(e);

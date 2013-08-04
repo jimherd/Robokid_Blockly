@@ -1,5 +1,5 @@
 /**
- * Visual Blocks Language
+ * Blockly Apps: Plane Seat Calculator
  *
  * Copyright 2012 Google Inc.
  * http://blockly.googlecode.com/
@@ -18,7 +18,7 @@
  */
 
 /**
- * @fileoverview Interactivity for the plane image.
+ * @fileoverview JavaScript for Blockly's Plane Seat Calculator application.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -33,12 +33,11 @@ BlocklyApps.LANGUAGES = {
   // Format: ['Language name', 'direction', 'XX_compressed.js']
   en: ['English', 'ltr', 'en_compressed.js'],
   hu: ['Magyar', 'ltr', 'en_compressed.js'],
-  vi: ['Tiếng Việt', 'ltr', 'vi_compressed.js']};
+  vi: ['Tiếng Việt', 'ltr', 'vi_compressed.js']
+};
 BlocklyApps.LANG = BlocklyApps.getLang();
 
-document.write('<script type="text/javascript" src="../' +
-               BlocklyApps.LANG + '.js"></script>\n');
-document.write('<script type="text/javascript" src="' +
+document.write('<script type="text/javascript" src="generated/' +
                BlocklyApps.LANG + '.js"></script>\n');
 
 Plane.MAX_LEVEL = 3;
@@ -87,51 +86,24 @@ Plane.setCorrect = function(ok) {
 };
 
 /**
- * Initialize Blockly and the SVG.
+ * Initialize Blockly and the SVG plane.
  */
 Plane.init = function() {
-  document.title = document.getElementById('title').textContent;
-  // document.dir fails in Mozilla, use document.body.parentNode.dir instead.
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=151407
+  BlocklyApps.init();
+
   var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
-  document.head.parentElement.setAttribute('dir',
-      BlocklyApps.LANGUAGES[BlocklyApps.LANG][1]);
-  document.head.parentElement.setAttribute('lang', BlocklyApps.LANG);
-
-  // Populate the language selection menu.
-  var languageMenu = document.getElementById('languageMenu');
-  languageMenu.options.length = 0;
-  for (var lang in BlocklyApps.LANGUAGES) {
-    var option = new Option(BlocklyApps.LANGUAGES[lang][0], lang);
-    if (lang == BlocklyApps.LANG) {
-      option.selected = true;
-    }
-    languageMenu.options.add(option);
-  }
-  // HACK: Firefox v21 does not allow the setting of style.float.
-  // Use setAttribute instead.
-  //languageMenu.parentElement.style.display = 'block';
-  //languageMenu.parentElement.style.float = rtl ? 'left' : 'right';
-  languageMenu.parentElement.setAttribute('style',
-      'display: block; float: ' + (rtl ? 'left' : 'right') + ';');
-
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blockly'),
       {path: '../../',
        rtl: rtl,
        toolbox: toolbox});
 
-  if (window.sessionStorage.loadOnceBlocks) {
-    var text = window.sessionStorage.loadOnceBlocks;
-    delete window.sessionStorage.loadOnceBlocks;
-    var xml = Blockly.Xml.textToDom(text);
-  } else {
-    // Load the editor with a starting block.
-    var xml = Blockly.Xml.textToDom(
-        '<xml><block type="plane_set_seats" deletable="false" x="70" y="70">' +
-        '</block></xml>');
-  }
-  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+  var defaultXml =
+      '<xml>' +
+      '  <block type="plane_set_seats" deletable="false" x="70" y="70">' +
+      '  </block>' +
+      '</xml>';
+  BlocklyApps.loadBlocks(defaultXml);
 
   Blockly.addChangeListener(Plane.recalculate);
 
@@ -149,20 +121,6 @@ Plane.init = function() {
 };
 
 window.addEventListener('load', Plane.init);
-
-/**
- * Save the blocks and reload with a different language.
- */
-Plane.changeLanguage = function() {
-  var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  var text = Blockly.Xml.domToText(xml);
-  window.sessionStorage.loadOnceBlocks = text;
-  var languageMenu = document.getElementById('languageMenu');
-  var newLang = languageMenu.options[languageMenu.selectedIndex].value;
-  window.location = window.location.protocol + '//' +
-      window.location.host + window.location.pathname +
-      '?lang=' + newLang + '&level=' + Plane.LEVEL;
-};
 
 /**
  * Use the blocks to calculate the number of seats.

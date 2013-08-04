@@ -26,9 +26,11 @@
 
 'use strict';
 
-goog.provide('Blockly.Robokid.robokid');
+Blockly.Robokid.robokid = {};
 
-goog.require('Blockly.Robokid');
+// goog.provide('Blockly.Robokid.robokid');
+
+// goog.require('Blockly.Robokid');
  
 // Blockly.Robokid = Blockly.Generator.get('Robokid');
 

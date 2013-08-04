@@ -1,33 +1,18 @@
 {namespace puzzlepage}
 
 /**
- * This is a Closure Template.  Build multilingually:
+ * This is a Closure Template.
  *
- * # Create en.js.
- * java -jar ../_soy/SoyToJsSrcCompiler.jar --outputPathFormat en.js --srcs template.soy
+ * To regenerate just en.js, run this command:
+ * java -jar ../_soy/SoyToJsSrcCompiler.jar --outputPathFormat generated/en.js --srcs ../template.soy,template.soy
  *
- * # Extract messages from template.soy.
- * java -jar ../_soy/SoyMsgExtractor.jar --outputFile extracted_msgs.xlf template.soy
- *
- * # Create en.json, qqq.json.
- * ../../i18n/xliff_to_json.py extracted_msgs.xlf
- *
- * Once translations have been made into <LANG>.json:
- *
- * # Create *.xlf.  By default, qqq.json and keys.json are skipped.
- * ../../i18n/json_to_xliff.py *.json
- *
- * # Create .js files by running script recommended by previous command.  It will
- * # start with "java -jar ../../apps/_soy/SoyToJsSrcCompiler.jar".
- *
- * # The .xlf files may be deleted.  They should not be checked in.
- * rm *.xlf
+ * To regenerate all files, see: trunk/apps/template.soy.
  */
 
 /**
- * Web page structure.
+ * Translated messages.
  */
-{template .start}
+{template .messages}
   <div id="MSG" style="display: none">
     <span id="country1">{{msg meaning="Puzzle.country1" desc="The name of the country Australia\n{lb}{lb}Identical|Australia{rb}{rb}"}}Australia{{/msg}}</span>
     <span id="country1Flag">flag_au.png</span>
@@ -73,7 +58,7 @@
       {/msg}
     </span>
     <span id="country2City2">
-      {msg meaning="Puzzle.country2City2" desc="The city Munich (München) in Germany."}
+      {msg meaning="Puzzle.country2City2" desc="The city Munich (M\u00fcnchen) in Germany."}
         Munich
       {/msg}
     </span>
@@ -131,8 +116,8 @@
       {/msg}
     </span>
     <span id="country4City2">
-      {msg meaning="Puzzle.country4City2" desc="The city São Paulo in Brazil."}
-        São Paulo
+      {msg meaning="Puzzle.country4City2" desc="The city S\u00e3o Paulo in Brazil."}
+        S\u00e3o Paulo
       {/msg}
     </span>
     <span id="country4HelpUrl">
@@ -142,7 +127,7 @@
       {/msg}
     </span>
     <span id="flag">
-      {msg meaning="Puzzle.flag" desc="The official flag (noun) representing a country."}
+      {{msg meaning="Puzzle.flag" desc="[[File:Config-language.png|left||32px]]\nnoun the official flag representing a country (the national flag).\n{lb}{lb}Identical|Flag{rb}{rb}"}}
         flag:
       {/msg}
     </span>
@@ -165,44 +150,53 @@
     </span>
     <span id="error0">
       {msg meaning="Puzzle.error0"
-           desc="A congratulatory message displayed if the user placed all %1 blocks correctly, where %1 is an integer greater than 1.  The use of '\n', which indicates a new line, is optional."}
+           desc="A congratulatory message displayed if the user placed all %1 blocks correctly, where %1 is an integer greater than 1.\n\nThe use of a new line character is optional."}
         Perfect!\nAll %1 blocks are correct.
       {/msg}
     </span>
     <span id="error1">
       {{msg meaning="Puzzle.error1"
-           desc="An encouraging error message displayed if the user placed all blocks except 1 correctly.\n\nIf the number of incorrect blocks is 2 or more, {lb}{lb}msgblockly|PuzzlePuzzle.error2{rb}{rb} is used instead."}}
+           desc="an encouraging error message displayed if the user placed all blocks except 1 correctly.\n\nIf the number of incorrect blocks is 2 or more, Puzzle.error2 is used instead."}}
         Almost! One block is incorrect.
       {{/msg}}
     </span>
     <span id="error2">
       {{msg meaning="Puzzle.error2"
-           desc="An error message displayed if the user misplaced %1 blocks, where %1 is an integer greater than one.\n\nIf the number of incorrect blocks is 1, {lb}{lb}msgblockly|PuzzlePuzzle.error1{rb}{rb} is used."}}
+           desc="an error message displayed if the user misplaced %1 blocks, where %1 is an integer greater than one.\n\nIf the number of incorrect blocks is 1, Puzzle.error1 is used."}}
         %1 blocks are incorrect.
       {{/msg}}
     </span>
     <span id="tryAgain">
        {msg meaning="Puzzle.tryAgain"
-            desc="A message indicating that a visually distinguished block is incorrect and that the user should try to fix it.  The use of '\n', which indicates a new line, is optional."}
+            desc="A message indicating that a visually distinguished block is incorrect and that the user should try to fix it.\n\nThe use of a new line character is optional."}
          The highlighted block is not correct.\nKeep trying.
        {/msg}
     </span>
   </div>
+{/template}
 
+/**
+ * Web page structure.
+ */
+{template .start}
+  {call .messages /}
   <table id="header" width="100%">
     <tr>
       <td valign="bottom">
-        <h1><span id="title"><a href="../index.html"><span id="blocklyName">Blockly</span></a>
+        <h1>
+          <span id="title">
+            <a href="../index.html">{msg meaning="Apps.blocklyMessage" desc="IBID"}Blockly{/msg}</a>
             {sp}:{sp}
             {msg meaning="Puzzle.title" desc="A brief title for page, not including the word for Blockly.  Use the word for a jigsaw puzzle."}
               Puzzle
-            {/msg}</span>
+            {/msg}
+          </span>
         </h1>
       </td>
       <td class="farSide">
-        <select id="languageMenu" onchange="Puzzle.changeLanguage();"></select>
+        <select id="languageMenu" onchange="BlocklyApps.changeLanguage();"></select>
         &nbsp; &nbsp;
-        <button id="helpButton" onclick="Puzzle.showHelp();">
+        <button id="helpButton" onclick="Puzzle.showHelp(true);">
           {{msg meaning="Puzzle.help"
                desc="The label on a button the user can press for help.\n{lb}{lb}Identical|Help{rb}{rb}"}}
             Help
@@ -225,7 +219,7 @@
   <div id="blockly"></div>
 
   <div id="shadow"></div>
-
+  <div id="helpBorder"></div>
   <div id="help">
     <div style="padding-bottom: 0.7ex">
       {msg meaning="Puzzle.helpText"
@@ -233,14 +227,9 @@
         For each country (green), attach its flag, choose its language, and make a stack of its cities.
       {/msg}
     </div>
-    <div>
-      <img src="help/{msg meaning="Puzzle.helpImage"
-                     desc="URL of helpful image; this should only be changed by Blockly developers, not translators. (Later, create instructors for translators.)"}
-                  help_en.png
-                {/msg}">
-    </div>
+    <iframe src="help.html?lang={$ij.lang}" style="height: 200px; width: 100%; border: none;"></iframe>
     <div class="farSide" style="padding: 1ex 3ex 0">
-      <button id="okButton" onclick="Puzzle.hideHelp()">
+      <button id="okButton" onclick="Puzzle.hideHelp(true)">
         {{msg meaning="Puzzle.helpOk"
              desc="Label on button for user to press when done reading help information.\n{lb}{lb}Identical|OK{rb}{rb}"}}
           OK
@@ -248,4 +237,16 @@
       </button>
     </div>
   </div>
+{/template}
+
+/**
+ * Help iframe structure.
+ */
+{template .help}
+  {call .messages /}
+
+  <script type="text/javascript" src="../../blockly_compressed.js"></script>
+  <script type="text/javascript" src="../../{$ij.langSrc}"></script>
+  <script type="text/javascript" src="blocks.js"></script>
+  <div id="blockly"></div>
 {/template}

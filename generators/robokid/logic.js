@@ -24,7 +24,32 @@
  * to language files.
  */
 
-Blockly.Robokid = Blockly.Generator.get('Robokid');
+ 'use strict';
+ 
+ Blockly.Robokid.logic = {};
+ 
+// Blockly.Robokid = Blockly.Generator.get('Robokid');
+
+ Blockly.Robokid.controls_if = function() {
+  // If/elseif/else condition.
+  var n = 0;
+  var argument = Blockly.Robokid.valueToCode(this, 'IF' + n,
+      Blockly.Robokid.ORDER_NONE) || 'false';
+  var branch = Blockly.Robokid.statementToCode(this, 'DO' + n);
+  var code = 'if ' + argument + ' {\n' + branch + '}';
+  for (n = 1; n <= this.elseifCount_; n++) {
+    argument = Blockly.Robokid.valueToCode(this, 'IF' + n,
+        Blockly.Robokid.ORDER_NONE) || 'false';
+    branch = Blockly.Robokid.statementToCode(this, 'DO' + n);
+    code += ' else if (' + argument + ') {\n' + branch + '}';
+  }
+  if (this.elseCount_) {
+    branch = Blockly.Robokid.statementToCode(this, 'ELSE');
+    code += ' else {\n' + branch + '}';
+  }
+  return code + ';\n';
+};
+
 
 Blockly.Robokid.logic_compare = function() {
   // Comparison operator.

@@ -49,10 +49,6 @@ Blockly.Field = function(text) {
        'height': 16}, this.group_);
   this.textElement_ = Blockly.createSvgElement('text',
       {'class': 'blocklyText'}, this.group_);
-  if (this.CURSOR) {
-    // Different field types show different cursor hints.
-    this.group_.style.cursor = this.CURSOR;
-  }
   this.size_ = {height: 25, width: 0};
   this.setText(text);
 };
@@ -76,10 +72,14 @@ Blockly.Field.prototype.init = function(block) {
     throw 'Field has already been initialized once.';
   }
   this.sourceBlock_ = block;
-  this.group_.setAttribute('class',
-      Blockly.editable ? 'blocklyEditableText' : 'blocklyNonEditableText');
+  this.group_.setAttribute('class', this.sourceBlock_.editable ?
+                           'blocklyEditableText' : 'blocklyNonEditableText');
+  if (this.CURSOR && this.sourceBlock_.editable) {
+    // Different field types show different cursor hints.
+    this.group_.style.cursor = this.CURSOR;
+  }
   block.getSvgRoot().appendChild(this.group_);
-  if (Blockly.editable) {
+  if (this.sourceBlock_.editable) {
     this.mouseUpWrapper_ =
         Blockly.bindEvent_(this.group_, 'mouseup', this, this.onMouseUp_);
   }

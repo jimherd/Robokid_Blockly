@@ -1,5 +1,5 @@
 /**
- * Blockly Demo: SVG Slider
+ * Blockly Apps: SVG Slider
  *
  * Copyright 2012 Google Inc.
  * http://blockly.googlecode.com/
@@ -129,7 +129,7 @@ Slider.mouseOver_ = function(e) {
     if (node == Slider.activeSlider_.SVG_) {
       return;
     }
-  } while (node = node.parentNode)
+  } while (node = node.parentNode);
   Slider.knobMouseUp_(e);
 };
 
