@@ -170,7 +170,7 @@ Blockly.Robokid.wait = function() {
   var argument0 = Blockly.Robokid.valueToCode(this, 'TIME',
       Blockly.Robokid.ORDER_NONE) || '0';
 	if (argument0 > 255) {
-		argument0 = '0';
+		argument0 = '255';
 	}
 	var units = argument0 % 10;
 	var tens = (argument0 - units)/10;

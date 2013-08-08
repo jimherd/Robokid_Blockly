@@ -36,4 +36,9 @@ Blockly.LANG_NOTE_AS = 'A_sharp';
 Blockly.LANG_NOTE_B = 'B';
 Blockly.LANG_NOTE_s = 'no_tone';
 
-Blockly.HSV_SATURATION = 1.0; 
+Blockly.HSV_SATURATION = 0.75;
+Blockly.HSV_VALUE = 0.8;
+
+
+Blockly.robokid_colour = 40;
+Blockly.math_colour = 10;

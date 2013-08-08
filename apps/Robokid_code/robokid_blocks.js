@@ -30,7 +30,7 @@ if (!Blockly.Language) Blockly.Language = {};
 //	category: Blockly.LANG_CATEGORY_ROBOKID,
 	helpUrl: Blockly.LANG_ROBOKID_LEDS_SET_HELPURL,
 	init: function() {
-		this.setColour(210);
+		this.setColour(Blockly.robokid_colour);
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 		this.setTooltip('Define state of the four LEDs on Robokid');
@@ -62,7 +62,7 @@ if (!Blockly.Language) Blockly.Language = {};
 //	category: Blockly.LANG_CATEGORY_ROBOKID,
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
-		this.setColour(210);
+		this.setColour(Blockly.robokid_colour);
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 		this.setInputsInline(true);
@@ -83,7 +83,7 @@ if (!Blockly.Language) Blockly.Language = {};
 //	category: Blockly.LANG_CATEGORY_ROBOKID,
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
-		this.setColour(210);
+		this.setColour(Blockly.robokid_colour);
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 		this.setInputsInline(true);	
@@ -106,10 +106,9 @@ if (!Blockly.Language) Blockly.Language = {};
 
 Blockly.Language.comment = {
   // Allow user to input a comment block
-//  category: Blockly.LANG_CATEGORY_ROBOKID,
   helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
 	this.setPreviousStatement(true);
 	this.setNextStatement(true);
     this.setTooltip('Comment for the code :: does not generate Robokid code');
@@ -127,10 +126,9 @@ Blockly.Language.comment = {
 
 Blockly.Language.display = {
   // show string on 2-character display on the robot
-//  category: Blockly.LANG_CATEGORY_ROBOKID,
   helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
 	this.setPreviousStatement(true);
 	this.setNextStatement(true);
     this.setTooltip('Ouput a string to the robot display');
@@ -147,11 +145,8 @@ Blockly.Language.display = {
 };
 
 Blockly.Language.wait = {
-  // Allow user to input a comment block
-//  category: Blockly.LANG_CATEGORY_ROBOKID,
-//  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
 	this.setNextStatement(true);
 	this.setPreviousStatement(true);
 	this.setInputsInline(true);		
@@ -166,11 +161,8 @@ Blockly.Language.wait = {
 };
 
 Blockly.Language.read_sensor = {
-  // Read a sensor and load into a variable
-//  category: Blockly.LANG_CATEGORY_ROBOKID,
-//  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
 	this.setInputsInline(true);
@@ -226,7 +218,7 @@ Blockly.Language.read_sysvar = {
 //  category: Blockly.LANG_CATEGORY_ROBOKID,
 //  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
 	this.setInputsInline(true);
@@ -269,7 +261,7 @@ Blockly.Language.print = {
 //  category: Blockly.LANG_CATEGORY_ROBOKID,
   helpUrl: Blockly.LANG_TEXT_JOIN_HELPURL,
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
 	this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.appendValueInput('ADD0')
@@ -366,7 +358,7 @@ Blockly.Language.print = {
 Blockly.Language.print_container = {
   // Container.
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
     this.appendDummyInput()
         .appendTitle(Blockly.LANG_TEXT_CREATE_JOIN_TITLE_JOIN);
     this.appendStatementInput('STACK');
@@ -378,7 +370,7 @@ Blockly.Language.print_container = {
 Blockly.Language.print_create_join_item = {
   // Add items.
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
     this.appendDummyInput()
         .appendTitle(Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TITLE_ITEM);
     this.setPreviousStatement(true);
@@ -393,7 +385,7 @@ Blockly.Language.calibrate = {
 //  category: Blockly.LANG_CATEGORY_ROBOKID,
 //  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
 	this.setNextStatement(true);
 	this.setPreviousStatement(true);
 //	this.setInputsInline(true);		
@@ -408,7 +400,7 @@ Blockly.Language.play_note = {
 //  category: Blockly.LANG_CATEGORY_ROBOKID,
 //  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
   init: function() {
-    this.setColour(210);
+    this.setColour(Blockly.robokid_colour);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
 	this.setInputsInline(true);
@@ -420,7 +412,7 @@ Blockly.Language.play_note = {
 	this.appendDummyInput()	
 		.appendTitle(dropdown, 'NOTE');
 	this.appendValueInput('duration')
-		.setCheck(Number)
+		.setCheck('Number')
 		.appendTitle(' for ');
 	this.appendDummyInput()
 		.appendTitle(" milliseconds");
