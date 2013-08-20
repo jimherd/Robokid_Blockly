@@ -152,7 +152,7 @@ Maze.map = [
 // Level 4.
 /**
  * Note, the path continues past the start and the goal in both directions.
- * This is intentionally done so kids see the maze is about getting from
+ * This is intentionally done so users see the maze is about getting from
  * the start to the goal and not necessarily about moving over every part of
  * the maze, 'mowing the lawn' as Neil calls it.
  */
@@ -291,6 +291,9 @@ Maze.tile_SHAPES = {
   'null4': [1, 3]
 };
 
+/**
+ * Create and layout all the nodes for the path, scenery, Pegman, and goal.
+ */
 Maze.drawMap = function() {
   var svg = document.getElementById('svgMaze');
 
@@ -420,7 +423,7 @@ Maze.drawMap = function() {
   pegmanClip.appendChild(clipRect);
   svg.appendChild(pegmanClip);
 
-  // Add pegman.
+  // Add Pegman.
   var pegmanIcon = document.createElementNS(Blockly.SVG_NS, 'image');
   pegmanIcon.setAttribute('id', 'pegman');
   pegmanIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
@@ -481,11 +484,9 @@ Maze.init = function() {
   var visualization = document.getElementById('visualization');
   var onresize = function(e) {
     var top = visualization.offsetTop;
-    blocklyDiv.style.top = top + 'px';
+    blocklyDiv.style.top = Math.max(10, top - window.scrollY) + 'px';
     blocklyDiv.style.left = rtl ? '10px' : '420px';
     blocklyDiv.style.width = (window.innerWidth - 440) + 'px';
-    blocklyDiv.style.height =
-        (window.innerHeight - top - 20 + window.scrollY) + 'px';
   };
   window.addEventListener('scroll', function() {
       onresize();
@@ -493,6 +494,7 @@ Maze.init = function() {
     });
   window.addEventListener('resize', onresize);
   onresize();
+  Blockly.fireUiEvent(window, 'resize');
 
   var defaultXml =
       '<xml>' +
@@ -512,14 +514,24 @@ Maze.init = function() {
   }
 
   Maze.reset(true);
-  Blockly.addChangeListener(function() {BlocklyApps.updateCapacity()});
+  Blockly.addChangeListener(function() {Maze.updateCapacity()});
+
+  document.body.addEventListener('mousemove',
+      Maze.updatePegSpin_, true);
+
+  // Lazy-load the syntax-highlighting.
+  window.setTimeout(BlocklyApps.importPrettify, 1);
 };
 
-window.addEventListener('load', Maze.init);
+if (window.location.pathname.match(/readonly.html$/)) {
+  window.addEventListener('load', BlocklyApps.initReadonly);
+} else {
+  window.addEventListener('load', Maze.init);
+}
 
 /**
  * Reload with a different Pegman skin.
- * @param {number} skin ID of new skin.
+ * @param {number} newSkin ID of new skin.
  */
 Maze.changePegman = function(newSkin) {
   Maze.saveToStorage();
@@ -620,7 +632,7 @@ Maze.reset = function(first) {
 Maze.runButtonClick = function() {
   // Only allow a single top block on levels 1 and 2.
   if (Maze.LEVEL <= 2 && Blockly.mainWorkspace.getTopBlocks().length > 1) {
-    window.alert(BlocklyApps.getMsg('oneTopBlock'));
+    Maze.showOneTopBlock();
     return;
   }
   var runButton = document.getElementById('runButton');
@@ -634,6 +646,72 @@ Maze.runButtonClick = function() {
   Blockly.mainWorkspace.traceOn(true);
   Maze.reset(false);
   Maze.execute();
+};
+
+/**
+ * Show a dialog requiring that the user connect their blocks.
+ */
+Maze.showOneTopBlock = function() {
+  // Assemble the user's blocks in the likely intended order.
+  // Note: this code only works for simple statements.  Do not use on more
+  // complicated blocks such as 'while'.
+  var blockGroups = Blockly.mainWorkspace.getTopBlocks(true);
+  var xmlGroups =  [];
+  for (var i = 0; i < blockGroups.length; i++) {
+    xmlGroups[i] = Blockly.Xml.blockToDom_(blockGroups[i]);
+  }
+  var xml = xmlGroups[0];
+  var cursor;
+  for (var i = 0; i < xmlGroups.length - 1; i++) {
+    var blocks = xml.getElementsByTagName('BLOCK');
+    if (blocks.length) {
+      cursor = blocks[blocks.length - 1];
+    } else {
+      cursor = xml;
+    }
+    var next = goog.dom.createDom('next', null, xmlGroups[i + 1]);
+    cursor.appendChild(next);
+  }
+  xml.setAttribute('x', 10);
+  xml.setAttribute('y', 10);
+  xml = Blockly.Xml.domToText(xml);
+
+  var iframe = document.getElementById('iframeOneTopBlock');
+  iframe.src = 'readonly.html?lang=' + encodeURIComponent(BlocklyApps.LANG) +
+      '&xml=' + encodeURIComponent(xml);
+  var origin = blockGroups[0].getSvgRoot();
+  var content = document.getElementById('dialogOneTopBlock');
+  var style = {
+    width: '40%',
+    left: '30%',
+    top: '5em'
+  };
+  BlocklyApps.showDialog(content, origin, true, true, style,
+      BlocklyApps.stopDialogKeyDown);
+  BlocklyApps.startDialogKeyDown();
+};
+
+/**
+ * Updates the document's 'capacity' element's innerHTML with a message
+ * indicating how many more blocks are permitted.  The capacity
+ * is retrieved from Blockly.mainWorkspace.remainingCapacity().
+ */
+Maze.updateCapacity = function() {
+  var cap = Blockly.mainWorkspace.remainingCapacity();
+  var p = document.getElementById('capacity');
+  if (cap == Infinity) {
+    p.style.display = 'none';
+  } else {
+    p.style.display = 'inline';
+    if (cap == 0) {
+      p.innerHTML = BlocklyApps.getMsg('Maze_capacity0');
+    } else if (cap == 1) {
+      p.innerHTML = BlocklyApps.getMsg('Maze_capacity1');
+    } else {
+      cap = Number(cap);
+      p.innerHTML = BlocklyApps.getMsg('Maze_capacity2').replace('%1', cap);
+    }
+  }
 };
 
 /**
@@ -688,7 +766,7 @@ Maze.execute = function() {
     } else {
       // Syntax error, can't happen.
       result = Maze.ResultType.ERROR;
-      alert(e);
+      window.alert(e);
     }
   }
 
@@ -777,18 +855,117 @@ Maze.animate = function() {
  * direct them to the next level, if available.
  */
 Maze.congratulations = function() {
+  var content = document.getElementById('dialogDone');
+  var textDiv = document.getElementById('dialogDoneText');
+  var buttonDiv = document.getElementById('dialogDoneButtons');
+  textDiv.innerHTML = '';
+  buttonDiv.innerHTML = '';
+  var style = {
+    width: '40%',
+    left: '30%',
+    top: '5em'
+  };
   if (Maze.LEVEL < Maze.MAX_LEVEL) {
-    var proceed = window.confirm(BlocklyApps.getMsg('nextLevel')
-        .replace('%1', Maze.LEVEL + 1));
-    if (proceed) {
-      window.location = window.location.protocol + '//' +
-          window.location.host + window.location.pathname +
-          '?lang=' + BlocklyApps.LANG + '&level=' + (Maze.LEVEL + 1) +
-          '&skin=' + Maze.SKIN_ID;
-    }
+    var text = BlocklyApps.getMsg('Maze_nextLevel')
+        .replace('%1', Maze.LEVEL + 1);
+    var cancel = document.createElement('button');
+    cancel.appendChild(
+        document.createTextNode(BlocklyApps.getMsg('dialogCancel')));
+    cancel.addEventListener('click', BlocklyApps.hideDialog, true);
+    buttonDiv.appendChild(cancel);
+
+    var ok = document.createElement('button');
+    ok.className = 'secondary';
+    ok.appendChild(document.createTextNode(BlocklyApps.getMsg('dialogOk')));
+    ok.addEventListener('click', Maze.nextLevel, true);
+    buttonDiv.appendChild(ok);
+
+    BlocklyApps.showDialog(content, null, false, true, style,
+        function() {
+          document.body.removeEventListener('keydown',
+              BlocklyApps.congratulationsKeyDown_, true);
+          });
+    document.body.addEventListener('keydown',
+        BlocklyApps.congratulationsKeyDown_, true);
+
   } else {
-    window.alert(BlocklyApps.getMsg('finalLevel'));
+    var text = BlocklyApps.getMsg('Maze_finalLevel');
+    var ok = document.createElement('button');
+    ok.className = 'secondary';
+    ok.addEventListener('click', BlocklyApps.hideDialog, true);
+    ok.appendChild(document.createTextNode(BlocklyApps.getMsg('dialogOk')));
+    buttonDiv.appendChild(ok);
+    BlocklyApps.showDialog(content, null, false, true, style,
+        BlocklyApps.stopDialogKeyDown);
+    BlocklyApps.startDialogKeyDown();
   }
+  textDiv.appendChild(document.createTextNode(text));
+
+  var pegSpin = document.getElementById('pegSpin');
+  pegSpin.style.backgroundImage = 'url(' + Maze.SKIN.sprite + ')';
+};
+
+/**
+ * If the user preses enter, escape, or space, hide the dialog.
+ * Enter and space move to the next level, escape does not.
+ * @param {!Event} e Keyboard event.
+ * @private
+ */
+BlocklyApps.congratulationsKeyDown_ = function(e) {
+  if (e.keyCode == 13 ||
+      e.keyCode == 27 ||
+      e.keyCode == 32) {
+    BlocklyApps.hideDialog(true);
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.keyCode != 27) {
+      Maze.nextLevel();
+    }
+  }
+};
+
+/**
+ * Go to the next level.
+ */
+Maze.nextLevel = function() {
+  window.location = window.location.protocol + '//' +
+      window.location.host + window.location.pathname +
+      '?lang=' + BlocklyApps.LANG + '&level=' + (Maze.LEVEL + 1) +
+      '&skin=' + Maze.SKIN_ID;
+};
+
+/**
+ * Point the congratulations Pegman to face the mouse.
+ * @param {Event} e Mouse move event.
+ * @private
+ */
+Maze.updatePegSpin_ = function(e) {
+  if (document.getElementById('dialogDone').className ==
+      'dialogHiddenContent') {
+    return;
+  }
+  var pegSpin = document.getElementById('pegSpin');
+  var bBox = BlocklyApps.getBBox_(pegSpin);
+  var x = bBox.x + bBox.width / 2 - window.scrollX;
+  var y = bBox.y + bBox.height / 2 - window.scrollY;
+  var dx = e.x - x;
+  var dy = e.y - y;
+  var angle = Math.atan(dy / dx);
+  // Convert from radians to degrees because I suck at math.
+  angle = angle / Math.PI * 180;
+  // 0: North, 90: East, 180: South, 270: West.
+  if (dx > 0) {
+    angle += 90;
+  } else {
+    angle += 270;
+  }
+  // Divide into 16 quads.
+  var quad = Math.round(angle / 360 * 16);
+  if (quad == 16) {
+    quad = 15;
+  }
+  // Display correct Pegman sprite.
+  pegSpin.style.backgroundPosition = (-quad * Maze.PEGMAN_WIDTH) + 'px 0px';
 };
 
 /**

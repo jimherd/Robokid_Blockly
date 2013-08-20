@@ -213,9 +213,7 @@ Blockly.clipboard_ = null;
  */
 Blockly.svgSize = function() {
   return {width: Blockly.svg.cachedWidth_,
-          height: Blockly.svg.cachedHeight_,
-          top: Blockly.svg.cachedTop_,
-          left: Blockly.svg.cachedLeft_};
+          height: Blockly.svg.cachedHeight_};
 };
 
 /**
@@ -234,15 +232,6 @@ Blockly.svgResize = function() {
   if (svg.cachedHeight_ != height) {
     svg.setAttribute('height', height + 'px');
     svg.cachedHeight_ = height;
-  }
-  // Can't use Blockly.svg.getBoundingClientRect() due to bugs in Firefox.
-  // Can't use Blockly.svg.offsetLeft due to bugs in Firefox.
-  svg.cachedLeft_ = 0;
-  svg.cachedTop_ = 0;
-  while (div) {
-    svg.cachedLeft_ += div.offsetLeft;
-    svg.cachedTop_ += div.offsetTop;
-    div = div.offsetParent;
   }
   // Update the scrollbars (if they exist).
   if (Blockly.mainWorkspace.scrollbar) {
@@ -336,14 +325,14 @@ Blockly.onKeyDown_ = function(e) {
     Blockly.hideChaff();
   } else if (e.keyCode == 8 || e.keyCode == 46) {
     // Delete or backspace.
-    if (Blockly.selected && Blockly.selected.deletable) {
+    if (Blockly.selected && Blockly.selected.isDeletable()) {
       Blockly.hideChaff();
       Blockly.selected.dispose(true, true);
     }
     // Stop the browser from going back to the previous page.
     e.preventDefault();
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
-    if (Blockly.selected && Blockly.selected.deletable &&
+    if (Blockly.selected && Blockly.selected.isDeletable() &&
         Blockly.selected.workspace == Blockly.mainWorkspace) {
       Blockly.hideChaff();
       if (e.keyCode == 67) {
@@ -584,10 +573,10 @@ Blockly.setCursorHand_ = function(closed) {
  * @return {Object} Contains size and position metrics of main workspace.
  */
 Blockly.getMainWorkspaceMetrics = function() {
-  var hwView = Blockly.svgSize();
-  hwView.width -= Blockly.Toolbox.width;  // Zero if no Toolbox.
-  var viewWidth = hwView.width - Blockly.Scrollbar.scrollbarThickness;
-  var viewHeight = hwView.height - Blockly.Scrollbar.scrollbarThickness;
+  var svgSize = Blockly.svgSize();
+  svgSize.width -= Blockly.Toolbox.width;  // Zero if no Toolbox.
+  var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
+  var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
   try {
     var blockBox = Blockly.mainWorkspace.getCanvas().getBBox();
   } catch (e) {
@@ -605,8 +594,8 @@ Blockly.getMainWorkspaceMetrics = function() {
                             blockBox.y + viewHeight);
   var absoluteLeft = Blockly.RTL ? 0 : Blockly.Toolbox.width;
   return {
-    viewHeight: hwView.height,
-    viewWidth: hwView.width,
+    viewHeight: svgSize.height,
+    viewWidth: svgSize.width,
     contentHeight: bottomEdge - topEdge,
     contentWidth: rightEdge - leftEdge,
     viewTop: -Blockly.mainWorkspace.scrollY,

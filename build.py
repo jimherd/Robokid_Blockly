@@ -118,6 +118,9 @@ delete window.BLOCKLY_DIR;
 delete window.BLOCKLY_BOOT;
 };
 
+// Delete any existing Closure (e.g. Soy's nogoog_shim).
+document.write('<script type="text/javascript">var goog = undefined;</script>');
+// Load fresh Closure Library.
 document.write('<script type="text/javascript" src="' + window.BLOCKLY_DIR +
     '/../closure-library-read-only/closure/goog/base.js"></script>');
 document.write('<script type="text/javascript">window.BLOCKLY_BOOT()</script>');
@@ -140,6 +143,7 @@ class Gen_compressed(threading.Thread):
     self.gen_core()
     self.gen_generator('javascript')
     self.gen_generator('python')
+	self.gen_generator('robokid')
     self.gen_language('de')
     self.gen_language('en')
     self.gen_language('pt_br')

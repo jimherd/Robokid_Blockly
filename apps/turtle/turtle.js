@@ -76,8 +76,8 @@ Turtle.init = function() {
 
   window.addEventListener('beforeunload', function(e) {
     if (Blockly.mainWorkspace.getAllBlocks().length > 2) {
-      e.returnValue = BlocklyApps.getMsg('unloadWarning');  // Gecko.
-      return BlocklyApps.getMsg('unloadWarning');  // Webkit.
+      e.returnValue = BlocklyApps.getMsg('Turtle_unloadWarning');  // Gecko.
+      return BlocklyApps.getMsg('Turtle_unloadWarning');  // Webkit.
     }
     return null;
   });
@@ -85,11 +85,9 @@ Turtle.init = function() {
   var visualization = document.getElementById('visualization');
   var onresize = function(e) {
     var top = visualization.offsetTop;
-    blocklyDiv.style.top = top + 'px';
+    blocklyDiv.style.top = Math.max(10, top - window.scrollY) + 'px';
     blocklyDiv.style.left = rtl ? '10px' : '420px';
     blocklyDiv.style.width = (window.innerWidth - 440) + 'px';
-    blocklyDiv.style.height =
-        (window.innerHeight - top - 20 + window.scrollY) + 'px';
   };
   window.addEventListener('scroll', function() {
       onresize();
@@ -97,6 +95,7 @@ Turtle.init = function() {
     });
   window.addEventListener('resize', onresize);
   onresize();
+  Blockly.fireUiEvent(window, 'resize');
 
   // Hide download button if browser lacks support
   // (http://caniuse.com/#feat=download).
@@ -124,6 +123,9 @@ Turtle.init = function() {
   Turtle.ctxDisplay = document.getElementById('display').getContext('2d');
   Turtle.ctxScratch = document.getElementById('scratch').getContext('2d');
   Turtle.reset();
+
+  // Lazy-load the syntax-highlighting.
+  window.setTimeout(BlocklyApps.importPrettify, 1);
 };
 
 window.addEventListener('load', Turtle.init);
@@ -165,12 +167,15 @@ Turtle.display = function() {
   Turtle.ctxDisplay.globalCompositeOperation = 'source-over';
   // Draw the turtle.
   if (Turtle.visible) {
+    // Make the turtle the colour of the pen.
+    Turtle.ctxDisplay.strokeStyle = Turtle.ctxScratch.strokeStyle;
+    Turtle.ctxDisplay.fillStyle = Turtle.ctxScratch.fillStyle;
+
     // Draw the turtle body.
     var radius = Turtle.ctxScratch.lineWidth / 2 + 10;
     Turtle.ctxDisplay.beginPath();
     Turtle.ctxDisplay.arc(Turtle.x, Turtle.y, radius, 0, 2 * Math.PI, false);
     Turtle.ctxDisplay.lineWidth = 3;
-    Turtle.ctxDisplay.strokeStyle = '#339933';
     Turtle.ctxDisplay.stroke();
 
     // Draw the turtle head.
@@ -194,7 +199,6 @@ Turtle.display = function() {
     var rightX = Turtle.x + (radius + ARROW_TIP) * Math.sin(radians);
     var rightY = Turtle.y - (radius + ARROW_TIP) * Math.cos(radians);
     Turtle.ctxDisplay.beginPath();
-    Turtle.ctxDisplay.fillStyle = '#339933';
     Turtle.ctxDisplay.moveTo(tipX, tipY);
     Turtle.ctxDisplay.lineTo(leftX, leftY);
     Turtle.ctxDisplay.bezierCurveTo(leftControlX, leftControlY,

@@ -47,7 +47,7 @@ BlocklyApps.LANGUAGES = {
   fi: ['Suomi', 'ltr', 'en_compressed.js'],
   fo: ['Føroyskt', 'ltr', 'en_compressed.js'],
   fr: ['Français', 'ltr', 'en_compressed.js'],
-  frr: ['Frasch', 'ltr',  'de_compressed.js'],
+  frr: ['Frasch', 'ltr', 'de_compressed.js'],
   gl: ['Galego', 'ltr', 'en_compressed.js'],
   hak: ['客家話', 'ltr', 'en_compressed.js'],
   he: ['עברית', 'rtl', 'en_compressed.js'],
@@ -87,6 +87,7 @@ BlocklyApps.LANGUAGES = {
   'zh-hant': ['中文', 'ltr', 'zh_tw_compressed.js']
 };
 BlocklyApps.LANG = BlocklyApps.getLang();
+Puzzle.RTL = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
 
 document.write('<script type="text/javascript" src="generated/' +
                BlocklyApps.LANG + '.js"></script>\n');
@@ -97,10 +98,9 @@ document.write('<script type="text/javascript" src="generated/' +
 Puzzle.init = function() {
   BlocklyApps.init();
 
-  var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
   Blockly.inject(document.getElementById('blockly'),
       {path: '../../',
-       rtl: rtl,
+       rtl: Puzzle.RTL,
        scrollbars: false,
        trashcan: false});
 
@@ -108,7 +108,7 @@ Puzzle.init = function() {
   var onresize = function(e) {
     blocklyDiv.style.width = (window.innerWidth - 20) + 'px';
     blocklyDiv.style.height =
-        (window.innerHeight - blocklyDiv.offsetTop - 22) + 'px';
+        (window.innerHeight - blocklyDiv.offsetTop - 15) + 'px';
   };
   onresize();
   window.addEventListener('resize', onresize);
@@ -120,14 +120,13 @@ Puzzle.init = function() {
     delete window.sessionStorage.loadOnceBlocks;
     var xml = Blockly.Xml.textToDom(text);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-    Puzzle.hideHelp(false);
   } else {
     // Create one of every block.
     var blocksCountries = [];
     var blocksFlags = [];
     var blocksCities = [];
     var i = 1;
-    while (BlocklyApps.getMsgOrNull('country' + i)) {
+    while (BlocklyApps.getMsgOrNull('Puzzle_country' + i)) {
       var block = new Blockly.Block(Blockly.mainWorkspace, 'country');
       block.populate(i);
       blocksCountries.push(block);
@@ -135,7 +134,7 @@ Puzzle.init = function() {
       block.populate(i);
       blocksFlags.push(block);
       var j = 1;
-      while (BlocklyApps.getMsgOrNull('country' + i + 'City' + j)) {
+      while (BlocklyApps.getMsgOrNull('Puzzle_country' + i + 'City' + j)) {
         var block = new Blockly.Block(Blockly.mainWorkspace, 'city');
         block.populate(i, j);
         blocksCities.push(block);
@@ -147,7 +146,7 @@ Puzzle.init = function() {
     Puzzle.shuffle(blocksFlags);
     Puzzle.shuffle(blocksCities);
     var blocks = [].concat(blocksCountries, blocksFlags, blocksCities);
-    if (rtl) {
+    if (Puzzle.RTL) {
       blocks.reverse();
     }
     // Initialize all the blocks.
@@ -176,7 +175,7 @@ Puzzle.init = function() {
       var blockBox = block.svg_.getRootElement().getBBox();
       // Spread the blocks horizontally, grouped by type.
       // Spacing is proportional to block's area.
-      if (rtl) {
+      if (Puzzle.RTL) {
         var dx = blockBox.width +
                  (countedArea / totalArea) * workspaceBox.width;
       } else {
@@ -190,27 +189,24 @@ Puzzle.init = function() {
       countedArea += block.cached_area_;
     }
     Puzzle.showHelp(false);
+    /**
+     * HACK:
+     * Chrome (v28) displays a broken image tag on any image that is also
+     * shown in the help dialog.  Selecting the block fixes the problem.
+     * If Chrome stops corrupting the Australian flag, delete this entire hack.
+     */
+    if (goog.userAgent.WEBKIT) {
+      var blocks = Blockly.mainWorkspace.getAllBlocks();
+      for (var i = 0, block; block = blocks[i]; i++) {
+        block.select();
+      }
+      Blockly.selected.unselect();
+    }
   }
 };
 
-/**
- * Initialize Blockly for the help.  Called on page load.
- */
-Puzzle.initHelp = function() {
-  var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
-  Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
-       readOnly: true,
-       rtl: rtl,
-       scrollbars: false});
-
-  // Add the blocks.
-  var xml = document.getElementById('blocks');
-  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-};
-
-if (window.location.pathname.match(/help.html$/)) {
-  window.addEventListener('load', Puzzle.initHelp);
+if (window.location.pathname.match(/readonly.html$/)) {
+  window.addEventListener('load', BlocklyApps.initReadonly);
 } else {
   window.addEventListener('load', Puzzle.init);
 }
@@ -238,10 +234,10 @@ Puzzle.shuffle = function(arr) {
  *   language-neutral tuples.
  */
 Puzzle.languages = function() {
-  var list = [[BlocklyApps.getMsg('languageChoose'), '0']];
+  var list = [[BlocklyApps.getMsg('Puzzle_languageChoose'), '0']];
   var i = 1;
   var lang;
-  while (lang = BlocklyApps.getMsgOrNull('country' + i + 'Language')) {
+  while (lang = BlocklyApps.getMsgOrNull('Puzzle_country' + i + 'Language')) {
     list[i] = [lang, String(i)];
     i++;
   }
@@ -261,24 +257,43 @@ Puzzle.checkAnswers = function() {
       block.select();
     }
   }
-  var message;
-  if (errors == 1) {
-    message = BlocklyApps.getMsg('error1') + '\n' +
-        BlocklyApps.getMsg('tryAgain');
-  } else if (errors) {
-    message = BlocklyApps.getMsg('error2').replace('%1', errors) + '\n' +
-        BlocklyApps.getMsg('tryAgain');
-  } else {
-    message = BlocklyApps.getMsg('error0').replace('%1', blocks.length);
-  }
-  alert(message);
-};
 
-/**
- * Opaque data from bindEvent_.
- * @type {Array.<!Array>}
- */
-Puzzle.keyDownHandler_ = null;
+  var graphValue = document.getElementById('graphValue');
+  window.setTimeout(function() {
+      graphValue.style.width =
+          (100 * (blocks.length - errors) / blocks.length) + 'px';
+  }, 500);
+
+  var messages;
+  if (errors == 1) {
+    messages = [BlocklyApps.getMsg('Puzzle_error1'),
+                BlocklyApps.getMsg('Puzzle_tryAgain')];
+  } else if (errors) {
+    messages = [BlocklyApps.getMsg('Puzzle_error2').replace('%1', errors),
+                BlocklyApps.getMsg('Puzzle_tryAgain')];
+  } else {
+    messages = [BlocklyApps.getMsg('Puzzle_error0').replace(
+        '%1', blocks.length)];
+  }
+  var textDiv = document.getElementById('answerMessage');
+  textDiv.innerHTML = '';
+  for (var i = 0; i < messages.length; i++) {
+    var line = document.createElement('div');
+    line.appendChild(document.createTextNode(messages[i]));
+    textDiv.appendChild(line);
+  }
+
+  var content = document.getElementById('answers');
+  var button = document.getElementById('checkButton');
+  var style = {
+    width: '25%',
+    left: Puzzle.RTL ? '5%' : '70%',
+    top: '5em'
+  };
+  BlocklyApps.showDialog(content, button, true, true, style,
+      BlocklyApps.stopDialogKeyDown);
+  BlocklyApps.startDialogKeyDown();
+};
 
 /**
  * Show the help pop-up.
@@ -286,82 +301,13 @@ Puzzle.keyDownHandler_ = null;
  */
 Puzzle.showHelp = function(animate) {
   var help = document.getElementById('help');
-  var shadow = document.getElementById('shadow');
-  shadow.style.visibility = 'visible';
-  shadow.style.opacity = 0.3;
-  var border = document.getElementById('helpBorder');
-  function endResult() {
-    help.style.visibility = 'visible';
-    help.style.zIndex = 1;
-    border.style.visibility = 'hidden';
-  }
-  if (animate) {
-    border.style.visibility = 'visible';
-    // In 100ms show the help and hide the animated border.
-    window.setTimeout(endResult, 100);
-  } else {
-    // No animation.  Just set the final state.
-    endResult();
-  }
-  // Match the animated border to the help window's size and location.
-  border.style.width = help.offsetWidth + 'px';
-  border.style.height = help.offsetHeight + 'px';
-  border.style.left = help.offsetLeft + 'px';
-  border.style.top = help.offsetTop + 'px';
-  border.style.opacity = 0.8;
-  Puzzle.keyDownHandler_ =
-      Blockly.bindEvent_(document, 'keydown', null, Puzzle.keyDown);
-};
-
-/**
- * Hide the help pop-up.
- * @param {boolean} animate Animate the pop-up closing.
- */
-Puzzle.hideHelp = function(animate) {
-  var help = document.getElementById('help');
-  var shadow = document.getElementById('shadow');
-  shadow.style.opacity = 0;
-  var border = document.getElementById('helpBorder');
-  // Match the animated border to the help button's size and width.
   var button = document.getElementById('helpButton');
-  border.style.width = (button.offsetWidth - 2) + 'px';
-  border.style.height = (button.offsetHeight - 2) + 'px';
-  var left = 0;
-  var top = 0;
-  do {
-    left += button.offsetLeft;
-    top += button.offsetTop;
-    button = button.offsetParent;
-  } while (button);
-  border.style.left = left + 'px';
-  border.style.top = top + 'px';
-  border.style.opacity = 0.2;
-  function endResult() {
-    shadow.style.visibility = 'hidden';
-    border.style.visibility = 'hidden';
-  }
-  if (animate) {
-    // In 100ms hide both the shadow and the animated border.
-    border.style.visibility = 'visible';
-    window.setTimeout(endResult, 100);
-  } else {
-    // No animation.  Just set the final state.
-    endResult();
-  }
-  help.style.visibility = 'hidden';
-  help.style.zIndex = -1;
-  if (Puzzle.keyDownHandler_) {
-    Blockly.unbindEvent_(Puzzle.keyDownHandler_);
-    Puzzle.keyDownHandler_ = null;
-  }
-};
-
-/**
- * If the user preses enter, space, or escape, hide the help.
- * @param {!Event} e Keyboard event.
- */
-Puzzle.keyDown = function(e) {
-  if (e.keyCode == 13 || e.keyCode == 27 || e.keyCode == 32) {
-    Puzzle.hideHelp(true);
-  }
+  var style = {
+    width: '50%',
+    left: '25%',
+    top: '5em'
+  };
+  BlocklyApps.showDialog(help, button, animate, true, style,
+      BlocklyApps.stopDialogKeyDown);
+  BlocklyApps.startDialogKeyDown();
 };

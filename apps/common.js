@@ -35,7 +35,7 @@ var BlocklyApps = {};
 BlocklyApps.getStringParamFromUrl = function(name, defaultValue) {
   var val =
       window.location.search.match(new RegExp('[?&]' + name + '=([^&]+)'));
-  return val ? decodeURIComponent(val[1]) : defaultValue;
+  return val ? decodeURIComponent(val[1].replace(/\+/g, '%20')) : defaultValue;
 };
 
 /**
@@ -150,7 +150,14 @@ BlocklyApps.init = function() {
 
   // Disable the link button if page isn't backed by App Engine storage.
   var linkButton = document.getElementById('linkButton');
-  if (linkButton && !('BlocklyStorage' in window)) {
+  if ('BlocklyStorage' in window) {
+    BlocklyStorage.HTTPREQUEST_ERROR = BlocklyApps.getMsg('httpRequestError');
+    BlocklyStorage.LINK_ALERT = BlocklyApps.getMsg('linkAlert');
+    BlocklyStorage.HASH_ERROR = BlocklyApps.getMsg('hashError');
+    BlocklyStorage.XML_ERROR = BlocklyApps.getMsg('xmlError');
+    // Swap out the BlocklyStorage's alert() for a nicer dialog.
+    BlocklyStorage.alert = BlocklyApps.storageAlert;
+  } else if (linkButton) {
     linkButton.className = 'disabled';
   }
 
@@ -160,6 +167,25 @@ BlocklyApps.init = function() {
     viewport.setAttribute('content',
         'width=725, initial-scale=.35, user-scalable=no');
   }
+};
+
+/**
+ * Initialize Blockly for a readonly iframe.  Called on page load.
+ * XML argument may be generated from the console with:
+ * encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5, -6))
+ */
+BlocklyApps.initReadonly = function() {
+  var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
+  Blockly.inject(document.getElementById('blockly'),
+      {path: '../../',
+       readOnly: true,
+       rtl: rtl,
+       scrollbars: false});
+
+  // Add the blocks.
+  var xml = BlocklyApps.getStringParamFromUrl('xml', '');
+  xml = Blockly.Xml.textToDom('<xml>' + xml + '</xml>');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 };
 
 /**
@@ -213,29 +239,6 @@ BlocklyApps.changeLanguage = function() {
 };
 
 /**
- * Updates the document's 'capacity' element's innerHTML with a message
- * indicating how many more blocks are permitted.  The capacity
- * is retrieved from Blockly.mainWorkspace.remainingCapacity().
- */
-BlocklyApps.updateCapacity = function() {
-  var cap = Blockly.mainWorkspace.remainingCapacity();
-  var p = document.getElementById('capacity');
-  if (cap == Infinity) {
-    p.style.display = 'none';
-  } else {
-    p.style.display = 'inline';
-    if (cap == 0) {
-      p.innerHTML = BlocklyApps.getMsg('capacity0');
-    } else if (cap == 1) {
-      p.innerHTML = BlocklyApps.getMsg('capacity1');
-    } else {
-      cap = Number(cap);
-      p.innerHTML = BlocklyApps.getMsg('capacity2').replace('%1', cap);
-    }
-  }
-};
-
-/**
  * Highlight the block (or clear highlighting).
  * @param {?string} id ID of block that triggered this action.
  */
@@ -265,6 +268,211 @@ BlocklyApps.checkTimeout = function(opt_id) {
 };
 
 /**
+ * Is the dialog currently onscreen?
+ * @private
+ */
+BlocklyApps.isDialogVisible_ = false;
+
+/**
+ * A closing dialog should animate towards this element.
+ * @type Element
+ * @private
+ */
+BlocklyApps.dialogOrigin_ = null;
+
+/**
+ * A function to call when a dialog closes.
+ * @type Function
+ * @private
+ */
+BlocklyApps.dialogDispose_ = null;
+
+/**
+ * Show the dialog pop-up.
+ * @param {!Element} content DOM element to display in the dialog.
+ * @param {Element} origin Animate the dialog opening/closing from/to this
+ *     DOM element.  If null, don't show any animations for opening or closing.
+ * @param {boolean} animate Animate the dialog opening (if origin not null).
+ * @param {boolean} modal If true, grey out background and prevent interaction.
+ * @param {!Object} style A dictionary of style rules for the dialog.
+ * @param {Function} disposeFunc An optional function to call when the dialog
+ *     closes.  Normally used for unhooking events.
+ */
+BlocklyApps.showDialog = function(content, origin, animate, modal, style,
+                                  disposeFunc) {
+  if (BlocklyApps.isDialogVisible_) {
+    BlocklyApps.hideDialog(false);
+  }
+  BlocklyApps.isDialogVisible_ = true;
+  BlocklyApps.dialogOrigin_ = origin;
+  BlocklyApps.dialogDispose_ = disposeFunc;
+  var dialog = document.getElementById('dialog');
+  var shadow = document.getElementById('dialogShadow');
+  var border = document.getElementById('dialogBorder');
+
+  // Copy all the specified styles to the dialog.
+  for (var name in style) {
+    dialog.style[name] = style[name];
+  }
+  dialog.appendChild(content);
+  content.className = content.className.replace('dialogHiddenContent', '');
+
+  if (modal) {
+    shadow.style.visibility = 'visible';
+    shadow.style.opacity = 0.3;
+  }
+  function endResult() {
+    dialog.style.visibility = 'visible';
+    dialog.style.zIndex = 1;
+    border.style.visibility = 'hidden';
+  }
+  if (animate && origin) {
+    BlocklyApps.matchBorder_(origin, false, 0.2);
+    BlocklyApps.matchBorder_(dialog, true, 0.8);
+    // In 175ms show the dialog and hide the animated border.
+    window.setTimeout(endResult, 175);
+  } else {
+    // No animation.  Just set the final state.
+    endResult();
+  }
+};
+
+/**
+ * Hide the dialog pop-up.
+ * @param {boolean} opt_animate Animate the dialog closing.  Defaults to true.
+ *     Requires that origin was not null when dialog was opened.
+ */
+BlocklyApps.hideDialog = function(opt_animate) {
+  if (!BlocklyApps.isDialogVisible_) {
+    return;
+  }
+  BlocklyApps.isDialogVisible_ = false;
+  BlocklyApps.dialogDispose_ && BlocklyApps.dialogDispose_();
+  BlocklyApps.dialogDispose_ = null;
+  var origin = (opt_animate === false) ? null : BlocklyApps.dialogOrigin_;
+  var dialog = document.getElementById('dialog');
+  var shadow = document.getElementById('dialogShadow');
+  var border = document.getElementById('dialogBorder');
+
+  shadow.style.opacity = 0;
+
+  function endResult() {
+    shadow.style.visibility = 'hidden';
+    border.style.visibility = 'hidden';
+  }
+  if (origin) {
+    BlocklyApps.matchBorder_(dialog, false, 0.8);
+    BlocklyApps.matchBorder_(origin, true, 0.2);
+    // In 175ms hide both the shadow and the animated border.
+    window.setTimeout(endResult, 175);
+  } else {
+    // No animation.  Just set the final state.
+    endResult();
+  }
+  dialog.style.visibility = 'hidden';
+  dialog.style.zIndex = -1;
+  while (dialog.firstChild) {
+    var content = dialog.firstChild;
+    content.className += ' dialogHiddenContent';
+    document.body.appendChild(content);
+  }
+};
+
+/**
+ * Match the animated border to the a element's size and location.
+ * @param {!Element} element Element to match.
+ * @param {boolean} animate Animate to the new location.
+ * @param {number} opacity Opacity of border.
+ * @private
+ */
+BlocklyApps.matchBorder_ = function(element, animate, opacity) {
+  if (!element) {
+    return;
+  }
+  var border = document.getElementById('dialogBorder');
+  var bBox = BlocklyApps.getBBox_(element);
+  function change() {
+    border.style.width = bBox.width + 'px';
+    border.style.height = bBox.height + 'px';
+    border.style.left = bBox.x + 'px';
+    border.style.top = bBox.y + 'px';
+    border.style.opacity = opacity;
+  }
+  if (animate) {
+    border.className = 'dialogAnimate';
+    window.setTimeout(change, 1);
+  } else {
+    border.className = '';
+    change();
+  }
+  border.style.visibility = 'visible';
+};
+
+/**
+ * Compute the absolute coordinates and dimensions of an HTML or SVG element.
+ * @param {!Element} element Element to match.
+ * @return {!Object} Contains height, width, x, and y properties.
+ * @private
+ */
+BlocklyApps.getBBox_ = function(element) {
+  if (element.getBBox) {
+    // SVG element.
+    var bBox = element.getBBox();
+    var height = bBox.height;
+    var width = bBox.width;
+    var xy = Blockly.getAbsoluteXY_(element);
+    var x = xy.x;
+    var y = xy.y;
+  } else {
+    // HTML element.
+    var height = element.offsetHeight;
+    var width = element.offsetWidth;
+    var x = 0;
+    var y = 0;
+    do {
+      x += element.offsetLeft;
+      y += element.offsetTop;
+      element = element.offsetParent;
+    } while (element);
+  }
+  return {
+    height: height,
+    width: width,
+    x: x,
+    y: y
+  };
+};
+
+/**
+ * Display a storage-related modal dialog.
+ * @param {string} message Text to alert.
+ */
+BlocklyApps.storageAlert = function(message) {
+  var content = document.createElement('div');
+  var lines = message.split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(lines[i]));
+    content.appendChild(div);
+  }
+  // Add OK button.
+  content.innerHTML += apps.ok();
+
+  var origin = document.getElementById('linkButton');
+  var style = {
+    width: '50%',
+    left: '25%',
+    top: '5em'
+  };
+  function disposeFunc() {
+    content.parentNode.removeChild(content);
+    BlocklyApps.stopDialogKeyDown();
+  }
+  BlocklyApps.showDialog(content, origin, true, true, style, disposeFunc);
+  BlocklyApps.startDialogKeyDown();
+};
+
+/**
  * Convert the user's code to raw JavaScript.
  * @param {string} code Generated code.
  * @return {string} The code without serial numbers and timeout checks.
@@ -274,17 +482,66 @@ BlocklyApps.stripCode = function(code) {
   code = code.replace(/(,\s*)?'block_id_\d+'\)/g, ')');
   // Remove timeouts.
   var regex = new RegExp(Blockly.JavaScript.INFINITE_LOOP_TRAP
-      .replace('(%1)', '\\(\\)'), 'g');
+      .replace('(%1)', '\\((\'\\d+\')?\\)'), 'g');
   return code.replace(regex, '');
 };
 
 /**
  * Show the user's code in raw JavaScript.
+ * @param {Element} origin Animate the dialog opening/closing from/to this
+ *     DOM element.  If null, don't show any animations for opening or closing.
  */
-BlocklyApps.showCode = function() {
+BlocklyApps.showCode = function(origin) {
   var code = Blockly.Generator.workspaceToCode('JavaScript');
   code = BlocklyApps.stripCode(code);
-  window.alert(code);
+  if (typeof prettyPrintOne == 'function') {
+    code = prettyPrintOne(code, 'js');
+  }
+  var container = document.getElementById('containerCode');
+  containerCode.innerHTML = code;
+
+  var content = document.getElementById('dialogCode');
+  var style = {
+    width: '40%',
+    left: '30%',
+    top: '5em'
+  };
+  BlocklyApps.showDialog(content, origin, true, true, style,
+      BlocklyApps.stopDialogKeyDown);
+  BlocklyApps.startDialogKeyDown();
+};
+
+/**
+ * If the user preses enter, escape, or space, hide the dialog.
+ * @param {!Event} e Keyboard event.
+ * @private
+ */
+BlocklyApps.dialogKeyDown_ = function(e) {
+  if (BlocklyApps.isDialogVisible_) {
+    if (e.keyCode == 13 ||
+        e.keyCode == 27 ||
+        e.keyCode == 32) {
+      BlocklyApps.hideDialog(true);
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }
+};
+
+/**
+ * Start listening for BlocklyApps.dialogKeyDown_.
+ */
+BlocklyApps.startDialogKeyDown = function() {
+  document.body.addEventListener('keydown',
+      BlocklyApps.dialogKeyDown_, true);
+};
+
+/**
+ * Stop listening for BlocklyApps.dialogKeyDown_.
+ */
+BlocklyApps.stopDialogKeyDown = function() {
+  document.body.removeEventListener('keydown',
+      BlocklyApps.dialogKeyDown_, true);
 };
 
 /**
@@ -294,7 +551,7 @@ BlocklyApps.showCode = function() {
  *     or an error message if the element was not found.
  */
 BlocklyApps.getMsg = function(key) {
-  var msg = BlocklyApps.getMsgOrNull(key)
+  var msg = BlocklyApps.getMsgOrNull(key);
   return msg === null ? '[Unknown message: ' + key + ']' : msg;
 };
 
@@ -337,3 +594,20 @@ BlocklyApps.addTouchEvents = function() {
 
 // Add events for touch devices when the window is done loading.
 window.addEventListener('load', BlocklyApps.addTouchEvents, false);
+
+/**
+ * Load the Prettify CSS and JavaScript.
+ */
+BlocklyApps.importPrettify = function() {
+  //<link rel="stylesheet" type="text/css" href="../prettify.css">
+  //<script type="text/javascript" src="../prettify.js"></script>
+  var link = document.createElement('link');
+  link.setAttribute('rel', 'stylesheet');
+  link.setAttribute('type', 'text/css');
+  link.setAttribute('href', '../prettify.css');
+  document.head.appendChild(link);
+  var script = document.createElement('script');
+  script.setAttribute('type', 'text/javascript');
+  script.setAttribute('src', '../prettify.js');
+  document.head.appendChild(script);
+};

@@ -1,22 +1,3 @@
-body {
-  background-color: #fff;
-  font-family: sans-serif;
-  margin-top: 0;
-}
-h1 {
-  font-weight: normal;
-  font-size: 140%;
-}
-a:hover {
-  color: #f00;
-}
-.farSide {
-  text-align: right;
-}
-html[dir="RTL"] .farSide {
-  text-align: left;
-}
-
 .tab {
   padding: 6px 12px;
   text-decoration: none;
@@ -28,7 +9,8 @@ html[dir="RTL"] .farSide {
   border-radius: 20px;
 }
 #blockly {
-  position: absolute;
+  position: fixed;
+  bottom: 10px;
 }
 #visualization {
   position: relative;
@@ -72,6 +54,28 @@ html[dir=rtl] #capacityBubble {
 #capacityNumber {
   font-weight: bold;
 }
+#containerCode {
+  direction: ltr;
+  font-size: large;
+  overflow: auto;
+  max-height: 400px;
+}
+#iframeOneTopBlock {
+  height: 150px;
+  width: 100%;
+  border: none;
+  margin-bottom: -6ex;
+}
+#pegSpin {
+  height: 50px;
+  width: 49px;
+  background-position: -343px 0px;
+  margin-top: 10px;
+  position: absolute;
+}
+html[dir=rtl] #pegSpin {
+  background-position: -441px 0px;
+}
 
 /* 'Look' icon */
 #look>path {
@@ -83,43 +87,12 @@ html[dir=rtl] #capacityBubble {
 }
 
 /* Buttons */
-button {
-  margin: 5px;
-  margin-right: 12px;
-  margin-left: 0;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  background-color: #eee;
-  font-size: 10%;
-  color: black;
-}
-button.launch {
-  border: 1px solid #d43;
-  background-color: #d43;
-  color: #fff;
-  font-size: large;
+button.primary {
   /* Can't use "text-align: start" due to IE. */
   text-align: left;
 }
-html[dir="RTL"] button.launch {
+html[dir="RTL"] button.primary {
   text-align: right;
-}
-button.launch>img {
-  opacity: 1;
-  vertical-align: text-bottom;
-}
-button:active {
-  border: 1px solid blue !important;
-}
-button:hover, .buttonHover {
-  box-shadow: 2px 2px 5px #888;
-}
-button>img {
-  opacity: 0.6;
-}
-button.disabled {
-  visibility: hidden;
 }
 #languageMenu {
   vertical-align: top;
@@ -191,4 +164,4 @@ html[dir="RTL"] #pegmanButton>span {
   height: 38px;
   width: 49px;
   background-position: -980px 0px;
-};
+}

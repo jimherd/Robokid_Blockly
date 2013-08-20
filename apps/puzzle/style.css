@@ -1,80 +1,22 @@
 body {
-  background-color: #fff;
-  font-family: sans-serif;
   overflow: hidden;
 }
-h1 {
-  font-weight: normal;
-  font-size: 140%;
+
+#graph {
+  position: absolute;
+  bottom: 25px;
+  height: 15px;
+  width: 100px;
+  border: 1px solid #ddd;
 }
-a:hover {
-  color: #f00;
-}
-.farSide {
-  text-align: right;
-}
-html[dir="RTL"] .farSide {
-  text-align: left;
+#graphValue {
+  height: 15px;
+  width: 0;
+  background-color: #0d0;
+  transition-property: width;
+  transition-duration: 1s;
 }
 
-/* Buttons */
-button {
-  margin: 5px 0;
-  padding: 10px;
-  font-size: large;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  background-color: #eee;
-  color: black;
-}
-button.launch {
-  border: 1px solid #d43;
-  background-color: #d43;
-  color: #fff;
-}
-button:active {
-  border: 1px solid blue !important;
-}
-button:hover {
-  box-shadow: 2px 2px 5px #888;
-}
 #blockly {
   position: fixed;
-}
-#help {
-  visibility: hidden;
-  background-color: #fff;
-  color: #000;
-  border: 1px solid #000;
-  width: 50%;
-  position: absolute;
-  left: 25%;
-  top: 5em;
-  z-index: 1;
-  border-radius: 8px;
-  box-shadow: 5px 5px 5px #888;
-  padding: 10px;
-}
-#helpBorder {
-  visibility: hidden;
-  position: absolute;
-  background-color: #fff;
-  color: #000;
-  border: 1px solid #000;
-  border-radius: 8px;
-  box-shadow: 5px 5px 5px #888;
-  transition-property: width height left top opacity;
-  transition-duration: 0.2s;
-}
-#shadow {
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: #000;
-  transition-property: opacity;
-  transition-duration: 0.2s;
-  opacity: 0.3
 }
