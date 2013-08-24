@@ -23,28 +23,33 @@
  */
 
 /**
+ * Create a namespace for the application.
+ */
+var Code = {};
+ 
+/**
  * List of tab names.
  * @private
  */
 // var TABS_ = ['blocks', 'javascript', 'dart', 'python', 'xml'];
-var TABS_ = ['blocks', 'robokid'];
+Code.TABS_ = ['blocks', 'robokid'];
 
-var selected = 'blocks';
+Code.selected = 'blocks';
 
-function setDisplay() {
+Code.setDisplay = function() {
 
     var canvas = Blockly.mainWorkspace.getCanvas();
-    canvas.addEventListener('blocklyWorkspaceChange', renderContent, false);
-	selected = 'robokid';
+    canvas.addEventListener('blocklyWorkspaceChange', Code.renderContent, false);
+	Code.selected = 'robokid';
 	document.getElementById('content_robokid').style.display = 'block';
-	renderContent();
-}
+	Code.renderContent();
+};
 
 /**
  * Switch the visible pane when a tab is clicked.
  * @param {string} id ID of tab clicked.
  */
-function tabClick(id) {
+Code.tabClick = function(id) {
 /*
   // If the XML tab was open, save and render the content.
   if (document.getElementById('tab_xml').className == 'tabon') {
@@ -68,25 +73,26 @@ function tabClick(id) {
   }
 
   // Deselect all tabs and hide all panes.
-  for (var x in TABS_) {
-    document.getElementById('tab_' + TABS_[x]).className = 'taboff';
-    document.getElementById('content_' + TABS_[x]).style.display = 'none';
+  for (var x in Code.TABS_) {
+    var name = Code.TABS_[x];
+    document.getElementById('tab_' + name).className = 'taboff';
+    document.getElementById('content_' + name).style.display = 'none';
   }
 
   // Select the active tab.
-  selected = id.replace('tab_', '');
+  Code.selected = id.replace('tab_', '');
   document.getElementById(id).className = 'tabon';
   // Show the selected pane.
-  var content = document.getElementById('content_' + selected);
-  content.style.display = 'block';
+  var content = document.getElementById('content_' + Code.selected);
+  Code.content.style.display = 'block';
   renderContent();   */
-}
+};
 
 /**
  * Populate the currently selected pane with content generated from the blocks.
  */
-function renderContent() {
-  var content = document.getElementById('content_' + selected);
+Code.renderContent = function() {
+  var content = document.getElementById('content_' + Code.selected);
   // Initialize the pane.
   if (content.id == 'content_blocks') {
     // If the workspace was changed by the XML tab, Firefox will have performed
@@ -107,13 +113,13 @@ function renderContent() {
   } else if (content.id == 'content_robokid') {
     content.innerHTML = Blockly.Generator.workspaceToCode('Robokid');
   }
-}
+};
 
 /**
  * Initialize Blockly.  Called on page load.
  * @param {!Blockly} blockly Instance of Blockly from iframe.
  */
-function init(blockly) {
+Code.init = function(blockly) {
   window.Blockly = blockly;
 
   // Add to reserved word list: Local variables in execution evironment (runJS)
@@ -142,20 +148,20 @@ function init(blockly) {
     BlocklyStorage.backupOnUnload();
   } else {
     document.getElementById('linkButton').className = 'disabled';
-  }
+  };
 
 //  tabClick('tab_' + selected);
   
-  selected  = 'robokid';
+  Code.selected  = 'robokid';
 //  auto_save_and_restore_blocks();
-  setDisplay();
-}
+  Code.setDisplay();
+};
 
 /**
  * Execute the user's code.
  * Just a quick and dirty eval.  Catch infinite loops.
  */
-function runJS() {
+Code.runJS = function() {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = '  checkTimeout();\n';
   var timeouts = 0;
   var checkTimeout = function() {
@@ -170,4 +176,17 @@ function runJS() {
   } catch (e) {
     alert(MSG_BAD_CODE.replace('%1', e));
   }
-}
+};
+
+/**
+ * Discard all blocks from the workspace.
+ */
+Code.discard = function() {
+  var count = Blockly.mainWorkspace.getAllBlocks().length;
+  if (count < 2 ||
+      window.confirm(BlocklyApps.getMsg('Code_discard').replace('%1', count))) {
+    Blockly.mainWorkspace.clear();
+    window.location.hash = '';
+  }
+};
+
