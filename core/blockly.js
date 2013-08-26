@@ -29,6 +29,7 @@ goog.provide('Blockly');
 // Blockly core dependencies.
 goog.require('Blockly.Block');
 goog.require('Blockly.Connection');
+goog.require('Blockly.FieldAngle');
 goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldDropdown');
@@ -38,6 +39,7 @@ goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Toolbox');
+goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
@@ -245,7 +247,7 @@ Blockly.svgResize = function() {
  * @private
  */
 Blockly.onMouseDown_ = function(e) {
-  Blockly.Block.terminateDrag_(); // In case mouse-up event was lost.
+  Blockly.terminateDrag_(); // In case mouse-up event was lost.
   Blockly.hideChaff();
   var isTargetSvg = e.target && e.target.nodeName &&
       e.target.nodeName.toLowerCase() == 'svg';
@@ -354,6 +356,15 @@ Blockly.onKeyDown_ = function(e) {
 };
 
 /**
+ * Stop binding to the global mouseup and mousemove events.
+ * @private
+ */
+Blockly.terminateDrag_ = function() {
+  Blockly.Block.terminateDrag_();
+  Blockly.Flyout.terminateDrag_();
+};
+
+/**
  * Copy a block onto the local clipboard.
  * @param {!Blockly.Block} block Block to be copied.
  * @private
@@ -442,7 +453,7 @@ Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip && Blockly.Tooltip.hide();
   Blockly.ContextMenu && Blockly.ContextMenu.hide();
   Blockly.FieldDropdown && Blockly.FieldDropdown.hide();
-  Blockly.widgetDiv.hide();
+  Blockly.WidgetDiv.hide();
   if (!opt_allowToolbox &&
       Blockly.Toolbox.flyout_ && Blockly.Toolbox.flyout_.autoClose) {
     Blockly.Toolbox.clearSelection();
@@ -554,7 +565,7 @@ Blockly.setCursorHand_ = function(closed) {
   }
   // Set cursor on the SVG surface as well as block so that rapid movements
   // don't result in cursor changing to an arrow momentarily.
-  document.getElementsByTagName('svg')[0].style.cursor = cursor;
+  Blockly.svg.style.cursor = cursor;
 };
 
 /**
