@@ -211,6 +211,28 @@ Blockly.Language.title_input = {
   }
 };
 
+Blockly.Language.title_angle = {
+  // Angle input.
+  init: function() {
+    this.setColour(160);
+    this.appendDummyInput()
+        .appendTitle('angle input')
+        .appendTitle(new Blockly.FieldAngle('90'), 'ANGLE')
+        .appendTitle(',')
+        .appendTitle(new Blockly.FieldTextInput('NAME'), 'TITLENAME');
+    this.setPreviousStatement(true, 'Title');
+    this.setNextStatement(true, 'Title');
+    this.setTooltip('An input field for the user to enter an angle.');
+  },
+  onchange: function() {
+    if (!this.workspace) {
+      // Block has been deleted.
+      return;
+    }
+    titleNameCheck(this);
+  }
+};
+
 Blockly.Language.title_dropdown = {
   // Dropdown menu.
   init: function() {
@@ -607,20 +629,13 @@ Blockly.Language.colour_hue = {
   init: function() {
     this.appendDummyInput()
         .appendTitle('hue:')
-        .appendTitle(new Blockly.FieldTextInput(String(this.colourHue),
-                                                this.validator), 'HUE');
+        .appendTitle(new Blockly.FieldAngle('0', this.validator), 'HUE');
     this.setOutput(true, 'Colour');
     this.setTooltip('Paint the block with this colour.');
   },
   validator: function(text) {
-    // Ensure that only a number may be entered.
-    var n = window.parseInt(text || 0, 10);
-    if (window.isNaN(n) || n < 0) {
-      return null;
-    }
-    n %= 360;
-    this.sourceBlock_.setColour(n);
-    return String(n);
+    // Update the current block's colour to match.
+    this.sourceBlock_.setColour(text);
   }
 };
 

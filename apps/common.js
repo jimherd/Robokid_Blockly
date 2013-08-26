@@ -97,7 +97,7 @@ BlocklyApps.getLang = function() {
 };
 
 /**
- * User's language.
+ * User's language.  E.g. 'en'
  * @type {?string}
  */
 BlocklyApps.LANG = undefined;
@@ -448,16 +448,16 @@ BlocklyApps.getBBox_ = function(element) {
  * @param {string} message Text to alert.
  */
 BlocklyApps.storageAlert = function(message) {
-  var content = document.createElement('div');
+  var container = document.getElementById('containerStorage');
+  container.innerHTML = '';
   var lines = message.split('\n');
   for (var i = 0; i < lines.length; i++) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(lines[i]));
-    content.appendChild(div);
+    var p = document.createElement('p');
+    p.appendChild(document.createTextNode(lines[i]));
+    container.appendChild(p);
   }
-  // Add OK button.
-  content.innerHTML += apps.ok();
 
+  var content = document.getElementById('dialogStorage');
   var origin = document.getElementById('linkButton');
   var style = {
     width: '50%',
@@ -494,11 +494,15 @@ BlocklyApps.stripCode = function(code) {
 BlocklyApps.showCode = function(origin) {
   var code = Blockly.Generator.workspaceToCode('JavaScript');
   code = BlocklyApps.stripCode(code);
+  var pre = document.getElementById('containerCode');
+  pre.innerHTML = '';
+  // Inject the code as a textNode, then extract with innerHTML, thus escaping.
+  pre.appendChild(document.createTextNode(code));
   if (typeof prettyPrintOne == 'function') {
+    code = pre.innerHTML;
     code = prettyPrintOne(code, 'js');
+    pre.innerHTML = code;
   }
-  var container = document.getElementById('containerCode');
-  containerCode.innerHTML = code;
 
   var content = document.getElementById('dialogCode');
   var style = {

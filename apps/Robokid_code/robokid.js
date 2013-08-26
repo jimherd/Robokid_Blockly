@@ -18,10 +18,24 @@
  */
 
 /**
- * @fileoverview JavaScript for Blockly code demo (langaue-neutral).
+ * @fileoverview JavaScript for Blockly code demo (language-neutral).
  * @author fraser@google.com (Neil Fraser)
  */
+ 
+ // Supported languages.
+BlocklyApps.LANGUAGES = {
+  // Format: ['Language name', 'direction', 'XX_compressed.js']
+  en: ['English', 'ltr', 'en_compressed.js']
+};
+BlocklyApps.LANG = BlocklyApps.getLang();
 
+document.write('<script type="text/javascript" src="generated/' +
+               BlocklyApps.LANG + '.js"></script>\n');
+/**
+ * Create a namespace for the application.
+ */
+var Code = {};
+ 
 /**
  * List of tab names.
  * @private
@@ -31,20 +45,20 @@ var TABS_ = ['blocks', 'robokid'];
 
 var selected = 'blocks';
 
-function setDisplay() {
+Code.setDisplay = function() {
 
     var canvas = Blockly.mainWorkspace.getCanvas();
-    canvas.addEventListener('blocklyWorkspaceChange', renderContent, false);
+    canvas.addEventListener('blocklyWorkspaceChange', Code.renderContent, false);
 	selected = 'robokid';
 	document.getElementById('content_robokid').style.display = 'block';
-	renderContent();
-}
+	Code.renderContent();
+};
 
 /**
  * Switch the visible pane when a tab is clicked.
  * @param {string} id ID of tab clicked.
  */
-function tabClick(id) {
+Code.tabClick = function(id) {
 /*
   // If the XML tab was open, save and render the content.
   if (document.getElementById('tab_xml').className == 'tabon') {
@@ -68,24 +82,25 @@ function tabClick(id) {
   }
 
   // Deselect all tabs and hide all panes.
-  for (var x in TABS_) {
-    document.getElementById('tab_' + TABS_[x]).className = 'taboff';
-    document.getElementById('content_' + TABS_[x]).style.display = 'none';
+  for (var x in Code.TABS_) {
+    var name = Code.TABS_[x];
+    document.getElementById('tab_' + name).className = 'taboff';
+    document.getElementById('content_' + name).style.display = 'none';
   }
 
   // Select the active tab.
-  selected = id.replace('tab_', '');
+  Code.selected = id.replace('tab_', '');
   document.getElementById(id).className = 'tabon';
   // Show the selected pane.
-  var content = document.getElementById('content_' + selected);
-  content.style.display = 'block';
+  var content = document.getElementById('content_' + Code.selected);
+  Code.content.style.display = 'block';
   renderContent();   */
-}
+};
 
 /**
  * Populate the currently selected pane with content generated from the blocks.
  */
-function renderContent() {
+Code.renderContent = function() {
   var content = document.getElementById('content_' + selected);
   // Initialize the pane.
   if (content.id == 'content_blocks') {
@@ -98,16 +113,17 @@ function renderContent() {
     var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
     xmlTextarea.value = xmlText;
     xmlTextarea.focus();
-/*  } else if (content.id == 'content_javascript') {
-    content.innerHTML = Blockly.Generator.workspaceToCode('JavaScript');
-  } else if (content.id == 'content_dart') {
-    content.innerHTML = Blockly.Generator.workspaceToCode('Dart');
-  } else if (content.id == 'content_python') {
-    content.innerHTML = Blockly.Generator.workspaceToCode('Python');  */
   } else if (content.id == 'content_robokid') {
-    content.innerHTML = Blockly.Generator.workspaceToCode('Robokid');
+    code = Blockly.Generator.workspaceToCode('Robokid');
+    content.innerHTML = '';
+    content.appendChild(document.createTextNode(code));
+    if (typeof prettyPrintOne == 'function') {
+      code = content.innerHTML;
+      code = prettyPrintOne(code, 'py');
+      content.innerHTML = code;
+    }
   }
-}
+};
 
 /**
  * Initialize Blockly.  Called on page load.
@@ -116,46 +132,38 @@ function renderContent() {
 function init(blockly) {
   window.Blockly = blockly;
 
-  // Add to reserved word list: Local variables in execution evironment (runJS)
+  BlocklyApps.init();
+  
+  // Add to reserved word list: Local variables in execution environment (runJS)
   // and the infinite loop detection function.
   Blockly.Robokid.addReservedWords('code,timeouts,checkTimeout');
 
   // Make the 'Blocks' tab line up with the toolbox.
-  if (Blockly.Toolbox) {
-    window.setTimeout(function() {
-        document.getElementById('tab_blocks').style.minWidth =
-            (Blockly.Toolbox.width - 38) + 'px';
-            // Account for the 19 pixel margin and on each side.
-    }, 1);
+  if (Blockly.Toolbox.width) {
+    document.getElementById('tab_blocks').style.minWidth =
+     (Blockly.Toolbox.width - 38) + 'px';
+    // Account for the 19 pixel margin and on each side.
   }
+
+    BlocklyApps.loadBlocks('');
 
   if ('BlocklyStorage' in window) {
-    // An href with #key trigers an AJAX call to retrieve saved blocks.
-    if (window.location.hash.length > 1) {
-      BlocklyStorage.retrieveXml(window.location.hash.substring(1));
-    } else {
-      // Restore saved blocks in a separate thread so that subsequent
-      // initialization is not affected from a failed load.
-      window.setTimeout(BlocklyStorage.restoreBlocks, 0);
-    }
     // Hook a save function onto unload.
     BlocklyStorage.backupOnUnload();
-  } else {
-    document.getElementById('linkButton').className = 'disabled';
   }
-
-//  tabClick('tab_' + selected);
+  
+// Lazy-load the syntax-highlighting.
+  window.setTimeout(BlocklyApps.importPrettify, 1);
   
   selected  = 'robokid';
-//  auto_save_and_restore_blocks();
-  setDisplay();
+  Code.setDisplay();
 }
 
 /**
  * Execute the user's code.
  * Just a quick and dirty eval.  Catch infinite loops.
  */
-function runJS() {
+Code.runJS = function() {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = '  checkTimeout();\n';
   var timeouts = 0;
   var checkTimeout = function() {
@@ -170,4 +178,19 @@ function runJS() {
   } catch (e) {
     alert(MSG_BAD_CODE.replace('%1', e));
   }
-}
+};
+
+/* window.addEventListener('load', Code.init);  */
+
+/**
+ * Discard all blocks from the workspace.
+ */ 
+Code.discard = function() {
+  var count = Blockly.mainWorkspace.getAllBlocks().length;
+  if (count < 2 ||
+      window.confirm('Delete all ' + count + ' blocks?')) {
+    Blockly.mainWorkspace.clear();
+    window.location.hash = '';
+  }
+};
+/*  window.confirm(BlocklyApps.getMsg('Code_discard').replace('%1', count))) { */
