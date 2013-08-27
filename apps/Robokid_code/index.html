@@ -1,7 +1,6 @@
 <html>
 <head>
   <meta charset="utf-8">
-<<<<<<< HEAD
   <title>Blockly Demo: Code</title>
   <link rel="stylesheet" type="text/css" href="../common.css">
   <link rel="stylesheet" type="text/css" href="style.css">  
@@ -20,8 +19,8 @@
     var MSG_BAD_XML = 'Error parsing XML:\n%1\n\nAbandon changes?';
     var MSG_BAD_CODE = 'Program error:\n%1';
     var MSG_TIMEOUT = 'Maximum execution iterations exceeded.';
-=======
-  <title>Blockly : Robokid</title>
+
+	<title>Blockly : Robokid</title>
   <link rel="stylesheet" type="text/css" href="../common.css">
   <link rel="stylesheet" type="text/css" href="style.css">
   <script type="text/javascript" src="../common.js"></script>
@@ -40,7 +39,6 @@
   var MSG_BAD_CODE = 'Program error:\n%1';
   var MSG_TIMEOUT = 'Maximum execution iterations exceeded.';
 
->>>>>>> origin/Test1
   </script>
 
 </head>
@@ -48,7 +46,6 @@
   <table height="100%" width="100%">
     <tr>
       <td>
- <!--       <h1><a href="http://code.google.com/p/blockly/">Blockly</a> &gt; <a href="../index.html">Demos</a> &gt; Code</h1>  -->
 		<h1> 
 		  <span id="title">
 		    Robokid Code Development System (based on Blockly : r1281) 
@@ -60,49 +57,58 @@
       </td>
     </tr>
     <tr>
+	
       <td>
         <table>
           <tr id="tabRow" height="1em">
-		  <td id="tab_blocks" class="taboff" onclick="Code.tabClick(this.id)">Blocks</td>
+		    <td id="tab_blocks" class="taboff" onclick="Code.tabClick(this.id)">Blocks</td>
             <td class="tabmin">&nbsp;</td> 
             <td id="tab_robokid" class="tabon" onclick="Code.tabClick(this.id)">Robokid</td>
 			<td class="tabmin">&nbsp;</td> 
-<!--        <td id="tab_xml" class="taboff" onclick="Code.tabClick(this.id)">XML</td> -->
             <td class="tabmax">
- <!--             <button onclick="setDisplay()">Start</button>  -->
               <button title="Discard all blocks" onclick="Code.discard(); Code.renderContent();">
                 <img src='../../media/1x1.gif' class="trash">
               </button>
               <button id="linkButton" title="Save and link to blocks" onclick="BlocklyStorage.link()">
                 <img src='../../media/1x1.gif' class="link">
               </button>
-<!--              <button title="Run program" class="launch" onclick="runJS()">
-                <img src='../../media/1x1.gif' class="run">
-              </button>  -->
             </td>
-          </tr>
+		  </tr>
         </table>
-      </td>
+      </td>	 
+	
+      <td align="center">
+	    <button id="copy-button" data-clipboard-text="Copy Me!" title="Click to copy me." data-clipboard-target="content_robokid" data-clipboard-text="You forgot to copy text to clipboard">Copy code to Clipboard</button>
+        </button>
+		<script type="text/javascript" src="ZeroClipboard.js"></script>
+        <script type="text/javascript" src="copy.js"></script>  
+	  </td>
+	
     </tr>
     <tr>
       <td height="99%" width="65%">
         <iframe id="content_blocks" src="../Robokid_code/frame.html"></iframe>
 		<script type="text/javascript">
-		var src = ['en/_messages.js',
+		  var src = ['en/_messages.js',
            'common/loops.js',
            'common/logic.js',
            'common/math.js',
            'common/text.js',
            'common/variables.js'];
-document.getElementById('content_blocks').src = 'frame.html?' + src.join('&');
+          document.getElementById('content_blocks').src = 'frame.html?' + src.join('&');
         </script>
 
 	  </td> 
 	  <td height="99%" width="30%">
-		<pre id="content_robokid"></pre> 
-        <div id="content_xml">
+	  
+	    <div id='content_code'>
+          <pre id="content_robokid"></pre> 
+        </div>  
+	  
+	<!--    <pre id="content_robokid"></pre> 
+    <div id="content_xml">
           <textarea id="textarea_xml"></textarea>
-        </div>
+        </div>   -->
       </td>
     </tr>
   </table>

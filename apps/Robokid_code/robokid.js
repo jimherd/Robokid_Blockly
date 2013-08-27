@@ -107,12 +107,6 @@ Code.renderContent = function() {
     // If the workspace was changed by the XML tab, Firefox will have performed
     // an incomplete rendering due to Blockly being invisible.  Rerender.
     Blockly.mainWorkspace.renderBlocks();
-  } else if (content.id == 'content_xml') {
-    var xmlTextarea = document.getElementById('textarea_xml');
-    var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-    xmlTextarea.value = xmlText;
-    xmlTextarea.focus();
   } else if (content.id == 'content_robokid') {
     code = Blockly.Generator.workspaceToCode('Robokid');
     content.innerHTML = '';
@@ -193,4 +187,15 @@ Code.discard = function() {
     window.location.hash = '';
   }
 };
-/*  window.confirm(BlocklyApps.getMsg('Code_discard').replace('%1', count))) { */
+
+Code.highlight = function() {
+
+  var content = document.getElementById('content_robokid');
+
+  code = Blockly.Generator.workspaceToCode('Robokid');
+  content.innerHTML = '';
+  content.appendChild(document.createTextNode(code));
+
+  code = content.innerHTML;
+  content.innerHTML = code;
+};
