@@ -46,7 +46,6 @@ var TABS_ = ['blocks', 'robokid'];
 var selected = 'blocks';
 
 Code.setDisplay = function() {
-
     var canvas = Blockly.mainWorkspace.getCanvas();
     canvas.addEventListener('blocklyWorkspaceChange', Code.renderContent, false);
 	selected = 'robokid';
@@ -111,7 +110,11 @@ Code.renderContent = function() {
     code = Blockly.Generator.workspaceToCode('Robokid');
     content.innerHTML = '';
     content.appendChild(document.createTextNode(code));
-    if (typeof prettyPrintOne == 'function') {
+	// get character count of code
+ 	var count = document.getElementById('chr_count');
+	count.innerHTML = '';
+	count.innerHTML = code.length; 	
+	if (typeof prettyPrintOne == 'function') {
       code = content.innerHTML;
       code = prettyPrintOne(code, 'py');
       content.innerHTML = code;

@@ -7,6 +7,20 @@
   <script type="text/javascript" src="../../appengine/storage.js"></script>
   <script type="text/javascript" src="../common.js"></script>
   <script type="text/javascript" src="../Robokid_code/robokid.js"></script>
+  
+  <style type="text/css">
+    div.thequote {
+	  border:1px;
+	  padding-left:50px;
+	  padding-right:50px;
+	  background-color:yellow;
+    }
+    span.quoter {
+	  padding-left:40px;
+	  font-style:italic;
+    }
+  </style>
+  
   <script>
     if ('BlocklyStorage' in window) {
       BlocklyStorage.DISCARD_WARNING = 'Delete all "%1" blocks?';
@@ -100,15 +114,12 @@
 
 	  </td> 
 	  <td height="99%" width="30%">
-	  
 	    <div id='content_code'>
           <pre id="content_robokid"></pre> 
-        </div>  
-	  
-	<!--    <pre id="content_robokid"></pre> 
-    <div id="content_xml">
-          <textarea id="textarea_xml"></textarea>
-        </div>   -->
+        </div> 
+        <div class="thequote">		
+	      <br />Raw character count of program = <span id='chr_count'> </span><br /> 
+		</div>	
       </td>
     </tr>
   </table>
