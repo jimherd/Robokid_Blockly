@@ -111,9 +111,20 @@ Code.renderContent = function() {
     content.innerHTML = '';
     content.appendChild(document.createTextNode(code));
 	// get character count of code
- 	var count = document.getElementById('chr_count');
-	count.innerHTML = '';
-	count.innerHTML = code.length; 	
+ 	var c_count = document.getElementById('chr_count');
+	c_count.innerHTML = '';
+	c_count.innerHTML = code.length; 	
+	// count number of lines
+	var l_count = document.getElementById('line_count');
+	nos_chars = code.length;
+	nos_lines = 0;
+	for (var i=0 ; i < nos_chars ; i++) {
+		if (code.charAt(i) =='\n') {
+			nos_lines++;
+		}
+	}
+	l_count.innerHTML = '';
+	l_count.innerHTML = nos_lines; 		
 	if (typeof prettyPrintOne == 'function') {
       code = content.innerHTML;
       code = prettyPrintOne(code, 'c');
