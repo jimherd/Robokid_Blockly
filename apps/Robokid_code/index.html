@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -33,29 +34,29 @@
     var MSG_BAD_XML = 'Error parsing XML:\n%1\n\nAbandon changes?';
     var MSG_BAD_CODE = 'Program error:\n%1';
     var MSG_TIMEOUT = 'Maximum execution iterations exceeded.';
+  </script>
 
-	<title>Blockly : Robokid</title>
+  <title>Blockly : Robokid</title>
   <link rel="stylesheet" type="text/css" href="../common.css">
   <link rel="stylesheet" type="text/css" href="style.css">
   <script type="text/javascript" src="../common.js"></script>
   <script type="text/javascript" src="robokid.js"></script>
   <script type="text/javascript" src="../../appengine/storage.js"></script>  
   <script>
-  if ('BlocklyStorage' in window) {
-    BlocklyStorage.DISCARD_WARNING = 'Delete all "%1" blocks?';
-    BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
-    BlocklyStorage.LINK_ALERT = 'Share your blocks with this link:\n\n';
-    BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
+    if ('BlocklyStorage' in window) {
+      BlocklyStorage.DISCARD_WARNING = 'Delete all "%1" blocks?';
+      BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
+      BlocklyStorage.LINK_ALERT = 'Share your blocks with this link:\n\n';
+      BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
+      BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
       'Perhaps it was created with a different version of Blockly?\nXML: ';
-  }
-  var MSG_BAD_XML = 'Error parsing XML:\n%1\n\nAbandon changes?';
-  var MSG_BAD_CODE = 'Program error:\n%1';
-  var MSG_TIMEOUT = 'Maximum execution iterations exceeded.';
-
+    }
+    var MSG_BAD_XML = 'Error parsing XML:\n%1\n\nAbandon changes?';
+    var MSG_BAD_CODE = 'Program error:\n%1';
+    var MSG_TIMEOUT = 'Maximum execution iterations exceeded.';
   </script>
-
 </head>
+
 <body>
   <table height="100%" width="100%">
     <tr>
@@ -70,8 +71,8 @@
         <select id="languageMenu" onchange="BlocklyApps.changeLanguage();"></select>
       </td>
     </tr>
-    <tr>
 	
+    <tr>
       <td>
         <table>
           <tr id="tabRow" height="1em">
@@ -90,17 +91,16 @@
 		  </tr>
         </table>
       </td>	 
-	
       <td align="center">
-	    <button id="copy-button" data-clipboard-text="Copy Me!" title="Click to copy me." data-clipboard-target="content_robokid" data-clipboard-text="You forgot to copy text to clipboard">Copy code to Clipboard</button>
+	    <button id="copy-button" data-clipboard-text="Copy Me!" title="Click to copy me." data-clipboard-target="content_robokid" data-clipboard-text="You forgot to copy text to clipboard">Copy code to Clipboard
         </button>
 		<script type="text/javascript" src="ZeroClipboard.js"></script>
         <script type="text/javascript" src="copy.js"></script>  
-	  </td>
-	
+	  </td>	
     </tr>
+	
     <tr>
-      <td height="99%" width="65%">
+      <td  height="550" width="65%">
         <iframe id="content_blocks" src="../Robokid_code/frame.html"></iframe>
 		<script type="text/javascript">
 		  var src = ['en/_messages.js',
@@ -113,14 +113,16 @@
         </script>
 
 	  </td> 
-	  <td height="99%" width="25%">
+	  <td  width="25%">
 	    <div id='content_code'>
           <pre id="content_robokid"></pre> 
         </div> 
         <div class="thequote">		
 	      <br />Raw character count of program = <span id='chr_count'> </span><br /> 
-		</div>	
+		</div>
+      </td>		
     </tr>
+	
   </table>
   
 <!--  PR.registerLangHandler(
