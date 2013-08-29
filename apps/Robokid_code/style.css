@@ -77,12 +77,24 @@ pre,
   height: 100%;
   padding: 15;  /* 0 */
   margin: 0;
-  border: 3px solid #ccc;
+  border: 3px solid #ccc; 
 /*  border-top-style: none; */
   overflow: hidden;
   display: none;
   font-size: 110%;   /* added */
   font-weight: bold; /* added */
+}
+#content_robokid {
+  width: 90%;
+  height: 100%;
+  padding: 15;  /* 0 */
+  margin: 0;
+  border: 3px solid blue;
+/*  border-top-style: none; */
+  overflow: hidden;
+  font-size: 120%;   /* added */
+  font-weight: bold; /* added */
+  background: url(lined_paper.png);
 }
 #textarea_xml {
   width: 100%;

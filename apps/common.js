@@ -97,14 +97,14 @@ BlocklyApps.getLang = function() {
 };
 
 /**
- * User's language.  E.g. 'en'
- * @type {?string}
+ * User's language (e.g. "en").
+ * @type string=
  */
 BlocklyApps.LANG = undefined;
 
 /**
  * List of languages supported by this app.  Keys should be in ISO 639 format.
- * @type {Object}
+ * @type !Object=
  */
 BlocklyApps.LANGUAGES = undefined;
 

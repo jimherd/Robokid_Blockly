@@ -116,7 +116,7 @@ Code.renderContent = function() {
 	count.innerHTML = code.length; 	
 	if (typeof prettyPrintOne == 'function') {
       code = content.innerHTML;
-      code = prettyPrintOne(code, 'py');
+      code = prettyPrintOne(code, 'c');
       content.innerHTML = code;
     }
   }

@@ -62,7 +62,7 @@
       <td>
 		<h1> 
 		  <span id="title">
-		    Robokid Code Development System (based on Blockly : r1281) 
+		    Robokid Code Development System (based on Blockly : r1293) 
 		  </span>
 		</h1>
       </td>
@@ -113,17 +113,37 @@
         </script>
 
 	  </td> 
-	  <td height="99%" width="30%">
+	  <td height="99%" width="25%">
 	    <div id='content_code'>
           <pre id="content_robokid"></pre> 
         </div> 
         <div class="thequote">		
 	      <br />Raw character count of program = <span id='chr_count'> </span><br /> 
 		</div>	
-      </td>
     </tr>
   </table>
   
+<!--  PR.registerLangHandler(
+    PR.createSimpleLexer(
+        [ // shortcutStylePatterns
+          // "single-line-string"
+          [PR.PR_STRING,        /^(?:"(?:[^\\"\r\n]|\\.)*(?:"|$))/, null, '"'],
+          // Whitespace
+          [PR.PR_PLAIN,         /^\s+/, null, ' \r\n\t\xA0']
+        ],
+        [ // fallthroughStylePatterns
+          // A line comment that starts with REM
+          [PR.PR_COMMENT,       /^REM[^\r\n]*/, null],
+          [PR.PR_KEYWORD,       /^\b(?:for|to|if|else|leds|speed|motors|display|wait|sense|print|cal|note)\b/, null],
+          [PR.PR_PLAIN,         /^[A-Z][A-Z0-9]?(?:\$|%)?/i, null],
+          // Literals .0, 0, 0.0 0E13
+          [PR.PR_LITERAL,       /^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+\-]?\d+)?/i,  null, '0123456789'],
+          [PR.PR_PUNCTUATION,   /^.[^\s\w\.$%"]*/, null]
+          // [PR.PR_PUNCTUATION,   /^[-,:;!<>=\+^\/\*]+/]
+        ]),
+    ['ubasic']);
+-->
+
     <xml id="toolbox" style="display: none">
     <category name="Robokid">
       <block type="LEDS_set"></block>
