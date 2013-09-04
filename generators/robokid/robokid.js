@@ -247,3 +247,8 @@ Blockly.Robokid.play_note = function() {
 	  return 'note ' + code + ' ' + argument0 + ';\n';
 };
 
+Blockly.Robokid.codeline = function() {
+  // Simple code comment which does not generate any code
+  var code = (this.getTitleValue('TEXT'));
+  return code + ';\n';
+};

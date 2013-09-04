@@ -435,3 +435,23 @@ Blockly.Language.play_note.NOTES =
      [Blockly.LANG_NOTE_s, '12']  
 	];
 
+  Blockly.Language.codeline = {
+  // Allow user to input a comment block
+//  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
+  init: function() {
+    this.setColour(Blockly.robokid_colour);
+	this.setPreviousStatement(true);
+	this.setNextStatement(true);
+	this.setInputsInline(true);
+    this.setTooltip('Input line of Ubasic code');
+	
+	var textInput = new Blockly.FieldTextInput('Code here');
+	this.appendDummyInput()	
+		.appendTitle('Code : ')
+		.appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+        'media/quote0.png', 12, 12))
+        .appendTitle(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+        'media/quote1.png', 12, 12));
+  }
+};

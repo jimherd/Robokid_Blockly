@@ -1,6 +1,7 @@
 {
     "@metadata": {
         "authors": [
+            "Chrumps",
             "Faren",
             "Ty221"
         ]
@@ -13,6 +14,7 @@
     "Apps.runProgram": "Uruchom Program",
     "Apps.resetProgram": "Zresetuj",
     "Apps.dialogOk": "OK",
+    "Apps.dialogCancel": "Anuluj",
     "Apps.catLogic": "Logika",
     "Apps.catLoops": "P\u0119tle",
     "Apps.catMath": "Matematyka",
@@ -49,22 +51,19 @@
     "Maze.ifTooltip": "Je\u015bli istnieje \u015bcie\u017cka jest w okre\u015blonym kierunku, wykonaj jakie\u015b akcje",
     "Maze.ifelseTooltip": "Je\u015bli istnieje \u015bcie\u017cka jest w okre\u015blonym kierunku, wykonaj pierwszy blok akcji. W innym wypadku wykonaj drugi blok akcji",
     "Maze.whileTooltip": "Powtarza\u0107 za\u0142\u0105czone kroki, dop\u00f3ki punkt nie zostanie osi\u0105gni\u0119ty.",
-    "Maze.capacity0": "Masz \u003Cx id='START_SPAN'/\u003E0\u003C/x id='END_SPAN'/\u003E pozosta\u0142ych blok\u00f3w.",
-    "Maze.capacity1": "Masz \u003Cx id='START_SPAN'/\u003E1\u003C/x id='END_SPAN'/\u003E pozosta\u0142y blok.",
-    "Maze.capacity2": "Masz \u003Cx id='START_SPAN'/\u003E%1\u003C/x id='END_SPAN'/\u003E pozosta\u0142e(ych) bloki(\u00f3w).",
+    "Maze.capacity0": "Masz %0 pozosta\u0142ych blok\u00f3w.",
+    "Maze.capacity1": "Masz %1 pozosta\u0142y blok.",
+    "Maze.capacity2": "Masz %2 pozosta\u0142e(ych) bloki(\u00f3w).",
     "Maze.nextLevel": "Gratulacje! Czy jeste\u015b gotowy, aby przej\u015b\u0107 do poziomu %1?",
     "Maze.finalLevel": "Gratulacje! Rozwi\u0105za\u0142e\u015b ko\u0144cowy poziom.",
     "Maze.maze": "Labirynt",
-    "Maze.instructions1": "Ustaw kilka polece\u0144 'id\u017a naprz\u00f3d' jedno po drugi abym doszed\u0142 do celu.",
-    "Maze.instructions2": "Jaka jest sekwencja krok\u00f3w, aby i\u015b\u0107 t\u0105 drog\u0105 ?",
-    "Maze.instructions3": "Komputery maj\u0105 ograniczon\u0105 pami\u0119\u0107. Dotrzyj do ko\u0144ca tej \u015bcie\u017cki za pomoc\u0105 tylko dw\u00f3ch blok\u00f3w. U\u017cyj \"powt\u00f3rz\" aby uruchomi\u0107 blok wi\u0119cej ni\u017c raz.",
-    "Maze.instructions4": "Osi\u0105gnij cel u\u017cywaj\u0105c tylko pi\u0119ciu blok\u00f3w.",
-    "Maze.instructions5": "Pegman musi skr\u0119ci\u0107 w lewo, kiedy nie mo\u017ce i\u015b\u0107 prosto.",
-    "Maze.instructions6": "Blok \"if (je\u017celi)\" wykona okre\u015blon\u0105 czynno\u015b\u0107 tylko kiedy wyra\u017cenie warunkowe jest prawdziwe. Spr\u00f3buj p\u00f3j\u015b\u0107 w lewo je\u015bli \u015bcie\u017cka jest w lewo.",
-    "Maze.instructions7": "Ten labirynt wygl\u0105da na bardziej skomplikowany ni\u017c poprzedni, ale wcale tak nie jest.",
-    "Maze.instructions8": "Mo\u017cesz u\u017cy\u0107 wi\u0119cej ni\u017c jednego bloku \"if\".",
-    "Maze.instructions9": "Bloki \"if-else (je\u017celi-lub)\" bed\u0105 wykonywa\u0107 jedn\u0105 czynno\u015b\u0107 lub inn\u0105 czynno\u015b\u0107.",
-    "Maze.oneTopBlock": "Na tym poziomie, musisz u\u0142o\u017cy\u0107 razem wszystkie bloki w bia\u0142ym obszarze roboczym.",
+    "Maze.helpStack": "Ustaw kilka polece\u0144 'id\u017a naprz\u00f3d' jedno po drugi abym doszed\u0142 do celu.",
+    "Maze.helpRepeat": "Komputery maj\u0105 ograniczon\u0105 pami\u0119\u0107. Dotrzyj do ko\u0144ca tej \u015bcie\u017cki za pomoc\u0105 tylko dw\u00f3ch blok\u00f3w. U\u017cyj \"powt\u00f3rz\" aby uruchomi\u0107 blok wi\u0119cej ni\u017c raz.",
+    "Maze.helpRepeatMany": "Osi\u0105gnij cel u\u017cywaj\u0105c tylko pi\u0119ciu blok\u00f3w.",
+    "Maze.helpIf": "Blok \"if (je\u017celi)\" wykona okre\u015blon\u0105 czynno\u015b\u0107 tylko kiedy wyra\u017cenie warunkowe jest prawdziwe. Spr\u00f3buj p\u00f3j\u015b\u0107 w lewo je\u015bli \u015bcie\u017cka jest w lewo.",
+    "Maze.helpIfElse": "Bloki \"if-else (je\u017celi-lub)\" bed\u0105 wykonywa\u0107 jedn\u0105 czynno\u015b\u0107 lub inn\u0105 czynno\u015b\u0107.",
+    "Maze.helpWallFollow": "Czy dasz rad\u0119 przej\u015b\u0107 ten trudny labirynt? Wypr\u00f3bnuj metod\u0119 trzymania si\u0119 lew\u0105 r\u0119k\u0105 \u015bciany. Tylko dla zaawansowanych programist\u00f3w!",
+    "Maze.helpOneTopBlock": "Na tym poziomie, musisz u\u0142o\u017cy\u0107 razem wszystkie bloki w bia\u0142ym obszarze roboczym.",
     "Plane.rows": "Wiersze: %1",
     "Plane.getRows": "wiersze (%1)",
     "Plane.placeholder": "?",
@@ -102,6 +101,7 @@
     "Puzzle.title": "Puzzle",
     "Puzzle.help": "Pomoc",
     "Puzzle.checkAnswers": "Sprawd\u017a Odpowiedzi",
+    "Puzzle.helpText": "Dla ka\u017cdego kraju (zielony), za\u0142\u0105cz jego flag\u0119, wybierz j\u0119zyk urz\u0119dowy, i okre\u015bl miasta, znajduj\u0105cych si\u0119 w tym kraju.",
     "Turtle.turnTooltip": "Obr\u00f3\u0107 \u017c\u00f3\u0142wia w lewo lub w prawo o okre\u015blon\u0105 liczb\u0119 stopni.",
     "Turtle.turnRight": "skr\u0119ci\u0107 w prawo przez",
     "Turtle.turnLeft": "skr\u0119ci\u0107 w lewo przez",
@@ -123,8 +123,5 @@
     "Turtle.title": "Grafiki \u017b\u00f3\u0142wia",
     "Turtle.captureTooltip": "Zapisz rysunek.",
     "Turtle.imgFilename": "drawing.png",
-    "Turtle.catTurtle": "\u017b\u00f3\u0142w",
-        "Maze.instructions10": "Czy dasz radę przejść ten trudny labirynt? Wypróbnuj metodę trzymania się lewą ręką ściany. Tylko dla zaawansowanych programistów!",
-        "Puzzle.helpText": "Dla każdego kraju (zielony), załącz jego flagę, wybierz język urzędowy, i określ miasta, znajdujących się w tym kraju."
-
+    "Turtle.catTurtle": "\u017b\u00f3\u0142w"
 }
