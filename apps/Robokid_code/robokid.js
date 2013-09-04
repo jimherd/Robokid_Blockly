@@ -112,8 +112,8 @@ Code.renderContent = function() {
     content.appendChild(document.createTextNode(code));
 	// get character count of code
  	var c_count = document.getElementById('chr_count');
-	c_count.innerHTML = '';
-	c_count.innerHTML = code.length; 	
+	c_count.textContent = '';
+	c_count.textContent = code.length; 	
 	// count number of lines
 	var l_count = document.getElementById('line_count');
 	nos_chars = code.length;
@@ -123,8 +123,8 @@ Code.renderContent = function() {
 			nos_lines++;
 		}
 	}
-	l_count.innerHTML = '';
-	l_count.innerHTML = nos_lines; 		
+	l_count.textContent = '';
+	l_count.textContent = nos_lines; 		
 	if (typeof prettyPrintOne == 'function') {
       code = content.innerHTML;
       code = prettyPrintOne(code, 'c');
