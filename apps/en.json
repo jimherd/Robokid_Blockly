@@ -1,7 +1,7 @@
 {
     "@metadata": {
         "author": "Ellen Spertus <ellen.spertus@gmail.com>",
-        "lastupdated": "2013-09-03 17:28:17.147662",
+        "lastupdated": "2013-09-06 16:30:46.881527",
         "locale": "en",
         "messagedocumentation" : "qqq"
     },
@@ -28,7 +28,7 @@
     "Apps.xmlError": "Could not load your saved file.  Perhaps it was created with a different version of Blockly?",
     "Apps.listVariable": "list",
     "Apps.textVariable": "text",
-    "Code.badXml": "Error parsing XML:\n%1\n\nAbandon changes?",
+    "Code.badXml": "Error parsing XML:\n%1\n\nSelect 'OK' to abandon your changes or 'Cancel' to further edit the XML.",
     "Code.badCode": "Program error:\n%1",
     "Code.timeout": "Maximum execution iterations exceeded.",
     "Code.discard": "Delete all %1 blocks?",
@@ -41,6 +41,7 @@
     "Maze.turnRight": "turn right",
     "Maze.doCode": "do",
     "Maze.elseCode": "else",
+    "Maze.helpIfElse": "If-else blocks will do one thing or the other.",
     "Maze.pathAhead": "if path ahead",
     "Maze.pathLeft": "if path to the left",
     "Maze.pathRight": "if path to the right",
@@ -67,7 +68,6 @@
     "Maze.helpRepeatMany": "You can fit more than one block inside a 'repeat' block.",
     "Maze.helpIf": "An 'if' block will do something only if the condition is true.  Try turning left if there is a path to the left.",
     "Maze.helpMenu": "Click on %1 in the 'if' block to change its condition.",
-    "Maze.helpIfElse": "If-else blocks will do one thing or the other.",
     "Maze.helpWallFollow": "Can you solve this complicated maze?  Try following the left-hand wall.  Advanced programmers only!",
     "Plane.rows": "Rows: %1",
     "Plane.getRows": "rows (%1)",
