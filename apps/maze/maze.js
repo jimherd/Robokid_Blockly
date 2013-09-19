@@ -31,35 +31,35 @@ var Maze = {};
 // Supported languages.
 BlocklyApps.LANGUAGES = {
   // Format: ['Language name', 'direction', 'XX_compressed.js']
-  ca: ['Català', 'ltr', 'en_compressed.js'],
-  cs: ['Čeština', 'ltr', 'en_compressed.js'],
-  da: ['Dansk', 'ltr', 'en_compressed.js'],
-  de: ['Deutsch', 'ltr', 'de_compressed.js'],
-  el: ['Eλληνικά', 'ltr', 'en_compressed.js'],
-  en: ['English', 'ltr', 'en_compressed.js'],
-  es: ['Español', 'ltr', 'en_compressed.js'],
-  eu: ['Euskara', 'ltr', 'en_compressed.js'],
-  fr: ['Français', 'ltr', 'en_compressed.js'],
-  hu: ['Magyar', 'ltr', 'en_compressed.js'],
-  ia: ['Interlingua', 'ltr', 'en_compressed.js'],
-  it: ['Italiano', 'ltr', 'en_compressed.js'],
-  ko: ['한국어', 'ltr', 'en_compressed.js'],
-  lv: ['Latviešu', 'ltr', 'en_compressed.js'],
-  mk: ['Македонски', 'ltr', 'en_compressed.js'],
-  nl: ['Nederlands', 'ltr', 'en_compressed.js'],
-  pl: ['Polski', 'ltr', 'en_compressed.js'],
-  pms: ['Piemontèis', 'ltr', 'en_compressed.js'],
-  pt: ['Português', 'ltr', 'pt_br_compressed.js'],
-  ru: ['Русский', 'ltr', 'en_compressed.js'],
-  sr: ['Српски', 'ltr', 'en_compressed.js'],
-  sv: ['Svenska', 'ltr', 'en_compressed.js'],
-  sw: ['Kishwahili', 'ltr', 'en_compressed.js'],
-  th: ['ภาษาไทย', 'ltr', 'en_compressed.js'],
-  tr: ['Türkçe', 'ltr', 'en_compressed.js'],
-  uk: ['Українська', 'ltr', 'en_compressed.js'],
-  vi: ['Tiếng Việt', 'ltr', 'vi_compressed.js'],
-  'zh-hans': ['简体字', 'ltr', 'zh_tw_compressed.js'],
-  'zh-hant': ['中文', 'ltr', 'zh_tw_compressed.js']
+  ca: ['Català', 'ltr', 'msg/js/en.js'],
+  cs: ['Čeština', 'ltr', 'msg/js/en.js'],
+  da: ['Dansk', 'ltr', 'msg/js/en.js'],
+  de: ['Deutsch', 'ltr', 'msg/js/de.js'],
+  el: ['Eλληνικά', 'ltr', 'msg/js/en.js'],
+  en: ['English', 'ltr', 'msg/js/en.js'],
+  es: ['Español', 'ltr', 'msg/js/en.js'],
+  eu: ['Euskara', 'ltr', 'msg/js/en.js'],
+  fr: ['Français', 'ltr', 'msg/js/en.js'],
+  hu: ['Magyar', 'ltr', 'msg/js/en.js'],
+  ia: ['Interlingua', 'ltr', 'msg/js/en.js'],
+  it: ['Italiano', 'ltr', 'msg/js/en.js'],
+  ko: ['한국어', 'ltr', 'msg/js/en.js'],
+  lv: ['Latviešu', 'ltr', 'msg/js/en.js'],
+  mk: ['Македонски', 'ltr', 'msg/js/en.js'],
+  nl: ['Nederlands', 'ltr', 'msg/js/en.js'],
+  pl: ['Polski', 'ltr', 'msg/js/en.js'],
+  pms: ['Piemontèis', 'ltr', 'msg/js/en.js'],
+  pt: ['Português', 'ltr', 'msg/js/pt_br.js'],
+  ru: ['Русский', 'ltr', 'msg/js/en.js'],
+  sr: ['Српски', 'ltr', 'msg/js/en.js'],
+  sv: ['Svenska', 'ltr', 'msg/js/en.js'],
+  sw: ['Kishwahili', 'ltr', 'msg/js/en.js'],
+  th: ['ภาษาไทย', 'ltr', 'msg/js/en.js'],
+  tr: ['Türkçe', 'ltr', 'msg/js/en.js'],
+  uk: ['Українська', 'ltr', 'msg/js/en.js'],
+  vi: ['Tiếng Việt', 'ltr', 'msg/js/vi.js'],
+  'zh-hans': ['简体字', 'ltr', 'msg/js/zh_tw.js'],
+  'zh-hant': ['中文', 'ltr', 'msg/js/zh_tw.js']
 };
 BlocklyApps.LANG = BlocklyApps.getLang();
 
@@ -131,14 +131,13 @@ Maze.map = [
 // Level 0.
  undefined,
 // Level 1.
- [[0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 2, 1, 3, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0]],
+ [[0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 2, 1, 3, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0]],
 // Level 2.
  [[0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
@@ -282,11 +281,6 @@ Maze.startDirection = Maze.DirectionType.EAST;
  */
 Maze.pidList = [];
 
-/**
- * Pseudo-random identifier used for tracking user progress within a level.
- */
-Maze.LEVEL_ID = Math.random();
-
 // Map each possible shape to a sprite.
 // Input: Binary string representing Centre/North/West/South/East squares.
 // Output: [x, y] coordinates of each tile's sprite in tiles.png.
@@ -318,6 +312,8 @@ Maze.tile_SHAPES = {
  */
 Maze.drawMap = function() {
   var svg = document.getElementById('svgMaze');
+  var scale = Math.max(Maze.ROWS, Maze.COLS) * Maze.SQUARE_SIZE;
+  svg.setAttribute('viewBox', '0 0 ' + scale + ' ' + scale);
 
   // Draw the outer square.
   var square = document.createElementNS(Blockly.SVG_NS, 'rect');
@@ -465,13 +461,7 @@ Maze.init = function() {
   // TODO: Detect if arrow is printed, or Unicode square is printed.
   var textElement = document.getElementById('arrowTest');
   var height = textElement.getBBox().height;
-  if (height < Blockly.BlockSvg.MIN_BLOCK_Y) {
-    // Append arrows to direction messages.
-    Blockly.Language.maze_turn.DIRECTIONS[0][0] += ' \u27F2';
-    Blockly.Language.maze_turn.DIRECTIONS[1][0] += ' \u27F3';
-    Blockly.Language.maze_if.DIRECTIONS[1][0] += ' \u27F2';
-    Blockly.Language.maze_if.DIRECTIONS[2][0] += ' \u27F3';
-  }
+  Maze.addArrows = height < Blockly.BlockSvg.MIN_BLOCK_Y;
   var svg = textElement.ownerSVGElement
   svg.parentNode.removeChild(svg);
 
@@ -674,7 +664,7 @@ Maze.levelHelp = function() {
       var span = document.createElement('span');
       span.className = 'helpMenuFake';
       var options = [];
-      Blockly.Language.maze_if.DIRECTIONS.forEach(
+      Blockly.Blocks.maze_if.DIRECTIONS.forEach(
           function(v, x, a) {options[x] = v[0];});
       var prefix = Blockly.commonWordPrefix(options);
       var suffix = Blockly.commonWordSuffix(options);
@@ -1034,10 +1024,10 @@ Maze.congratulations = function() {
     BlocklyApps.showDialog(content, null, false, true, style,
         function() {
           document.body.removeEventListener('keydown',
-              BlocklyApps.congratulationsKeyDown_, true);
+              Maze.congratulationsKeyDown_, true);
           });
     document.body.addEventListener('keydown',
-        BlocklyApps.congratulationsKeyDown_, true);
+        Maze.congratulationsKeyDown_, true);
 
   } else {
     var text = BlocklyApps.getMsg('Maze_finalLevel');
@@ -1063,7 +1053,7 @@ Maze.congratulations = function() {
  * @param {!Event} e Keyboard event.
  * @private
  */
-BlocklyApps.congratulationsKeyDown_ = function(e) {
+Maze.congratulationsKeyDown_ = function(e) {
   if (e.keyCode == 13 ||
       e.keyCode == 27 ||
       e.keyCode == 32) {

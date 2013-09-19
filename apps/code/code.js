@@ -25,11 +25,11 @@
 // Supported languages.
 BlocklyApps.LANGUAGES = {
   // Format: ['Language name', 'direction', 'XX_compressed.js']
-  en: ['English', 'ltr', 'en_compressed.js'],
-  de: ['Deutsch', 'ltr', 'de_compressed.js'],
-  hu: ['Magyar', 'ltr', 'en_compressed.js'],
-  vi: ['Tiếng Việt', 'ltr', 'vi_compressed.js'],
-  'zh-tw': ['中國的', 'ltr', 'zh_tw_compressed.js']
+  en: ['English', 'ltr', 'msg/js/en.js'],
+  de: ['Deutsch', 'ltr', 'msg/js/de.js'],
+  hu: ['Magyar', 'ltr', 'msg/js/en.js'],
+  vi: ['Tiếng Việt', 'ltr', 'msg/js/vi.js'],
+  'zh-tw': ['中國的', 'ltr', 'msg/js/zh_tw.js']
 };
 BlocklyApps.LANG = BlocklyApps.getLang();
 
@@ -177,7 +177,11 @@ Code.init = function() {
   window.setTimeout(BlocklyApps.importPrettify, 1);
 };
 
-window.addEventListener('load', Code.init);
+if (window.location.pathname.match(/readonly.html$/)) {
+  window.addEventListener('load', BlocklyApps.initReadonly);
+} else {
+  window.addEventListener('load', Code.init);
+}
 
 /**
  * Execute the user's code.

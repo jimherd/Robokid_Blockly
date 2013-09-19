@@ -28,6 +28,7 @@
 {template .start}
   {call .messages /}
   <script type="text/javascript" src="../../blockly_compressed.js"></script>
+  <script type="text/javascript" src="../../blocks_compressed.js"></script>
   <script type="text/javascript" src="../../javascript_compressed.js"></script>
   <script type="text/javascript" src="../../python_compressed.js"></script>
   <script type="text/javascript" src="../../{$ij.langSrc}"></script>
@@ -260,4 +261,15 @@
     <category name="{msg meaning="Apps.catVariables" desc="IBID"}Variables{/msg}" custom="VARIABLE"></category>
     <category name="{msg meaning="Apps.catProcedures" desc="IBID"}Procedures{/msg}" custom="PROCEDURE"></category>
   </xml>
+{/template}
+
+/**
+ * Readonly Blockly in an iframe.
+ */
+{template .readonly}
+  {call .messages /}
+
+  <script type="text/javascript" src="../../blockly_compressed.js"></script>
+  <script type="text/javascript" src="../../{$ij.langSrc}"></script>
+  <div id="blockly"></div>
 {/template}

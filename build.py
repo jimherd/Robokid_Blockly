@@ -141,15 +141,9 @@ class Gen_compressed(threading.Thread):
 
   def run(self):
     self.gen_core()
+    self.gen_blocks()
     self.gen_generator('javascript')
     self.gen_generator('python')
-	self.gen_generator('robokid')
-    self.gen_language('de')
-    self.gen_language('en')
-    self.gen_language('en_us')
-    self.gen_language('pt_br')
-    self.gen_language('vi')
-    self.gen_language('zh_tw')
 
   def gen_core(self):
     target_filename = 'blockly_compressed.js'
@@ -175,7 +169,32 @@ class Gen_compressed(threading.Thread):
       params.append(('js_code', ''.join(f.readlines())))
       f.close()
 
-    self.do_compile(params, target_filename, filenames)
+    self.do_compile(params, target_filename, filenames, '')
+
+  def gen_blocks(self):
+    target_filename = 'blocks_compressed.js'
+    # Define the parameters for the POST request.
+    params = [
+        ('compilation_level', 'SIMPLE_OPTIMIZATIONS'),
+        ('output_format', 'json'),
+        ('output_info', 'compiled_code'),
+        ('output_info', 'warnings'),
+        ('output_info', 'errors'),
+        ('output_info', 'statistics'),
+      ]
+
+    # Read in all the source files.
+    # Add Blockly.Blocks to be compatible with the compiler.
+    params.append(('js_code', "goog.provide('Blockly.Blocks');"))
+    filenames = glob.glob(os.path.join('blocks', '*.js'))
+    for filename in filenames:
+      f = open(filename)
+      params.append(('js_code', ''.join(f.readlines())))
+      f.close()
+
+    # Remove Blockly.Blocks to be compatible with Blockly.
+    remove = "var Blockly={Blocks:{}};"
+    self.do_compile(params, target_filename, filenames, remove)
 
   def gen_generator(self, language):
     target_filename = language + '_compressed.js'
@@ -190,6 +209,8 @@ class Gen_compressed(threading.Thread):
       ]
 
     # Read in all the source files.
+    # Add Blockly.Generator to be compatible with the compiler.
+    params.append(('js_code', "goog.provide('Blockly.Generator');"))
     filenames = glob.glob(
         os.path.join('generators', language, '*.js'))
     filenames.insert(0, os.path.join('generators', language + '.js'))
@@ -198,33 +219,11 @@ class Gen_compressed(threading.Thread):
       params.append(('js_code', ''.join(f.readlines())))
       f.close()
 
-    self.do_compile(params, target_filename, filenames)
+    # Remove Blockly.Generator to be compatible with Blockly.
+    remove = "var Blockly={Generator:{}};"
+    self.do_compile(params, target_filename, filenames, remove)
 
-  def gen_language(self, language):
-    target_filename = language + '_compressed.js'
-    # Define the parameters for the POST request.
-    params = [
-        ('compilation_level', 'SIMPLE_OPTIMIZATIONS'),
-        ('output_format', 'json'),
-        ('output_info', 'compiled_code'),
-        ('output_info', 'warnings'),
-        ('output_info', 'errors'),
-        ('output_info', 'statistics'),
-      ]
-
-    # Read in all the source files.
-    filenames = glob.glob(os.path.join('language', 'common', '*.js'))
-    filenames += glob.glob(os.path.join('language', language, '*.js'))
-    filenames.remove(os.path.join('language', language, '_messages.js'))
-    filenames.insert(0, os.path.join('language', language, '_messages.js'))
-    for filename in filenames:
-      f = open(filename)
-      params.append(('js_code', ''.join(f.readlines())))
-      f.close()
-
-    self.do_compile(params, target_filename, filenames)
-
-  def do_compile(self, params, target_filename, filenames):
+  def do_compile(self, params, target_filename, filenames, remove):
     # Send the request to Google.
     headers = { "Content-type": "application/x-www-form-urlencoded" }
     conn = httplib.HTTPConnection('closure-compiler.appspot.com')
@@ -274,6 +273,7 @@ class Gen_compressed(threading.Thread):
         sys.exit(1)
 
       code = HEADER + '\n' + json_data['compiledCode']
+      code = code.replace(remove, '')
 
       stats = json_data['statistics']
       original_b = stats['originalSize']
