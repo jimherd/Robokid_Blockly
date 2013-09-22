@@ -24,10 +24,13 @@
  * to language files.
  */
 
-if (!Blockly.Language) Blockly.Language = {};
+'use strict';
 
- Blockly.Language.LEDS_set = {
-//	category: Blockly.LANG_CATEGORY_ROBOKID,
+goog.provide('Blockly.Blocks.robokid');
+
+goog.require('Blockly.Blocks');
+
+Blockly.Blocks['LEDS_set'] = {
 	helpUrl: Blockly.LANG_ROBOKID_LEDS_SET_HELPURL,
 	init: function() {
 		this.setColour(Blockly.robokid_colour);
@@ -58,8 +61,7 @@ if (!Blockly.Language) Blockly.Language = {};
 	}
  };
  
-  Blockly.Language.set_speed = {
-//	category: Blockly.LANG_CATEGORY_ROBOKID,
+ Blockly.Blocks['set_speed'] = {
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
 		this.setColour(Blockly.robokid_colour);
@@ -79,8 +81,7 @@ if (!Blockly.Language) Blockly.Language = {};
 	}
 };
 
-  Blockly.Language.motors = {
-//	category: Blockly.LANG_CATEGORY_ROBOKID,
+Blockly.Blocks['motors'] = {
 	helpUrl: Blockly.LANG_ROBOKID_MOTORS_SET_HELPURL,
 	init: function() {
 		this.setColour(Blockly.robokid_colour);
@@ -104,7 +105,7 @@ if (!Blockly.Language) Blockly.Language = {};
 	}
 };
 
-Blockly.Language.comment = {
+Blockly.Blocks['comment'] = {
   // Allow user to input a comment block
   helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
@@ -124,7 +125,7 @@ Blockly.Language.comment = {
   }
 };
 
-Blockly.Language.display = {
+Blockly.Blocks['display'] = {
   // show string on 2-character display on the robot
   helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
   init: function() {
@@ -132,7 +133,6 @@ Blockly.Language.display = {
 	this.setPreviousStatement(true);
 	this.setNextStatement(true);
     this.setTooltip('Ouput a string to the robot display');
-	
 	var textInput = new Blockly.FieldTextInput('Text here');
 	this.appendDummyInput()	
 		.appendTitle('Display : ')
@@ -144,14 +144,13 @@ Blockly.Language.display = {
   }
 };
 
-Blockly.Language.wait = {
+Blockly.Blocks['wait'] = {
   init: function() {
     this.setColour(Blockly.robokid_colour);
 	this.setNextStatement(true);
 	this.setPreviousStatement(true);
 	this.setInputsInline(true);		
     this.setTooltip('wait a number of tenths of a second');
-	
 	this.appendValueInput('TIME')
 		.setCheck('Number')
 		.appendTitle("Wait ");
@@ -160,18 +159,31 @@ Blockly.Language.wait = {
   }
 };
 
-Blockly.Language.read_sensor = {
-  init: function() {
+Blockly.Blocks['read_sensor'] = {
+	init: function() {
+	var OPERATORS =
+		[[Blockly.LANG_SENSOR_BATTERY_VOLTS, '0'],
+		[Blockly.LANG_SENSOR_POT_3, '1'],
+		[Blockly.LANG_SENSOR_POT_2, '2'],
+		[Blockly.LANG_SENSOR_POT_1, '3'],
+		[Blockly.LANG_SENSOR_PAD_SWL, '4'],
+		[Blockly.LANG_SENSOR_PAD_SWR, '5'],	
+		[Blockly.LANG_SENSOR_LINE_SENSOR_L, '6'],
+		[Blockly.LANG_SENSOR_LINE_SENSOR_R, '7'],	 
+		[Blockly.LANG_SENSOR_FRONT_SENSOR_L, '8'],	 
+		[Blockly.LANG_SENSOR_FRONT_SENSOR_C, '9'],
+		[Blockly.LANG_SENSOR_FRONT_SENSOR_R, '10'],
+		[Blockly.LANG_SENSOR_WHEEL_SENSOR_L, '11'],	
+		[Blockly.LANG_SENSOR_WHEEL_SENSOR_R, '12'],	
+		[Blockly.LANG_SENSOR_REAR_SENSOR, '13']];
     this.setColour(Blockly.robokid_colour);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-	this.setInputsInline(true);
-	
+	this.setInputsInline(true);	
 	this.appendDummyInput()
 		.appendTitle("Read sensor : ");
-	var dropdown = new Blockly.FieldDropdown(this.SENSORS);
 	this.appendDummyInput()	
-		.appendTitle(dropdown, 'SENSOR');
+	    .appendTitle(new Blockly.FieldDropdown(OPERATORS), 'SENSOR');
 	this.appendDummyInput()
 		.appendTitle(" into variable ");
 	this.appendDummyInput() 
@@ -196,28 +208,13 @@ Blockly.Language.read_sensor = {
   }
 };
 
-Blockly.Language.read_sensor.SENSORS =
-    [[Blockly.LANG_SENSOR_BATTERY_VOLTS, '0'],
-     [Blockly.LANG_SENSOR_POT_3, '1'],
-     [Blockly.LANG_SENSOR_POT_2, '2'],
-     [Blockly.LANG_SENSOR_POT_1, '3'],
-     [Blockly.LANG_SENSOR_PAD_SWL, '4'],
-     [Blockly.LANG_SENSOR_PAD_SWR, '5'],	
-     [Blockly.LANG_SENSOR_LINE_SENSOR_L, '6'],
-     [Blockly.LANG_SENSOR_LINE_SENSOR_R, '7'],	 
-     [Blockly.LANG_SENSOR_FRONT_SENSOR_L, '8'],	 
-     [Blockly.LANG_SENSOR_FRONT_SENSOR_C, '9'],
-     [Blockly.LANG_SENSOR_FRONT_SENSOR_R, '10'],
-     [Blockly.LANG_SENSOR_WHEEL_SENSOR_L, '11'],	
-     [Blockly.LANG_SENSOR_WHEEL_SENSOR_R, '12'],	
-     [Blockly.LANG_SENSOR_REAR_SENSOR, '13']		 
-	 ];
-
-Blockly.Language.read_sysvar = {
-  // Read an internal system variable
-//  category: Blockly.LANG_CATEGORY_ROBOKID,
+Blockly.Blocks['read_sysvar'] = {
+// Read an internal system variable
 //  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
   init: function() {
+  var OPERATORS =
+    [[Blockly.LANG_SYSVAR_TIMER_TICK, '0'],
+	 ];
     this.setColour(Blockly.robokid_colour);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -225,9 +222,8 @@ Blockly.Language.read_sysvar = {
 	
 	this.appendDummyInput()
 		.appendTitle("Read system variable : ");
-	var dropdown = new Blockly.FieldDropdown(this.SYSVARS);
 	this.appendDummyInput()	
-		.appendTitle(dropdown, 'SYSVAR');
+	    .appendTitle(new Blockly.FieldDropdown(OPERATORS), 'SYSVAR');
 	this.appendDummyInput()
 		.appendTitle(" into variable ");
 	this.appendDummyInput() 
@@ -252,13 +248,8 @@ Blockly.Language.read_sysvar = {
   }
 };
 	 
-Blockly.Language.read_sysvar.SYSVARS =
-    [[Blockly.LANG_SYSVAR_TIMER_TICK, '0'],
-	 ];
-
-Blockly.Language.print = {
-  // Create a string made up of any number of elements of any type.
-//  category: Blockly.LANG_CATEGORY_ROBOKID,
+Blockly.Blocks['print'] = {
+// Create a string made up of any number of elements of any type.
   helpUrl: Blockly.LANG_TEXT_JOIN_HELPURL,
   init: function() {
     this.setColour(Blockly.robokid_colour);
@@ -268,7 +259,7 @@ Blockly.Language.print = {
         .appendTitle('Print to USB connection ');
     this.appendValueInput('ADD1');
     this.setMutator(new Blockly.Mutator(['print_create_join_item']));
-    this.setTooltip(Blockly.LANG_TEXT_JOIN_TOOLTIP_1);
+//    this.setTooltip(Blockly.LANG_TEXT_JOIN_TOOLTIP_1);
     this.itemCount_ = 2;
   },
   mutationToDom: function() {
@@ -355,19 +346,19 @@ Blockly.Language.print = {
   }
 };
 
-Blockly.Language.print_container = {
+Blockly.Blocks['print_container'] = {
   // Container.
   init: function() {
     this.setColour(Blockly.robokid_colour);
     this.appendDummyInput()
         .appendTitle(Blockly.LANG_TEXT_CREATE_JOIN_TITLE_JOIN);
     this.appendStatementInput('STACK');
-    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_TOOLTIP_1);
+//    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_TOOLTIP_1);
     this.contextMenu = false;
   }
 };
 
-Blockly.Language.print_create_join_item = {
+Blockly.Blocks['print_create_join_item'] = {
   // Add items.
   init: function() {
     this.setColour(Blockly.robokid_colour);
@@ -375,15 +366,12 @@ Blockly.Language.print_create_join_item = {
         .appendTitle(Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TITLE_ITEM);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TOOLTIP);
+//    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TOOLTIP);
     this.contextMenu = false;
   }
 };
 
-Blockly.Language.calibrate = {
-  // Allow user to input a comment block
-//  category: Blockly.LANG_CATEGORY_ROBOKID,
-//  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
+Blockly.Blocks['calibrate'] = {
   init: function() {
     this.setColour(Blockly.robokid_colour);
 	this.setNextStatement(true);
@@ -395,31 +383,10 @@ Blockly.Language.calibrate = {
   }
 };
 
-Blockly.Language.play_note = {
-  // play a tone for a period of time
-//  category: Blockly.LANG_CATEGORY_ROBOKID,
-//  helpUrl: Blockly.LANG_MATH_CHANGE_HELPURL,
+Blockly.Blocks['play_note'] = {
+// play a tone for a period of time
   init: function() {
-    this.setColour(Blockly.robokid_colour);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-	this.setInputsInline(true);
-	this.setTooltip('Pick note and set duration in units of 1 millisecond');
-	
-	this.appendDummyInput()
-		.appendTitle("Play note : ");
-	var dropdown = new Blockly.FieldDropdown(this.NOTES);
-	this.appendDummyInput()	
-		.appendTitle(dropdown, 'NOTE');
-	this.appendValueInput('duration')
-		.setCheck('Number')
-		.appendTitle(' for ');
-	this.appendDummyInput()
-		.appendTitle(" milliseconds");
-  }
-};
-
-Blockly.Language.play_note.NOTES =
+  var OPERATORS =
     [[Blockly.LANG_NOTE_C, '0'],
      [Blockly.LANG_NOTE_CS, '1'],
      [Blockly.LANG_NOTE_D, '2'],
@@ -434,10 +401,26 @@ Blockly.Language.play_note.NOTES =
      [Blockly.LANG_NOTE_B, '11'],
      [Blockly.LANG_NOTE_s, '12']  
 	];
+    this.setColour(Blockly.robokid_colour);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+	this.setInputsInline(true);
+	this.setTooltip('Pick note and set duration in units of 1 millisecond');
+	
+	this.appendDummyInput()
+		.appendTitle("Play note : ");
+	this.appendDummyInput()	
+	    .appendTitle(new Blockly.FieldDropdown(OPERATORS), 'NOTE');
+	this.appendValueInput('duration')
+		.setCheck('Number')
+		.appendTitle(' for ');
+	this.appendDummyInput()
+		.appendTitle(" milliseconds");
+  }
+};
 
-  Blockly.Language.codeline = {
-  // Allow user to input a comment block
-//  helpUrl: Blockly.LANG_ROBOKID_READ_SENSOR_HELPURL,
+Blockly.Blocks['codeline'] = {
+// Allow user to input a line of ubasic+ code
   init: function() {
     this.setColour(Blockly.robokid_colour);
 	this.setPreviousStatement(true);

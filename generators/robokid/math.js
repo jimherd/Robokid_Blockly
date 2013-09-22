@@ -26,21 +26,19 @@
 
  'use strict';
 
-Blockly.Robokid.math = {};
- 
-// goog.provide('Blockly.Robokid.math');
+goog.provide('Blockly.Robokid.math');
 
-// goog.require('Blockly.Robokid');
- 
-// Blockly.Robokid = Blockly.Generator.get('Robokid');
+goog.require('Blockly.Robokid');
 
-Blockly.Robokid.math_number = function() {
+Blockly.Robokid['math_number'] = function() {
+//Blockly.Robokid.math_number = function() {
   // Numeric value.
   var code = window.parseFloat(this.getTitleValue('NUM'));
   return [code, Blockly.Robokid.ORDER_UNARY_SIGN];
 };
 
-Blockly.Robokid.math_arithmetic = function() {
+Blockly.Robokid['math_arithmetic'] = function() {
+//Blockly.Robokid.math_arithmetic = function() {
   // Basic arithmetic operators, and power.
   var mode = this.getTitleValue('OP');
   var tuple = Blockly.Robokid.math_arithmetic.OPERATORS[mode];
@@ -60,7 +58,8 @@ Blockly.Robokid.math_arithmetic.OPERATORS = {
   POWER: ['**', Blockly.Robokid.ORDER_EXPONENTIATION]
 };
 
-Blockly.Robokid.math_change = function() {
+Blockly.Robokid['math_change'] = function() {
+//Blockly.Robokid.math_change = function() {
   // Add to a variable in place.
   var argument0 = Blockly.Robokid.valueToCode(this, 'DELTA',
       Blockly.Robokid.ORDER_ADDITIVE) || '0';
@@ -70,7 +69,8 @@ Blockly.Robokid.math_change = function() {
       ' + ' + argument0 + '\n';
 };
 
-Blockly.Robokid.math_single = function() {
+Blockly.Robokid['math_single'] = function() {
+//Blockly.Robokid.math_single = function() {
   // Math operators with single operand.
  
   var operator = this.getTitleValue('OP');
@@ -155,7 +155,8 @@ Blockly.Robokid.math_round = Blockly.Robokid.math_single;
 // Trigonometry functions have a single operand.
 Blockly.Robokid.math_trig = Blockly.Robokid.math_single;
 
-Blockly.Robokid.math_on_list = function() {
+Blockly.Robokid['math_on_list'] = function() {
+//Blockly.Robokid.math_on_list = function() {
   // Math functions for lists.
   func = this.getTitleValue('OP');
   list = Blockly.Robokid.valueToCode(this, 'LIST',
@@ -264,7 +265,8 @@ Blockly.Robokid.math_on_list = function() {
   return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
 };
 
-Blockly.Robokid.math_constrain = function() {
+Blockly.Robokid['math_constrain'] = function() {
+//Blockly.Robokid.math_constrain = function() {
   // Constrain a number between two limits.
   var argument0 = Blockly.Robokid.valueToCode(this, 'VALUE',
       Blockly.Robokid.ORDER_NONE) || '0';
@@ -276,7 +278,8 @@ Blockly.Robokid.math_constrain = function() {
   return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
 };
 
-Blockly.Robokid.math_modulo = function() {
+Blockly.Robokid['math_modulo'] = function() {
+//Blockly.Robokid.math_modulo = function() {
   // Remainder computation.
   var argument0 = Blockly.Robokid.valueToCode(this, 'DIVIDEND',
       Blockly.Robokid.ORDER_MULTIPLICATIVE) || '0';
@@ -286,7 +289,8 @@ Blockly.Robokid.math_modulo = function() {
   return [code, Blockly.Robokid.ORDER_MULTIPLICATIVE];
 };
 
-Blockly.Robokid.math_random_int = function() {
+Blockly.Robokid['math_random_int'] = function() {
+//Blockly.Robokid.math_random_int = function() {
   // Random integer between [X] and [Y].
   Blockly.Robokid.definitions_['import_random'] = 'import random';
   var argument0 = Blockly.Robokid.valueToCode(this, 'FROM',
@@ -297,7 +301,8 @@ Blockly.Robokid.math_random_int = function() {
   return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
 };
 
-Blockly.Robokid.math_random_float = function() {
+Blockly.Robokid['math_random_float'] = function() {
+//Blockly.Robokid.math_random_float = function() {
   // Random fraction between 0 and 1.
   Blockly.Robokid.definitions_['import_random'] = 'import random';
   return ['random.random()', Blockly.Robokid.ORDER_FUNCTION_CALL];

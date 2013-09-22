@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Blockly Demo: Code</title>
+  <title>Blockly : Robokid</title>  
   <link rel="stylesheet" type="text/css" href="../common.css">
   <link rel="stylesheet" type="text/css" href="style.css">  
   <script type="text/javascript" src="../../appengine/storage.js"></script>
@@ -35,26 +35,6 @@
     var MSG_BAD_CODE = 'Program error:\n%1';
     var MSG_TIMEOUT = 'Maximum execution iterations exceeded.';
   </script>
-
-  <title>Blockly : Robokid</title>
-  <link rel="stylesheet" type="text/css" href="../common.css">
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <script type="text/javascript" src="../common.js"></script>
-  <script type="text/javascript" src="robokid.js"></script>
-  <script type="text/javascript" src="../../appengine/storage.js"></script>  
-  <script>
-    if ('BlocklyStorage' in window) {
-      BlocklyStorage.DISCARD_WARNING = 'Delete all "%1" blocks?';
-      BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
-      BlocklyStorage.LINK_ALERT = 'Share your blocks with this link:\n\n';
-      BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-      BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
-      'Perhaps it was created with a different version of Blockly?\nXML: ';
-    }
-    var MSG_BAD_XML = 'Error parsing XML:\n%1\n\nAbandon changes?';
-    var MSG_BAD_CODE = 'Program error:\n%1';
-    var MSG_TIMEOUT = 'Maximum execution iterations exceeded.';
-  </script>
 </head>
 
 <body>
@@ -63,7 +43,7 @@
       <td>
 		<h1> 
 		  <span id="title">
-		    Robokid Code Development System (based on Blockly : r1330) 
+		    Robokid Code Development System (based on Blockly : r1369) 
 		  </span>
 		</h1>
       </td>
@@ -103,12 +83,8 @@
       <td  height="550" width="65%">
         <iframe id="content_blocks" src="../Robokid_code/frame.html"></iframe>
 		<script type="text/javascript">
-		  var src = ['en/_messages.js',
-           'common/loops.js',
-           'common/logic.js',
-           'common/math.js',
-           'common/text.js',
-           'common/variables.js'];
+<!--		  var src = [ 'en/_messages.js','blocks/loops.js','blocks/logic.js','blocks/math.js','blocks/text.js','blocks/variables.js' ]; -->
+			var src = [ ];
           document.getElementById('content_blocks').src = 'frame.html?' + src.join('&');
         </script>
 
