@@ -29,7 +29,7 @@
 
 // goog.require('Blockly.CodeGenerator');
 
-Blockly.Robokid = Blockly.Generator.get('Robokid');
+Blockly.Robokid = new Blockly.Generator('Robokid');
 
 /**
  * List of illegal variable names.
@@ -158,7 +158,7 @@ Blockly.Robokid.scrub_ = function(block, code) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      commentCode += Blockly.Generator.prefixLines(comment, '# ') + '\n';
+      commentCode += this.prefixLines(comment, '# ') + '\n';
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
@@ -166,9 +166,9 @@ Blockly.Robokid.scrub_ = function(block, code) {
       if (block.inputList[x].type == Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
-          var comment = Blockly.Generator.allNestedComments(childBlock);
+          var comment = this.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly.Generator.prefixLines(comment, '# ');
+            commentCode += this.prefixLines(comment, '# ');
           }
         }
       }

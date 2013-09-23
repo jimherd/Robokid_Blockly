@@ -351,7 +351,7 @@ Blockly.Blocks['print_container'] = {
   init: function() {
     this.setColour(Blockly.robokid_colour);
     this.appendDummyInput()
-        .appendTitle(Blockly.LANG_TEXT_CREATE_JOIN_TITLE_JOIN);
+        .appendTitle('Print');
     this.appendStatementInput('STACK');
 //    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_TOOLTIP_1);
     this.contextMenu = false;
@@ -363,7 +363,7 @@ Blockly.Blocks['print_create_join_item'] = {
   init: function() {
     this.setColour(Blockly.robokid_colour);
     this.appendDummyInput()
-        .appendTitle(Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TITLE_ITEM);
+        .appendTitle('item');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
 //    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TOOLTIP);

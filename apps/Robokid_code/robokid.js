@@ -41,14 +41,14 @@ var Code = {};
  * @private
  */
 // var TABS_ = ['blocks', 'javascript', 'dart', 'python', 'xml'];
-var TABS_ = ['blocks', 'robokid'];
+Code.TABS_ = ['blocks', 'robokid'];
 
-var selected = 'blocks';
+Code.selected = 'blocks';
 
 Code.setDisplay = function() {
     var canvas = Blockly.mainWorkspace.getCanvas();
     canvas.addEventListener('blocklyWorkspaceChange', Code.renderContent, false);
-	selected = 'robokid';
+	Code.selected = 'robokid';
 	document.getElementById('content_robokid').style.display = 'block';
 	Code.renderContent();
 };
@@ -100,14 +100,14 @@ Code.tabClick = function(id) {
  * Populate the currently selected pane with content generated from the blocks.
  */
 Code.renderContent = function() {
-  var content = document.getElementById('content_' + selected);
+  var content = document.getElementById('content_' + Code.selected);
   // Initialize the pane.
   if (content.id == 'content_blocks') {
     // If the workspace was changed by the XML tab, Firefox will have performed
     // an incomplete rendering due to Blockly being invisible.  Rerender.
     Blockly.mainWorkspace.renderBlocks();
   } else if (content.id == 'content_robokid') {
-    code = Blockly.Generator.workspaceToCode('Robokid');
+    code = Blockly.Robokid.workspaceToCode();
     content.innerHTML = '';
     content.appendChild(document.createTextNode(code));
 	// get character count of code
@@ -163,7 +163,7 @@ function init(blockly) {
 // Lazy-load the syntax-highlighting.
   window.setTimeout(BlocklyApps.importPrettify, 1);
   
-  selected  = 'robokid';
+  Code.selected  = 'robokid';
   Code.setDisplay();
 }
 
@@ -206,7 +206,7 @@ Code.highlight = function() {
 
   var content = document.getElementById('content_robokid');
 
-  code = Blockly.Generator.workspaceToCode('Robokid');
+  code = Blockly.Robokid.workspaceToCode();
   content.innerHTML = '';
   content.appendChild(document.createTextNode(code));
 
