@@ -33,29 +33,29 @@ goog.require('Blockly.Robokid');
 Blockly.Robokid['math_number'] = function() {
 //Blockly.Robokid.math_number = function() {
   // Numeric value.
-  var code = window.parseFloat(this.getTitleValue('NUM'));
+  var code = parseFloat(this.getTitleValue('NUM'));
   return [code, Blockly.Robokid.ORDER_UNARY_SIGN];
 };
 
 Blockly.Robokid['math_arithmetic'] = function() {
 //Blockly.Robokid.math_arithmetic = function() {
   // Basic arithmetic operators, and power.
-  var mode = this.getTitleValue('OP');
-  var tuple = Blockly.Robokid.math_arithmetic.OPERATORS[mode];
+  var OPERATORS = {
+      ADD: ['+', Blockly.Robokid.ORDER_ADDITIVE],
+      MINUS: ['-', Blockly.Robokid.ORDER_ADDITIVE],
+      MULTIPLY: ['*', Blockly.Robokid.ORDER_MULTIPLICATIVE],
+      DIVIDE: ['/', Blockly.Robokid.ORDER_MULTIPLICATIVE],
+      POWER: ['**', Blockly.Robokid.ORDER_EXPONENTIATION]
+  }; 
+  var tuple = OPERATORS[this.getTitleValue('OP')];
+//  var mode = this.getTitleValue('OP');
+//  var tuple = Blockly.Robokid.math_arithmetic.OPERATORS[mode];
   var operator = tuple[0];
   var order = tuple[1];
   var argument0 = Blockly.Robokid.valueToCode(this, 'A', order) || '0';
   var argument1 = Blockly.Robokid.valueToCode(this, 'B', order) || '0';
   var code = argument0 + operator + argument1;
   return [code, order];
-};
-
-Blockly.Robokid.math_arithmetic.OPERATORS = {
-  ADD: ['+', Blockly.Robokid.ORDER_ADDITIVE],
-  MINUS: ['-', Blockly.Robokid.ORDER_ADDITIVE],
-  MULTIPLY: ['*', Blockly.Robokid.ORDER_MULTIPLICATIVE],
-  DIVIDE: ['/', Blockly.Robokid.ORDER_MULTIPLICATIVE],
-  POWER: ['**', Blockly.Robokid.ORDER_EXPONENTIATION]
 };
 
 Blockly.Robokid['math_change'] = function() {

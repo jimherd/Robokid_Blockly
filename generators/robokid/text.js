@@ -130,51 +130,48 @@ Blockly.Robokid.text_charAt = function() {
 
 Blockly.Robokid.text_changeCase = function() {
   // Change capitalization.
-  var mode = this.getTitleValue('CASE');
-  var operator = Blockly.Robokid.text_changeCase.OPERATORS[mode];
+  var OPERATORS = {
+    UPPERCASE: '.toUpperCase()',
+    LOWERCASE: '.toLowerCase()',
+    TITLECASE: null
+  };
+  var operator = OPERATORS[this.getTitleValue('CASE')];
   var argument0 = Blockly.Robokid.valueToCode(this, 'TEXT',
       Blockly.Robokid.ORDER_MEMBER) || '\'\'';
   var code = argument0 + operator;
   return [code, Blockly.Robokid.ORDER_MEMBER];
-};
-
-Blockly.Robokid.text_changeCase.OPERATORS = {
-  UPPERCASE: '.upper()',
-  LOWERCASE: '.lower()',
-  TITLECASE: '.title()'
 };
 
 Blockly.Robokid.text_trim = function() {
   // Trim spaces.
-  var mode = this.getTitleValue('MODE');
-  var operator = Blockly.Robokid.text_trim.OPERATORS[mode];
+  var OPERATORS = {
+    LEFT: '.trimLeft()',
+    RIGHT: '.trimRight()',
+    BOTH: '.trim()'
+  };
+  var operator = OPERATORS[this.getTitleValue('MODE')];
   var argument0 = Blockly.Robokid.valueToCode(this, 'TEXT',
       Blockly.Robokid.ORDER_MEMBER) || '\'\'';
   var code = argument0 + operator;
   return [code, Blockly.Robokid.ORDER_MEMBER];
 };
 
-Blockly.Robokid.text_trim.OPERATORS = {
-  LEFT: '.lstrip()',
-  RIGHT: '.rstrip()',
-  BOTH: '.strip()'
-};
-
-Blockly.Robokid.text_print = function() {
+Blockly.Robokid['text_print'] = function() {
   // Print statement.
   var argument0 = Blockly.Robokid.valueToCode(this, 'TEXT',
       Blockly.Robokid.ORDER_NONE) || '\'\'';
-  return 'print ' + argument0 + '\n';
+  return 'window.alert(' + argument0 + ');\n';
 };
 
-Blockly.Robokid.text_prompt = function() {
+Blockly.Robokid['text_prompt'] = function() {
   // Prompt function.
   var msg = Blockly.Robokid.quote_(this.getTitleValue('TEXT'));
-  var code = 'raw_input(' + msg + ')';
+  var code = 'window.prompt(' + msg + ')';
   var toNumber = this.getTitleValue('TYPE') == 'NUMBER';
   if (toNumber) {
-    code = 'float(' + code + ')';
+    code = 'parseFloat(' + code + ')';
   }
-  return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
+
 

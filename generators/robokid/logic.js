@@ -53,8 +53,15 @@
 
 Blockly.Robokid.logic_compare = function() {
   // Comparison operator.
-  var mode = this.getTitleValue('OP');
-  var operator = Blockly.Robokid.logic_compare.OPERATORS[mode];
+  var OPERATORS = {
+    EQ: '==',
+    NEQ: '!=',
+    LT: '<',
+    LTE: '<=',
+    GT: '>',
+    GTE: '>='
+  };
+  var operator = OPERATORS[this.getTitleValue('OP')];
   var order = Blockly.Robokid.ORDER_RELATIONAL;
   var argument0 = Blockly.Robokid.valueToCode(this, 'A', order) || '0';
   var argument1 = Blockly.Robokid.valueToCode(this, 'B', order) || '0';
