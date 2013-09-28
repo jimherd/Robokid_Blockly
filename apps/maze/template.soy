@@ -26,7 +26,7 @@
     <span id="Maze_pathAhead">{msg meaning="Maze.pathAhead" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Condensed form of 'if there is a path ahead', as in: 'if path ahead, go forward'.  Prefer translation that has text in common with 'if path to the left' and 'if path to the right'."}if path ahead{/msg}</span>
     <span id="Maze_pathLeft">{msg meaning="Maze.pathLeft" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Condensed form of 'if there is a path to the left', as in: 'if path to the left, turn left'."}if path to the left{/msg}</span>
     <span id="Maze_pathRight">{msg meaning="Maze.pathRight" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Condensed form of 'if there is a path to the right', as in: 'if path to the right, turn right'."}if path to the right{/msg}</span>
-    <span id="Maze_repeatUntil">{msg meaning="Maze.repeatUntil" desc="block text - Imperative or infinitive of a verb to repeat the following commands.  The phrase is followed by the symbol denoting the end of the maze."}repeat until{/msg}</span>
+    <span id="Maze_repeatUntil">{{msg meaning="Maze.repeatUntil" desc="block text - Imperative or infinitive of a verb to repeat the following commands.  The phrase is followed by the symbol denoting the end of the maze.\n\nSee also:\n* {lb}{lb}msg-blockly|Maze.helpRepeatMany{rb}{rb}."}}repeat until{{/msg}}</span>
     <span id="Maze_moveForwardTooltip">{msg meaning="Maze.moveForwardTooltip" desc="tooltip - Moves the icon on the screen representing the player forward one square on the maze board."}Moves the player forward one space.{/msg}</span>
     <span id="Maze_turnTooltip">{msg meaning="Maze.turnTooltip" desc="tooltip - Turns the icon on the screen representing the player 90 degrees counter-clockwise (left) or clockwise (right)."}Turns the player left or right by 90 degrees.{/msg}</span>
     <span id="Maze_ifTooltip">{msg meaning="Maze.ifTooltip" desc="tooltip - 'path' refers to a path through a maze."}If there is a path in the specified direction, then do some actions.{/msg}</span>
@@ -72,7 +72,7 @@
         </h1>
       </td>
       <td class="farSide">
-        <select id="languageMenu" onchange="BlocklyApps.changeLanguage();"></select>
+        <select id="languageMenu"></select>
         {sp}&nbsp;{sp}
         <button id="pegmanButton" onmousedown="Maze.showPegmanMenu();">
           <img src="../../media/1x1.gif">
@@ -98,18 +98,18 @@
   <table width="400">
     <tr>
       <td style="width: 190px; text-align: center; vertical-align: top;">
-        <button class="notext" title="{msg meaning="Apps.codeTooltip" desc="tooltip (pop-up help) for button; pressing the button causes a program in the JavaScript computer language to be displayed, based on the program created by the user."}See generated JavaScript code.{/msg}" onclick="BlocklyApps.showCode(this);">
+        <button id="codeButton" class="notext" title="{msg meaning="Apps.codeTooltip" desc="tooltip (pop-up help) for button; pressing the button causes a program in the JavaScript computer language to be displayed, based on the program created by the user."}See generated JavaScript code.{/msg}">
           <img src="../../media/1x1.gif" class="code icon21">
         </button>
-        <button id="linkButton" class="notext" title="{msg meaning="Apps.linkTooltip" desc="IBID"}Save and link to blocks.{/msg}" onclick="BlocklyStorage.link();">
+        <button id="linkButton" class="notext" title="{msg meaning="Apps.linkTooltip" desc="IBID"}Save and link to blocks.{/msg}">
           <img src="../../media/1x1.gif" class="link icon21">
         </button>
       </td>
       <td>
-        <button id="runButton" class="primary" onclick="Maze.runButtonClick();" title="{msg meaning="Maze.runTooltip" desc="tooltip - Pressing this button runs the computer program the user has written to move the player through the maze."}Makes the player do what the blocks say.{/msg}">
+        <button id="runButton" class="primary" title="{msg meaning="Maze.runTooltip" desc="tooltip - Pressing this button runs the computer program the user has written to move the player through the maze."}Makes the player do what the blocks say.{/msg}">
           <img src="../../media/1x1.gif" class="run icon21"> {msg meaning="Apps.runProgram" desc="IBID"}Run Program{/msg}
         </button>
-        <button id="resetButton" class="primary" onclick="Maze.resetButtonClick();" style="display: none" title="{msg meaning="Maze.resetTooltip" desc="tooltip - Pressing this button restores the player to the start position and enables the user's program to be run again."}Put the player back at the start of the maze.{/msg}">
+        <button id="resetButton" class="primary" style="display: none" title="{msg meaning="Maze.resetTooltip" desc="tooltip - Pressing this button restores the player to the start position and enables the user's program to be run again."}Put the player back at the start of the maze.{/msg}">
           <img src="../../media/1x1.gif" class="stop icon21"> {msg meaning="Apps.resetProgram" desc="IBID"}Reset{/msg}
         </button>
       </td>
@@ -126,7 +126,6 @@
     <text id="arrowTest" style="font-family: sans-serif; font-size: 11pt;">⟲⟳</text>
   </svg>
 
-
   <div id="pegmanMenu"></div>
 
   {call apps.dialog /}
@@ -141,7 +140,7 @@
     <table><tr><td>
       <img src="help.png">
     </td><td>&nbsp;</td><td>
-      {msg meaning="Maze.helpStack" desc="callout - The word words for 'stack' and 'blocks' should be the same as for stacking children's blocks. Use the imperative verb form appropriate for speaking to a child, gender unspecified.  If no gender-neutral singular/familiar form exists but a gender-neutral plural/formal form exists, use that instead.  Be sure to use the same translation of 'move forward' as above."}Stack a couple of 'move forward' blocks together to help me reach the goal.{/msg}
+      {{msg meaning="Maze.helpStack" desc="callout - The words for 'stack' and 'blocks' should be the same as for stacking children's blocks. Use the imperative verb form appropriate for speaking to a child, gender unspecified.  If no gender-neutral singular/familiar form exists but a gender-neutral plural/formal form exists, use that instead.  Be sure to use the same translation of 'move forward' as above.\n\n'move forward' refers to {lb}{lb}msg-blockly|Maze.moveForward{rb}{rb}."}}Stack a couple of 'move forward' blocks together to help me reach the goal.{{/msg}}
     </td><td valign="top">
       <img src="help_stack.png" class="mirrorImg" height=63 width=136>
     </td></tr></table>
@@ -165,7 +164,7 @@
   </div>
   <div id="dialogHelpReset" class="dialogHiddenContent">
     <table><tr><td>
-      {msg meaning="Maze.helpReset" desc="callout - This is shown after the user has run a program that does not solve the maze."}Your program didn't solve the maze.  Press 'Reset' and try again.{/msg}
+      {{msg meaning="Maze.helpReset" desc="callout - This is shown after the user has run a program that does not solve the maze.\n\n'Reset' refers to {lb}{lb}msg-blockly|Apps.resetProgram{rb}{rb}."}}Your program didn't solve the maze.  Press 'Reset' and try again.{{/msg}}
     </td><td rowspan=2>
       <img src="help.png">
     </td></tr><tr><td>
@@ -176,7 +175,7 @@
     <table><tr><td>
       <img src="help_up.png">
     </td><td>
-      {msg meaning="Maze.helpRepeat" desc="callout - This is shown when the 'repeat' block is introduced.  The word 'path' refers to a path through a maze, and 'block' refers to a child's building block."}Reach the end of this path using only two blocks.  Use 'repeat' to run a block more than once.{/msg}
+      {msg meaning="Maze.helpRepeat" desc="callout - This is shown when the &quot;repeat&quot; block is introduced.  The word &quot;path&quot; refers to a path through a maze, and &quot;block&quot; refers to a child&quot;s building block."}Reach the end of this path using only two blocks.  Use 'repeat' to run a block more than once.{/msg}
     </td><td>
       <img src="help.png">
     </td></tr></table>
@@ -192,9 +191,18 @@
     <table><tr><td>
       <img src="help_up.png">
     </td><td>
-      {msg meaning="Maze.helpRepeatMany" desc="callout - This is a hint that the user should place a second block inside of a a 'repeat' block."}You can fit more than one block inside a 'repeat' block.{/msg}
+      {{msg meaning="Maze.helpRepeatMany" desc="callout - This is a hint that the user should place a second block inside of a &quot;repeat&quot; block.\n\n&quot;repeat&quot; should be consistent with {lb}{lb}msg-blockly|Maze.repeatUntil{rb}{rb}."}}You can fit more than one block inside a 'repeat' block.{{/msg}}
     </td><td>
       <img src="help.png">
+    </td></tr></table>
+  </div>
+  <div id="dialogHelpSkins" class="dialogHiddenContent">
+    <table><tr><td>
+      <img src="help.png">
+    </td><td>
+      {{msg meaning="Maze.helpSkins" desc="callout - This is a hint that the user can change the appearance of the player that moves within the maze."}}Choose your favourite player from this menu.{{/msg}}
+    </td><td>
+      <img src="help_up.png">
     </td></tr></table>
   </div>
   <div id="dialogHelpIf" class="dialogHiddenContent">

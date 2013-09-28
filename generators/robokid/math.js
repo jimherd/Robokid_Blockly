@@ -5,7 +5,7 @@
  * http://code.google.com/p/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * you may not use block file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -30,14 +30,14 @@ goog.provide('Blockly.Robokid.math');
 
 goog.require('Blockly.Robokid');
 
-Blockly.Robokid['math_number'] = function() {
+Blockly.Robokid['math_number'] = function(block) {
 //Blockly.Robokid.math_number = function() {
   // Numeric value.
-  var code = parseFloat(this.getTitleValue('NUM'));
+  var code = parseFloat(block.getTitleValue('NUM'));
   return [code, Blockly.Robokid.ORDER_UNARY_SIGN];
 };
 
-Blockly.Robokid['math_arithmetic'] = function() {
+Blockly.Robokid['math_arithmetic'] = function(block) {
 //Blockly.Robokid.math_arithmetic = function() {
   // Basic arithmetic operators, and power.
   var OPERATORS = {
@@ -47,47 +47,47 @@ Blockly.Robokid['math_arithmetic'] = function() {
       DIVIDE: ['/', Blockly.Robokid.ORDER_MULTIPLICATIVE],
       POWER: ['**', Blockly.Robokid.ORDER_EXPONENTIATION]
   }; 
-  var tuple = OPERATORS[this.getTitleValue('OP')];
-//  var mode = this.getTitleValue('OP');
+  var tuple = OPERATORS[block.getTitleValue('OP')];
+//  var mode = block.getTitleValue('OP');
 //  var tuple = Blockly.Robokid.math_arithmetic.OPERATORS[mode];
   var operator = tuple[0];
   var order = tuple[1];
-  var argument0 = Blockly.Robokid.valueToCode(this, 'A', order) || '0';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'B', order) || '0';
+  var argument0 = Blockly.Robokid.valueToCode(block, 'A', order) || '0';
+  var argument1 = Blockly.Robokid.valueToCode(block, 'B', order) || '0';
   var code = argument0 + operator + argument1;
   return [code, order];
 };
 
-Blockly.Robokid['math_change'] = function() {
+Blockly.Robokid['math_change'] = function(block) {
 //Blockly.Robokid.math_change = function() {
   // Add to a variable in place.
-  var argument0 = Blockly.Robokid.valueToCode(this, 'DELTA',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'DELTA',
       Blockly.Robokid.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Robokid.variableDB_.getName(this.getTitleValue('VAR'),
+  var varName = Blockly.Robokid.variableDB_.getName(block.getTitleValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   return varName + ' = (' + varName + ' if type(' + varName + ') in (int, float) else 0)' +
       ' + ' + argument0 + '\n';
 };
 
-Blockly.Robokid['math_single'] = function() {
+Blockly.Robokid['math_single'] = function(block) {
 //Blockly.Robokid.math_single = function() {
   // Math operators with single operand.
  
-  var operator = this.getTitleValue('OP');
+  var operator = block.getTitleValue('OP');
   var code;
   var arg;
   if (operator == 'NEG') {
     // Negation is a special case given its different operator precedence.
-    var code = Blockly.Robokid.valueToCode(this, 'NUM',
+    var code = Blockly.Robokid.valueToCode(block, 'NUM',
         Blockly.Robokid.ORDER_UNARY_SIGN) || '0';
     return ['-' + code, Blockly.Robokid.ORDER_UNARY_SIGN];
   }
   Blockly.Robokid.definitions_['import_math'] = 'import math';
   if (operator == 'SIN' || operator == 'COS' || operator == 'TAN') {
-    arg = Blockly.Robokid.valueToCode(this, 'NUM',
+    arg = Blockly.Robokid.valueToCode(block, 'NUM',
         Blockly.Robokid.ORDER_MULTIPLICATIVE) || '0';
   } else {
-    arg = Blockly.Robokid.valueToCode(this, 'NUM',
+    arg = Blockly.Robokid.valueToCode(block, 'NUM',
         Blockly.Robokid.ORDER_NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
@@ -155,11 +155,11 @@ Blockly.Robokid.math_round = Blockly.Robokid.math_single;
 // Trigonometry functions have a single operand.
 Blockly.Robokid.math_trig = Blockly.Robokid.math_single;
 
-Blockly.Robokid['math_on_list'] = function() {
+Blockly.Robokid['math_on_list'] = function(block) {
 //Blockly.Robokid.math_on_list = function() {
   // Math functions for lists.
-  func = this.getTitleValue('OP');
-  list = Blockly.Robokid.valueToCode(this, 'LIST',
+  func = block.getTitleValue('OP');
+  list = Blockly.Robokid.valueToCode(block, 'LIST',
       Blockly.Robokid.ORDER_NONE) || '[]';
   var code;
   switch (func) {
@@ -174,7 +174,7 @@ Blockly.Robokid['math_on_list'] = function() {
       break;
     case 'AVERAGE':
       if (!Blockly.Robokid.definitions_['math_mean']) {
-        // This operation exclude null values: math_mean([null,null,1,9]) == 5.0.
+        // block operation exclude null values: math_mean([null,null,1,9]) == 5.0.
         var functionName = Blockly.Robokid.variableDB_.getDistinctName(
             'math_mean', Blockly.Generator.NAME_TYPE);
         Blockly.Robokid.math_on_list.math_mean = functionName;
@@ -189,7 +189,7 @@ Blockly.Robokid['math_on_list'] = function() {
       break;
     case 'MEDIAN':
       if (!Blockly.Robokid.definitions_['math_median']) {
-        // This operation exclude null values: math_median([null,null,1,3]) == 2.0.
+        // block operation exclude null values: math_median([null,null,1,3]) == 2.0.
         var functionName = Blockly.Robokid.variableDB_.getDistinctName('math_median',
             Blockly.Generator.NAME_TYPE);
         Blockly.Robokid.math_on_list.math_median = functionName;
@@ -265,43 +265,43 @@ Blockly.Robokid['math_on_list'] = function() {
   return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
 };
 
-Blockly.Robokid['math_constrain'] = function() {
+Blockly.Robokid['math_constrain'] = function(block) {
 //Blockly.Robokid.math_constrain = function() {
   // Constrain a number between two limits.
-  var argument0 = Blockly.Robokid.valueToCode(this, 'VALUE',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'VALUE',
       Blockly.Robokid.ORDER_NONE) || '0';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'LOW',
+  var argument1 = Blockly.Robokid.valueToCode(block, 'LOW',
       Blockly.Robokid.ORDER_NONE) || '0';
-  var argument2 = Blockly.Robokid.valueToCode(this, 'HIGH',
+  var argument2 = Blockly.Robokid.valueToCode(block, 'HIGH',
       Blockly.Robokid.ORDER_NONE) || '0';
   code = 'min(max(' + argument0 + ', ' + argument1 + '), ' + argument2 + ')';
   return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
 };
 
-Blockly.Robokid['math_modulo'] = function() {
+Blockly.Robokid['math_modulo'] = function(block) {
 //Blockly.Robokid.math_modulo = function() {
   // Remainder computation.
-  var argument0 = Blockly.Robokid.valueToCode(this, 'DIVIDEND',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'DIVIDEND',
       Blockly.Robokid.ORDER_MULTIPLICATIVE) || '0';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'DIVISOR',
+  var argument1 = Blockly.Robokid.valueToCode(block, 'DIVISOR',
       Blockly.Robokid.ORDER_MULTIPLICATIVE) || '0';
   var code = argument0 + ' % ' + argument1;
   return [code, Blockly.Robokid.ORDER_MULTIPLICATIVE];
 };
 
-Blockly.Robokid['math_random_int'] = function() {
+Blockly.Robokid['math_random_int'] = function(block) {
 //Blockly.Robokid.math_random_int = function() {
   // Random integer between [X] and [Y].
   Blockly.Robokid.definitions_['import_random'] = 'import random';
-  var argument0 = Blockly.Robokid.valueToCode(this, 'FROM',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'FROM',
       Blockly.Robokid.ORDER_NONE) || '0';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'TO',
+  var argument1 = Blockly.Robokid.valueToCode(block, 'TO',
       Blockly.Robokid.ORDER_NONE) || '0';
   code = 'random.randint(' + argument0 + ', ' + argument1 + ')';
   return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
 };
 
-Blockly.Robokid['math_random_float'] = function() {
+Blockly.Robokid['math_random_float'] = function(block) {
 //Blockly.Robokid.math_random_float = function() {
   // Random fraction between 0 and 1.
   Blockly.Robokid.definitions_['import_random'] = 'import random';

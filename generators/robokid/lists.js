@@ -5,7 +5,7 @@
  * http://code.google.com/p/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * you may not use block file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -26,59 +26,59 @@
 
 Blockly.Robokid = Blockly.Generator.get('Robokid');
 
-Blockly.Robokid.lists_create_empty = function() {
+Blockly.Robokid.lists_create_empty = function(block) {
   // Create an empty list.
   return ['[]', Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.Robokid.lists_create_with = function() {
+Blockly.Robokid.lists_create_with = function(block) {
   // Create a list with any number of elements of any type.
-  var code = new Array(this.itemCount_);
-  for (var n = 0; n < this.itemCount_; n++) {
-    code[n] = Blockly.Robokid.valueToCode(this, 'ADD' + n,
+  var code = new Array(block.itemCount_);
+  for (var n = 0; n < block.itemCount_; n++) {
+    code[n] = Blockly.Robokid.valueToCode(block, 'ADD' + n,
         Blockly.JavaScript.ORDER_NONE) || 'None';
   }
   code = '[' + code.join(', ') + ']';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.Robokid.lists_repeat = function() {
+Blockly.Robokid.lists_repeat = function(block) {
   // Create a list with one element repeated.
-  var argument0 = Blockly.Robokid.valueToCode(this, 'ITEM',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'ITEM',
       Blockly.JavaScript.ORDER_NONE) || 'None';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'NUM',
+  var argument1 = Blockly.Robokid.valueToCode(block, 'NUM',
       Blockly.JavaScript.ORDER_MULTIPLICATIVE) || '0';
   var code = '[' + argument0 + '] * ' + argument1;
   return [code, Blockly.JavaScript.ORDER_MULTIPLICATIVE];
 };
 
-Blockly.Robokid.lists_length = function() {
+Blockly.Robokid.lists_length = function(block) {
   // Testing the length of a list is the same as for a string.
-  return Blockly.Robokid.text_length.call(this);
+  return Blockly.Robokid.text_length.call(block);
 };
 
-Blockly.Robokid.lists_isEmpty = function() {
+Blockly.Robokid.lists_isEmpty = function(block) {
   // Testing a list for being empty is the same as for a string.
-  return Blockly.Robokid.text_isEmpty.call(this);
+  return Blockly.Robokid.text_isEmpty.call(block);
 };
 
-Blockly.Robokid.lists_indexOf = function() {
+Blockly.Robokid.lists_indexOf = function(block) {
   // Searching a list for a value is the same as search for a substring.
-  return Blockly.Robokid.text_indexOf.call(this);
+  return Blockly.Robokid.text_indexOf.call(block);
 };
 
-Blockly.Robokid.lists_getIndex = function() {
+Blockly.Robokid.lists_getIndex = function(block) {
   // Indexing into a list is the same as indexing into a string.
-  return Blockly.Robokid.text_charAt.call(this);
+  return Blockly.Robokid.text_charAt.call(block);
 };
 
-Blockly.Robokid.lists_setIndex = function() {
+Blockly.Robokid.lists_setIndex = function(block) {
   // Set element at index.
-  var argument0 = Blockly.Robokid.valueToCode(this, 'AT',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'AT',
       Blockly.Robokid.ORDER_NONE) || '1';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'LIST',
+  var argument1 = Blockly.Robokid.valueToCode(block, 'LIST',
       Blockly.Robokid.ORDER_MEMBER) || '[]';
-  var argument2 = Blockly.Robokid.valueToCode(this, 'TO',
+  var argument2 = Blockly.Robokid.valueToCode(block, 'TO',
       Blockly.Robokid.ORDER_NONE) || 'None';
   // Blockly uses one-based indicies.
   if (argument0.match(/^\d+$/)) {

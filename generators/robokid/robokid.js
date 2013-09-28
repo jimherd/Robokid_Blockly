@@ -5,7 +5,7 @@
  * http://code.google.com/p/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * you may not use block file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -34,13 +34,13 @@ goog.require('Blockly.Robokid');
  
 // Blockly.Robokid = Blockly.Generator.get('Robokid');
 
-Blockly.Robokid['LEDS_set'] = function() {
+Blockly.Robokid['LEDS_set'] = function(block) {
   // leds command for 4 LEDs on the Robokid robot
   // Todo : posible use of an array rather than individual variables
   
   var LED_A_value, LED_B_value, LED_C_value, LED_D_value;  
   
-    switch (this.getTitleValue('LED_A_mode')) {
+    switch (block.getTitleValue('LED_A_mode')) {
 		case 'off':
 			LED_A_value = '0';
 			break;
@@ -55,7 +55,7 @@ Blockly.Robokid['LEDS_set'] = function() {
 			break;
   }
 
-    switch (this.getTitleValue('LED_B_mode')) {
+    switch (block.getTitleValue('LED_B_mode')) {
 		case 'off':
 			LED_B_value = '0';
 			break;
@@ -70,7 +70,7 @@ Blockly.Robokid['LEDS_set'] = function() {
 			break;
   }
 
-    switch (this.getTitleValue('LED_C_mode')) {
+    switch (block.getTitleValue('LED_C_mode')) {
 		case 'off':
 			LED_C_value = '0';
 			break;
@@ -85,7 +85,7 @@ Blockly.Robokid['LEDS_set'] = function() {
 			break;
   }
 
-    switch (this.getTitleValue('LED_D_mode')) {
+    switch (block.getTitleValue('LED_D_mode')) {
 		case 'off':
 			LED_D_value = '0';
 			break;
@@ -106,9 +106,9 @@ Blockly.Robokid['LEDS_set'] = function() {
 	return code;
 };
 
-Blockly.Robokid['set_speed'] = function() {
+Blockly.Robokid['set_speed'] = function(block) {
   // 
-  var argument0 = Blockly.Robokid.valueToCode(this, 'Motor_L',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'Motor_L',
       Blockly.Robokid.ORDER_NONE) || '0';
 	if (argument0 > 100) {
 		argument0 = '100';
@@ -116,7 +116,7 @@ Blockly.Robokid['set_speed'] = function() {
 	if (argument0 < 0) {
 		argument0 = '0';
 	}	
-	var argument1 = Blockly.Robokid.valueToCode(this, 'Motor_R',
+	var argument1 = Blockly.Robokid.valueToCode(block, 'Motor_R',
       Blockly.Robokid.ORDER_NONE) || '0';
 	if (argument1 > 100) {
 		argument1 = '100';
@@ -128,10 +128,10 @@ Blockly.Robokid['set_speed'] = function() {
 	return code;
 };
 
-Blockly.Robokid['motors'] = function() {
+Blockly.Robokid['motors'] = function(block) {
   // 
 	var left_mode, right_mode;
-    switch (this.getTitleValue('left_motor')) {
+    switch (block.getTitleValue('left_motor')) {
 		case 'off':
 			left_mode = '0';
 			break;
@@ -143,7 +143,7 @@ Blockly.Robokid['motors'] = function() {
 			break;
   }
 
-      switch (this.getTitleValue('right_motor')) {
+      switch (block.getTitleValue('right_motor')) {
 		case 'off':
 			right_mode = '0';
 			break;
@@ -157,15 +157,15 @@ Blockly.Robokid['motors'] = function() {
    return 'motors ' + left_mode  + ' ' + right_mode +';\n';
 };
 
-Blockly.Robokid['comment'] = function() {
+Blockly.Robokid['comment'] = function(block) {
   // Simple code comment which does not generate any code
-  var code = (this.getTitleValue('TEXT'));
+  var code = (block.getTitleValue('TEXT'));
   return '# ' + code + ';\n';
 };
 
-Blockly.Robokid['wait'] = function() {
+Blockly.Robokid['wait'] = function(block) {
   // 
-  var argument0 = Blockly.Robokid.valueToCode(this, 'TIME',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'TIME',
       Blockly.Robokid.ORDER_NONE) || '0';
 	if (argument0 > 255) {
 		argument0 = '255';
@@ -177,16 +177,16 @@ Blockly.Robokid['wait'] = function() {
 	return code;
 };
 
-Blockly.Robokid['display'] = function() {
+Blockly.Robokid['display'] = function(block) {
   // Simple code comment which does not generate any code
-  var code = (this.getTitleValue('TEXT'));
+  var code = (block.getTitleValue('TEXT'));
   return 'display \'' + code + '\';\n';
 };
 
-Blockly.Robokid['read_sensor'] = function() {
+Blockly.Robokid['read_sensor'] = function(block) {
   // Read a sensor and assign to a variable
-  var code = (this.getTitleValue('SENSOR'));
-  var variable = (this.getTitleValue('VAR'));
+  var code = (block.getTitleValue('SENSOR'));
+  var variable = (block.getTitleValue('VAR'));
   if (!variable.match(/^[a-z]$/)) {
       variable = 'ERROR: variable should be a single letter';
 //	  promptName('test', '');
@@ -194,11 +194,11 @@ Blockly.Robokid['read_sensor'] = function() {
   return 'sense ' + code + ' ' + variable + ';\n';
 };
 
-Blockly.Robokid['read_sysvar'] = function() {
+Blockly.Robokid['read_sysvar'] = function(block) {
 //Blockly.Robokid.read_sysvar = function() {
   // Read a sensor and assign to a variable
-  var code = (this.getTitleValue('SYSVAR'));
-  var variable = (this.getTitleValue('VAR'));
+  var code = (block.getTitleValue('SYSVAR'));
+  var variable = (block.getTitleValue('VAR'));
   if (!variable.match(/^[a-z]$/)) {
       variable = 'ERROR: variable should be a single letter';
 //	  promptName('test', '');
@@ -206,52 +206,52 @@ Blockly.Robokid['read_sysvar'] = function() {
   return 'read ' + code + ' ' + variable + ';\n';
 };
 
-Blockly.Robokid['print'] = function() {
+Blockly.Robokid['print'] = function(block) {
 //Blockly.Robokid.print = function() {
   // Create a string made up of any number of elements of any type.
   var code;
-  if (this.itemCount_ == 0) {
+  if (block.itemCount_ == 0) {
 //    return ['# empty print\n', Blockly.Robokid.ORDER_ATOMIC];
 		return '# empty print\n';
-  } else if (this.itemCount_ == 1) {
-    var argument0 = Blockly.Robokid.valueToCode(this, 'ADD0',
+  } else if (block.itemCount_ == 1) {
+    var argument0 = Blockly.Robokid.valueToCode(block, 'ADD0',
         Blockly.Robokid.ORDER_UNARY_POSTFIX) || ' ';
     code = 'print ' +  argument0 + ';\n';
 //    return [code, Blockly.Robokid.ORDER_UNARY_POSTFIX];
 	return code;
   } else {
     code = [];
-    code[0] = 'print ' + (Blockly.Robokid.valueToCode(this, 'ADD0',
+    code[0] = 'print ' + (Blockly.Robokid.valueToCode(block, 'ADD0',
         Blockly.Robokid.ORDER_NONE) || ' ');
-    for (var n = 1; n < this.itemCount_; n++) {
-      code[n] = ',' + (Blockly.Robokid.valueToCode(this, 'ADD' + n,
+    for (var n = 1; n < block.itemCount_; n++) {
+      code[n] = ',' + (Blockly.Robokid.valueToCode(block, 'ADD' + n,
           Blockly.Robokid.ORDER_NONE) || ' ');
     }
-	code[this.itemCount_] = ';\n';
+	code[block.itemCount_] = ';\n';
     code = code.join('');
 //    return [code, Blockly.Robokid.ORDER_UNARY_POSTFIX];
 	return code;
   }
 };
 
-Blockly.Robokid['calibrate'] = function() {
+Blockly.Robokid['calibrate'] = function(block) {
 //Blockly.Robokid.calibrate = function() {
   // Execute calibrate function
   return 'cal;' + ' # read notes about calibrate before using\n';
 };
 
-Blockly.Robokid['play_note'] = function() {
+Blockly.Robokid['play_note'] = function(block) {
 //Blockly.Robokid.play_note = function() {
   // Read a sensor and assign to a variable
-  var code = (this.getTitleValue('NOTE'));
-  var argument0 = Blockly.Robokid.valueToCode(this, 'duration',
+  var code = (block.getTitleValue('NOTE'));
+  var argument0 = Blockly.Robokid.valueToCode(block, 'duration',
       Blockly.Robokid.ORDER_NONE) || '0';
 	  return 'note ' + code + ' ' + argument0 + ';\n';
 };
 
-Blockly.Robokid['codeline'] = function() {
+Blockly.Robokid['codeline'] = function(block) {
 //Blockly.Robokid.codeline = function() {
   // Simple code comment which does not generate any code
-  var code = (this.getTitleValue('TEXT'));
+  var code = (block.getTitleValue('TEXT'));
   return code + ';\n';
 };

@@ -26,6 +26,106 @@
 var BlocklyApps = {};
 
 /**
+ * Lookup for names of languages.  Keys should be in ISO 639 format.
+ */
+BlocklyApps.LANGUAGE_NAME = {
+  'af': 'Afrikaans',
+  'ar': 'العربية',
+  'cs': 'Česky',
+  'be-tarask': 'Taraškievica',
+  'br': 'Brezhoneg',
+  'ca': 'Català',
+  'cdo': '閩東語',
+  'da': 'Dansk',
+  'de': 'Deutsch',
+  'el': 'Ελληνικά',
+  'en': 'English',
+  'es': 'Español',
+  'eu': 'Euskara',
+  'fa': 'یسراف',
+  'fi': 'Suomi',
+  'fo': 'Føroyskt',
+  'fr': 'Français',
+  'frr': 'Frasch',
+  'gl': 'Galego',
+  'hak': '客家話',
+  'he': 'עברית',
+  'hu': 'Magyar',
+  'ia': 'Interlingua',
+  'it': 'Italiano',
+  'ja': '日本語',
+  'ka': 'ქართული',
+  'km': 'ភាសាខ្មែរ',
+  'ko': '한국어',
+  'ksh': 'Ripoarėsch',
+  'ky': 'Кыргызча',
+  'la': 'Latine',
+  'lb': 'Lëtzebuergesch',
+  'lt': 'Lietuvių',
+  'lv': 'Latviešu',
+  'ml': 'മലയാളം',
+  'mk': 'Македонски',
+  'mr': 'मराठी',
+  'ms': 'Bahasa Melayu',
+  'mzn': 'مازِرونی',
+  'nb': 'Norsk Bokmål',
+  'nl': 'Nederlands, Vlaams',
+  'oc': 'Lenga d\'òc',
+  'pa': 'पंजाबी',
+  'pl': 'Polski',
+  'pms': 'Piemontèis',
+  'ps': 'پښتو',
+  'pt': 'Português',
+  'pt-br': 'Português Brasileiro',
+  'ru': 'Русский',
+  'sk': 'Slovenčina',
+  'sr': 'Српски',
+  'sv': 'Svenska',
+  'sw': 'Kishwahili',
+  'th': 'ภาษาไทย',
+  'tr': 'Türkçe',
+  'uk': 'Українська',
+  'vi': 'Tiếng Việt',
+  'zh-hans': '简体字',
+  'zh-hant': '中文'
+};
+
+/**
+ * List of RTL languages.
+ */
+BlocklyApps.LANGUAGE_RTL = ['ar', 'fa', 'he', 'mzn', 'ps'];
+
+/**
+ * Lookup for Blockly core block language pack.
+ */
+BlocklyApps.LANGUAGE_PACK = {
+  'cdo': 'msg/js/zh_tw.js',
+  'de': 'msg/js/de.js',
+  'frr': 'msg/js/de.js',
+  'ksh': 'msg/js/de.js',
+  'lb': 'msg/js/de.js',
+  'pt': 'msg/js/pt_br.js',
+  'pt-br': 'msg/js/pt_br.js',
+  'vi': 'msg/js/vi.js',
+  'zh-hans': 'msg/js/zh_tw.js',
+  'zh-hant': 'msg/js/zh_tw.js',
+  'zh-tw': 'msg/js/zh_tw.js',
+  'default': 'msg/js/en.js'
+};
+
+/**
+ * User's language (e.g. "en").
+ * @type string=
+ */
+BlocklyApps.LANG = undefined;
+
+/**
+ * List of languages supported by this app.  Values should be in ISO 639 format.
+ * @type !Array.<string>=
+ */
+BlocklyApps.LANGUAGES = undefined;
+
+/**
  * Extracts a parameter from the URL.
  * If the parameter is absent default_value is returned.
  * @param {string} name The name of the parameter.
@@ -61,7 +161,7 @@ BlocklyApps.getNumberParamFromUrl = function(name, minValue, maxValue) {
 BlocklyApps.getLang = function() {
   // First choice: The URL specified language.
   var lang = BlocklyApps.getStringParamFromUrl('lang', '');
-  if (BlocklyApps.LANGUAGES[lang]) {
+  if (BlocklyApps.LANGUAGES.indexOf(lang) != -1) {
     // Save this explicit choice as cookie.
     // Use of a session cookie for saving language is explicitly permitted
     // in the EU's Cookie Consent Exemption policy.  Section 3.6:
@@ -74,39 +174,44 @@ BlocklyApps.getLang = function() {
   var cookie = document.cookie.match(/(^|;)\s*lang=(\w+)/);
   if (cookie) {
     lang = unescape(cookie[2]);
-    if (BlocklyApps.LANGUAGES[lang]) {
+    if (BlocklyApps.LANGUAGES.indexOf(lang) != -1) {
       return lang;
     }
   }
   // Third choice: The browser's language.
   lang = navigator.language;
-  if (BlocklyApps.LANGUAGES[lang]) {
+  if (BlocklyApps.LANGUAGES.indexOf(lang) != -1) {
     return lang;
   }
   // Fourth choice: English.
   lang = 'en';
-  if (BlocklyApps.LANGUAGES[lang]) {
+  if (BlocklyApps.LANGUAGES.indexOf(lang) != -1) {
     return lang;
   }
   // Fifth choice: I'm feeling lucky.
-  for (var lang in BlocklyApps.LANGUAGES) {
-    return lang;
+  if (BlocklyApps.LANGUAGES.length) {
+    return BlocklyApps.LANGUAGES[0];
   }
   // Sixth choice: Die.
   throw 'No languages available.';
 };
 
 /**
- * User's language (e.g. "en").
- * @type string=
+ * Is the current language (BlocklyApps.LANG) an RTL language?
+ * @return {boolean} True if RTL, false if LTR.
  */
-BlocklyApps.LANG = undefined;
+BlocklyApps.isRtl = function() {
+  return BlocklyApps.LANGUAGE_RTL.indexOf(BlocklyApps.LANG) != -1;
+};
 
 /**
- * List of languages supported by this app.  Keys should be in ISO 639 format.
- * @type !Object=
+ * Look up the Blockly language pack for current language (BlocklyApps.LANG).
+ * @return {string} URL to langugae pack (e.g. 'msg/js/en.js').
  */
-BlocklyApps.LANGUAGES = undefined;
+BlocklyApps.languagePack = function() {
+  return BlocklyApps.LANGUAGE_PACK[BlocklyApps.LANG] ||
+    BlocklyApps.LANGUAGE_PACK['default'];
+};
 
 /**
  * Common startup tasks for all apps.
@@ -118,15 +223,15 @@ BlocklyApps.init = function() {
   // Set the HTML's language and direction.
   // document.dir fails in Mozilla, use document.body.parentNode.dir instead.
   // https://bugzilla.mozilla.org/show_bug.cgi?id=151407
-  var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
-  document.head.parentElement.setAttribute('dir',
-      BlocklyApps.LANGUAGES[BlocklyApps.LANG][1]);
+  var rtl = BlocklyApps.isRtl();
+  document.head.parentElement.setAttribute('dir', rtl ? 'rtl' : 'ltr');
   document.head.parentElement.setAttribute('lang', BlocklyApps.LANG);
 
   // Sort languages alphabetically.
   var languages = [];
-  for (var lang in BlocklyApps.LANGUAGES) {
-    languages.push(BlocklyApps.LANGUAGES[lang].concat(lang));
+  for (var i = 0; i < BlocklyApps.LANGUAGES.length; i++) {
+    var lang = BlocklyApps.LANGUAGES[i];
+    languages.push([BlocklyApps.LANGUAGE_NAME[lang], lang]);
   }
   var comp = function(a, b) {
     // Sort based on first argument ('English', 'Русский', '简体字', etc).
@@ -147,18 +252,25 @@ BlocklyApps.init = function() {
     }
     languageMenu.options.add(option);
   }
+  languageMenu.addEventListener('change', BlocklyApps.changeLanguage, true);
 
   // Disable the link button if page isn't backed by App Engine storage.
   var linkButton = document.getElementById('linkButton');
   if ('BlocklyStorage' in window) {
-    BlocklyStorage.HTTPREQUEST_ERROR = BlocklyApps.getMsg('httpRequestError');
-    BlocklyStorage.LINK_ALERT = BlocklyApps.getMsg('linkAlert');
-    BlocklyStorage.HASH_ERROR = BlocklyApps.getMsg('hashError');
-    BlocklyStorage.XML_ERROR = BlocklyApps.getMsg('xmlError');
+    BlocklyStorage['HTTPREQUEST_ERROR'] =
+        BlocklyApps.getMsg('httpRequestError');
+    BlocklyStorage['LINK_ALERT'] = BlocklyApps.getMsg('linkAlert');
+    BlocklyStorage['HASH_ERROR'] = BlocklyApps.getMsg('hashError');
+    BlocklyStorage['XML_ERROR'] = BlocklyApps.getMsg('xmlError');
     // Swap out the BlocklyStorage's alert() for a nicer dialog.
     BlocklyStorage.alert = BlocklyApps.storageAlert;
+    BlocklyApps.bindClick('linkButton', BlocklyStorage.link);
   } else if (linkButton) {
     linkButton.className = 'disabled';
+  }
+
+  if (document.getElementById('codeButton')) {
+    BlocklyApps.bindClick('codeButton', BlocklyApps.showCode);
   }
 
   // Fixes viewport for small screens.
@@ -175,11 +287,10 @@ BlocklyApps.init = function() {
  * encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5, -6))
  */
 BlocklyApps.initReadonly = function() {
-  var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
   Blockly.inject(document.getElementById('blockly'),
       {path: '../../',
        readOnly: true,
-       rtl: rtl,
+       rtl: BlocklyApps.isRtl(),
        scrollbars: false});
 
   // Add the blocks.
@@ -193,14 +304,20 @@ BlocklyApps.initReadonly = function() {
  * @param {string} defaultXml Text representation of default blocks.
  */
 BlocklyApps.loadBlocks = function(defaultXml) {
+  try {
+    var loadOnce = window.sessionStorage.loadOnceBlocks;
+  } catch(e) {
+    // Firefox sometimes throws a SecurityError when accessing sessionStorage.
+    // Restarting Firefox fixes this, so it looks like a bug.
+    var loadOnce = null;
+  }
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     // An href with #key trigers an AJAX call to retrieve saved blocks.
     BlocklyStorage.retrieveXml(window.location.hash.substring(1));
-  } else if (window.sessionStorage.loadOnceBlocks) {
+  } else if (loadOnce) {
     // Language switching stores the blocks during the reload.
-    var text = window.sessionStorage.loadOnceBlocks;
     delete window.sessionStorage.loadOnceBlocks;
-    var xml = Blockly.Xml.textToDom(text);
+    var xml = Blockly.Xml.textToDom(loadOnce);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   } else if (defaultXml) {
     // Load the editor with default starting blocks.
@@ -571,10 +688,10 @@ BlocklyApps.stripCode = function(code) {
 
 /**
  * Show the user's code in raw JavaScript.
- * @param {Element} origin Animate the dialog opening/closing from/to this
- *     DOM element.  If null, don't show any animations for opening or closing.
+ * @param {!Event} e Mouse or touch event.
  */
-BlocklyApps.showCode = function(origin) {
+BlocklyApps.showCode = function(e) {
+  var origin = e.target;
   var code = Blockly.JavaScript.workspaceToCode();
   code = BlocklyApps.stripCode(code);
   var pre = document.getElementById('containerCode');
@@ -679,6 +796,18 @@ BlocklyApps.addTouchEvents = function() {
 
 // Add events for touch devices when the window is done loading.
 window.addEventListener('load', BlocklyApps.addTouchEvents, false);
+
+/**
+ * Bind a function to a button's click event.
+ * On touch enabled browsers, ontouchend is treated as equivalent to onclick.
+ * @param {string} id ID of button element.
+ * @param {!Function} func Event handler to bind.
+ */
+BlocklyApps.bindClick = function(id, func) {
+  var el = document.getElementById(id);
+  el.addEventListener('click', func, true);
+  el.addEventListener('touchend', func, true);
+};
 
 /**
  * Load the Prettify CSS and JavaScript.

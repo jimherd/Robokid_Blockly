@@ -22,11 +22,8 @@
  * @author fraser@google.com (Neil Fraser)
  */
  
- // Supported languages.
-BlocklyApps.LANGUAGES = {
-  // Format: ['Language name', 'direction', 'XX_compressed.js']
-  en: ['English', 'ltr', 'en_compressed.js']
-};
+// Supported languages.
+BlocklyApps.LANGUAGES = ['en'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +

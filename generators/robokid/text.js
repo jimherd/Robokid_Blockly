@@ -5,7 +5,7 @@
  * http://code.google.com/p/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * you may not use block file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -30,35 +30,35 @@ Blockly.Robokid.text = {};
  
 // Blockly.Robokid = Blockly.Generator.get('Robokid');
 
-Blockly.Robokid.text = function() {
+Blockly.Robokid.text = function(block) {
   // Text value.
-  var code = Blockly.Robokid.quote_(this.getTitleValue('TEXT'));
+  var code = Blockly.Robokid.quote_(block.getTitleValue('TEXT'));
   return [code, Blockly.Robokid.ORDER_ATOMIC];
 };
 
 
-Blockly.Robokid.text_join = function() {
+Blockly.Robokid.text_join = function(block) {
   // Create a string made up of any number of elements of any type.
   //Should we allow joining by '-' or ',' or any other characters?
   var code;
-  if (this.itemCount_ == 0) {
+  if (block.itemCount_ == 0) {
     return ['\'\'', Blockly.Robokid.ORDER_ATOMIC];
-  } else if (this.itemCount_ == 1) {
-    var argument0 = Blockly.Robokid.valueToCode(this, 'ADD0',
+  } else if (block.itemCount_ == 1) {
+    var argument0 = Blockly.Robokid.valueToCode(block, 'ADD0',
         Blockly.Robokid.ORDER_NONE) || '\'\'';
     code = 'str(' + argument0 + ')';
     return [code, Blockly.Robokid.ORDER_FUNCTION_CALL];
-  } else if (this.itemCount_ == 2) {
-    var argument0 = Blockly.Robokid.valueToCode(this, 'ADD0',
+  } else if (block.itemCount_ == 2) {
+    var argument0 = Blockly.Robokid.valueToCode(block, 'ADD0',
         Blockly.Robokid.ORDER_NONE) || '\'\'';
-    var argument1 = Blockly.Robokid.valueToCode(this, 'ADD1',
+    var argument1 = Blockly.Robokid.valueToCode(block, 'ADD1',
         Blockly.Robokid.ORDER_NONE) || '\'\'';
     var code = 'str(' + argument0 + ') + str(' + argument1 + ')';
     return [code, Blockly.Robokid.ORDER_UNARY_SIGN];
   } else {
     var code = [];
-    for (var n = 0; n < this.itemCount_; n++) {
-      code[n] = Blockly.Robokid.valueToCode(this, 'ADD' + n,
+    for (var n = 0; n < block.itemCount_; n++) {
+      code[n] = Blockly.Robokid.valueToCode(block, 'ADD' + n,
           Blockly.Robokid.ORDER_NONE) || '\'\'';
     }
     var tempVar = Blockly.Robokid.variableDB_.getDistinctName('temp_value',
@@ -68,52 +68,52 @@ Blockly.Robokid.text_join = function() {
   }
 };
 
-Blockly.Robokid.text_length = function() {
+Blockly.Robokid.text_length = function(block) {
   // String length.
-  var argument0 = Blockly.Robokid.valueToCode(this, 'VALUE',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'VALUE',
       Blockly.Robokid.ORDER_NONE) || '\'\'';
   return ['len(' + argument0 + ')', Blockly.Robokid.ORDER_FUNCTION_CALL];
 };
 
-Blockly.Robokid.text_isEmpty = function() {
+Blockly.Robokid.text_isEmpty = function(block) {
   // Is the string null?
-  var argument0 = Blockly.Robokid.valueToCode(this, 'VALUE',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'VALUE',
       Blockly.Robokid.ORDER_NONE) || '\'\'';
   var code = 'not len(' + argument0 + ')';
   return [code, Blockly.Robokid.ORDER_LOGICAL_NOT];
 };
 
-Blockly.Robokid.text_endString = function() {
+Blockly.Robokid.text_endString = function(block) {
   // Return a leading or trailing substring.
   // Do we need to prevent 'List index out of range' ERROR by checking
   // if argument 0 > len(argument1)? Or will ALL error be handled systematically?
-  var first = this.getTitleValue('END') == 'FIRST';
-  var argument0 = Blockly.Robokid.valueToCode(this, 'NUM',
+  var first = block.getTitleValue('END') == 'FIRST';
+  var argument0 = Blockly.Robokid.valueToCode(block, 'NUM',
       Blockly.Robokid.ORDER_NONE) || '1';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'TEXT',
+  var argument1 = Blockly.Robokid.valueToCode(block, 'TEXT',
       Blockly.Robokid.ORDER_MEMBER) || '\'\'';
   var code = argument1 + '[' +
       (first ? ':' + argument0 : '-' + argument0 + ':') + ']';
   return [code, Blockly.Robokid.ORDER_MEMBER];
 };
 
-Blockly.Robokid.text_indexOf = function() {
+Blockly.Robokid.text_indexOf = function(block) {
   // Search the text for a substring.
   // Should we allow for non-case sensitive???
-  var operator = this.getTitleValue('END') == 'FIRST' ? 'find' : 'rfind';
-  var argument0 = Blockly.Robokid.valueToCode(this, 'FIND',
+  var operator = block.getTitleValue('END') == 'FIRST' ? 'find' : 'rfind';
+  var argument0 = Blockly.Robokid.valueToCode(block, 'FIND',
       Blockly.Robokid.ORDER_NONE) || '\'\'';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'VALUE',
+  var argument1 = Blockly.Robokid.valueToCode(block, 'VALUE',
       Blockly.Robokid.ORDER_MEMBER) || '\'\'';
   var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
   return [code, Blockly.Robokid.ORDER_MEMBER];
 };
 
-Blockly.Robokid.text_charAt = function() {
+Blockly.Robokid.text_charAt = function(block) {
   // Get letter at index.
-  var argument0 = Blockly.Robokid.valueToCode(this, 'AT',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'AT',
       Blockly.Robokid.ORDER_NONE) || '1';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'VALUE',
+  var argument1 = Blockly.Robokid.valueToCode(block, 'VALUE',
       Blockly.Robokid.ORDER_MEMBER) || '[]';
   // Blockly uses one-based indicies.
   if (argument0.match(/^\d+$/)) {
@@ -128,46 +128,46 @@ Blockly.Robokid.text_charAt = function() {
   return [code, Blockly.Robokid.ORDER_MEMBER];
 };
 
-Blockly.Robokid.text_changeCase = function() {
+Blockly.Robokid.text_changeCase = function(block) {
   // Change capitalization.
   var OPERATORS = {
     UPPERCASE: '.toUpperCase()',
     LOWERCASE: '.toLowerCase()',
     TITLECASE: null
   };
-  var operator = OPERATORS[this.getTitleValue('CASE')];
-  var argument0 = Blockly.Robokid.valueToCode(this, 'TEXT',
+  var operator = OPERATORS[block.getTitleValue('CASE')];
+  var argument0 = Blockly.Robokid.valueToCode(block, 'TEXT',
       Blockly.Robokid.ORDER_MEMBER) || '\'\'';
   var code = argument0 + operator;
   return [code, Blockly.Robokid.ORDER_MEMBER];
 };
 
-Blockly.Robokid.text_trim = function() {
+Blockly.Robokid.text_trim = function(block) {
   // Trim spaces.
   var OPERATORS = {
     LEFT: '.trimLeft()',
     RIGHT: '.trimRight()',
     BOTH: '.trim()'
   };
-  var operator = OPERATORS[this.getTitleValue('MODE')];
-  var argument0 = Blockly.Robokid.valueToCode(this, 'TEXT',
+  var operator = OPERATORS[block.getTitleValue('MODE')];
+  var argument0 = Blockly.Robokid.valueToCode(block, 'TEXT',
       Blockly.Robokid.ORDER_MEMBER) || '\'\'';
   var code = argument0 + operator;
   return [code, Blockly.Robokid.ORDER_MEMBER];
 };
 
-Blockly.Robokid['text_print'] = function() {
+Blockly.Robokid['text_print'] = function(block) {
   // Print statement.
-  var argument0 = Blockly.Robokid.valueToCode(this, 'TEXT',
+  var argument0 = Blockly.Robokid.valueToCode(block, 'TEXT',
       Blockly.Robokid.ORDER_NONE) || '\'\'';
   return 'window.alert(' + argument0 + ');\n';
 };
 
-Blockly.Robokid['text_prompt'] = function() {
+Blockly.Robokid['text_prompt'] = function(block) {
   // Prompt function.
-  var msg = Blockly.Robokid.quote_(this.getTitleValue('TEXT'));
+  var msg = Blockly.Robokid.quote_(block.getTitleValue('TEXT'));
   var code = 'window.prompt(' + msg + ')';
-  var toNumber = this.getTitleValue('TYPE') == 'NUMBER';
+  var toNumber = block.getTitleValue('TYPE') == 'NUMBER';
   if (toNumber) {
     code = 'parseFloat(' + code + ')';
   }

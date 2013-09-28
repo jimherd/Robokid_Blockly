@@ -29,38 +29,10 @@
 var Maze = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = {
-  // Format: ['Language name', 'direction', 'XX_compressed.js']
-  'ca': ['Català', 'ltr', 'msg/js/en.js'],
-  'cs': ['Čeština', 'ltr', 'msg/js/en.js'],
-  'da': ['Dansk', 'ltr', 'msg/js/en.js'],
-  'de': ['Deutsch', 'ltr', 'msg/js/de.js'],
-  'el': ['Eλληνικά', 'ltr', 'msg/js/en.js'],
-  'en': ['English', 'ltr', 'msg/js/en.js'],
-  'es': ['Español', 'ltr', 'msg/js/en.js'],
-  'eu': ['Euskara', 'ltr', 'msg/js/en.js'],
-  'fr': ['Français', 'ltr', 'msg/js/en.js'],
-  'hu': ['Magyar', 'ltr', 'msg/js/en.js'],
-  'ia': ['Interlingua', 'ltr', 'msg/js/en.js'],
-  'it': ['Italiano', 'ltr', 'msg/js/en.js'],
-  'ko': ['한국어', 'ltr', 'msg/js/en.js'],
-  'lv': ['Latviešu', 'ltr', 'msg/js/en.js'],
-  'mk': ['Македонски', 'ltr', 'msg/js/en.js'],
-  'nl': ['Nederlands', 'ltr', 'msg/js/en.js'],
-  'pl': ['Polski', 'ltr', 'msg/js/en.js'],
-  'pms': ['Piemontèis', 'ltr', 'msg/js/en.js'],
-  'pt': ['Português', 'ltr', 'msg/js/pt_br.js'],
-  'ru': ['Русский', 'ltr', 'msg/js/en.js'],
-  'sr': ['Српски', 'ltr', 'msg/js/en.js'],
-  'sv': ['Svenska', 'ltr', 'msg/js/en.js'],
-  'sw': ['Kishwahili', 'ltr', 'msg/js/en.js'],
-  'th': ['ภาษาไทย', 'ltr', 'msg/js/en.js'],
-  'tr': ['Türkçe', 'ltr', 'msg/js/en.js'],
-  'uk': ['Українська', 'ltr', 'msg/js/en.js'],
-  'vi': ['Tiếng Việt', 'ltr', 'msg/js/vi.js'],
-  'zh-hans': ['简体字', 'ltr', 'msg/js/zh_tw.js'],
-  'zh-hant': ['中文', 'ltr', 'msg/js/zh_tw.js']
-};
+BlocklyApps.LANGUAGES = ['br', 'ca', 'cs', 'da', 'de', 'el', 'en',
+    'es', 'eu', 'fr', 'gl', 'hu', 'ia', 'it', 'ko', 'lv', 'mk', 'ms',
+    'nl', 'pl', 'pms', 'pt', 'ru', 'sk', 'sr', 'sv', 'sw', 'th', 'tr',
+    'uk', 'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +
@@ -490,7 +462,7 @@ Maze.init = function() {
   }
   Blockly.bindEvent_(window, 'resize', null, Maze.hidePegmanMenu);
 
-  var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
+  var rtl = BlocklyApps.isRtl();
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blockly'),
       {path: '../../',
@@ -541,6 +513,9 @@ Maze.init = function() {
   Blockly.addChangeListener(function() {Maze.updateCapacity()});
 
   document.body.addEventListener('mousemove', Maze.updatePegSpin_, true);
+
+  BlocklyApps.bindClick('runButton', Maze.runButtonClick);
+  BlocklyApps.bindClick('resetButton', Maze.resetButtonClick);
 
   if (Maze.LEVEL == 1) {
     // Make connecting blocks easier for beginners.
@@ -643,13 +618,46 @@ Maze.levelHelp = function() {
       }
     }
   } else if (Maze.LEVEL == 4) {
-    if (userBlocks.indexOf('maze_forever') == -1 ||
-        Blockly.mainWorkspace.getAllBlocks().length < 3 ||
-        Blockly.mainWorkspace.getTopBlocks(false).length != 1) {
-      content = document.getElementById('dialogHelpRepeatMany');
-      style = {width: '360px', top: '320px'};
-      style[Blockly.RTL ? 'right' : 'left'] = '425px';
-      origin = toolbar[3].getSvgRoot();
+    if (Blockly.mainWorkspace.remainingCapacity() == 0 &&
+        (userBlocks.indexOf('maze_forever') == -1 ||
+         Blockly.mainWorkspace.getTopBlocks(false).length > 1)) {
+      content = document.getElementById('dialogHelpCapacity');
+      style = {width: '430px', top: '310px'};
+      style[Blockly.RTL ? 'right' : 'left'] = '50px';
+      origin = document.getElementById('capacityBubble');
+    } else {
+      var showHelp = true;
+      // Only show help if there is not a loop with two nested blocks.
+      var blocks = Blockly.mainWorkspace.getAllBlocks();
+      for (var i = 0; i < blocks.length; i++) {
+        var block = blocks[i];
+        if (block.type != 'maze_forever') {
+          continue;
+        }
+        var j = 0;
+        while (block) {
+          var kids = block.getChildren();
+          block = kids.length ? kids[0] : null;
+          j++;
+        }
+        if (j > 2) {
+          showHelp = false;
+          break;
+        }
+      }
+      if (showHelp) {
+        content = document.getElementById('dialogHelpRepeatMany');
+        style = {width: '360px', top: '320px'};
+        style[Blockly.RTL ? 'right' : 'left'] = '425px';
+        origin = toolbar[3].getSvgRoot();
+      }
+    }
+  } else if (Maze.LEVEL == 5) {
+    if (Maze.SKIN_ID == 0 && !Maze.showPegmanMenu.activatedOnce) {
+      content = document.getElementById('dialogHelpSkins');
+      style = {width: '360px', top: '60px'};
+      style[Blockly.RTL ? 'left' : 'right'] = '20px';
+      origin = document.getElementById('pegmanButton');
     }
   } else if (Maze.LEVEL == 6) {
     if (userBlocks.indexOf('maze_if') == -1) {
@@ -749,6 +757,12 @@ Maze.showPegmanMenu = function() {
       Maze.pegmanMenuMouse_ = Blockly.bindEvent_(document.body, 'mousedown',
                                                  null, Maze.hidePegmanMenu);
       }, 0);
+  // Close the skin-changing hint if open.
+  if (document.getElementById('dialogHelpSkins').className !=
+      'dialogHiddenContent') {
+    BlocklyApps.hideDialog(false);
+  }
+  Maze.showPegmanMenu.activatedOnce = true;
 };
 
 /**

@@ -32,13 +32,7 @@ if (typeof google == 'object') {
 }
 
 // Supported languages.
-BlocklyApps.LANGUAGES = {
-  // Format: ['Language name', 'direction', 'XX_compressed.js']
-  'en': ['English', 'ltr', 'msg/js/en.js'],
-  'de': ['Deutsch', 'ltr', 'msg/js/de.js'],
-  'hu': ['Magyar', 'ltr', 'msg/js/en.js'],
-  'vi': ['Tiếng Việt', 'ltr', 'msg/js/vi.js']
-};
+BlocklyApps.LANGUAGES = ['en', 'de', 'hu', 'vi'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +
@@ -55,7 +49,7 @@ var Graph = {};
 Graph.init = function() {
   BlocklyApps.init();
 
-  var rtl = BlocklyApps.LANGUAGES[BlocklyApps.LANG][1] == 'rtl';
+  var rtl = BlocklyApps.isRtl();
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blockly'),
       {path: '../../',

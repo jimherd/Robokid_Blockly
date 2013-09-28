@@ -5,7 +5,7 @@
  * http://code.google.com/p/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * you may not use block file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -34,14 +34,14 @@ Blockly.Robokid.control = {};
  
 // Blockly.Robokid = Blockly.Generator.get('Robokid');
 
-Blockly.Robokid.controls_whileUntil = function() {
+Blockly.Robokid.controls_whileUntil = function(block) {
   // Do while/until loop.
-  var until = this.getTitleValue('MODE') == 'UNTIL';
-  var argument0 = Blockly.Robokid.valueToCode(this, 'BOOL',
+  var until = block.getTitleValue('MODE') == 'UNTIL';
+  var argument0 = Blockly.Robokid.valueToCode(block, 'BOOL',
       until ? Blockly.Robokid.ORDER_LOGICAL_NOT :
       Blockly.Robokid.ORDER_NONE) || 'False';
-  var branch0 = Blockly.Robokid.statementToCode(this, 'DO') || '  pass\n';
-  if (this.getTitleValue('MODE') == 'UNTIL') {
+  var branch0 = Blockly.Robokid.statementToCode(block, 'DO') || '  pass\n';
+  if (block.getTitleValue('MODE') == 'UNTIL') {
     if (!argument0.match(/^\w+$/)) {
       argument0 = '(' + argument0 + ')';
     }
@@ -50,15 +50,15 @@ Blockly.Robokid.controls_whileUntil = function() {
   return 'while ' + argument0 + ':\n' + branch0 + '\n';
 };
 
-Blockly.Robokid.controls_for = function() {
+Blockly.Robokid.controls_for = function(block) {
   // For loop.
   var variable0 = Blockly.Robokid.variableDB_.getName(
-      this.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
-  var argument0 = Blockly.Robokid.valueToCode(this, 'FROM',
+      block.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
+  var argument0 = Blockly.Robokid.valueToCode(block, 'FROM',
       Blockly.Robokid.ORDER_NONE) || 'false';
-  var argument1 = Blockly.Robokid.valueToCode(this, 'TO',
+  var argument1 = Blockly.Robokid.valueToCode(block, 'TO',
       Blockly.Robokid.ORDER_NONE) || 'false';
-  var branch0 = Blockly.Robokid.statementToCode(this, 'DO');
+  var branch0 = Blockly.Robokid.statementToCode(block, 'DO');
   var code;
   if (argument0.match(/^-?\d+(\.\d+)?$/) &&
       argument1.match(/^-?\d+(\.\d+)?$/)) {
@@ -93,20 +93,20 @@ Blockly.Robokid.controls_for = function() {
 };
 
 
-Blockly.Robokid.controls_forEach = function() {
+Blockly.Robokid.controls_forEach = function(block) {
   // For each loop.
   var variable0 = Blockly.Robokid.variableDB_.getName(
-      this.getInputVariable('VAR'), Blockly.Variables.NAME_TYPE);
-  var argument0 = Blockly.Robokid.valueToCode(this, 'LIST',
+      block.getInputVariable('VAR'), Blockly.Variables.NAME_TYPE);
+  var argument0 = Blockly.Robokid.valueToCode(block, 'LIST',
       Blockly.Robokid.ORDER_RELATIONAL) || '[]';
-  var branch0 = Blockly.Robokid.statementToCode(this, 'DO') || '  pass\n';
+  var branch0 = Blockly.Robokid.statementToCode(block, 'DO') || '  pass\n';
   var code = 'for ' + variable0 + ' in ' + argument0 + ':\n' + branch0 + '\n';
   return code;
 };
 
-Blockly.Robokid.controls_flow_statements = function() {
+Blockly.Robokid.controls_flow_statements = function(block) {
   // Flow statements: continue, break.
-  switch (this.getTitleValue('FLOW')) {
+  switch (block.getTitleValue('FLOW')) {
     case 'BREAK':
       return 'break\n';
     case 'CONTINUE':

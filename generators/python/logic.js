@@ -28,27 +28,27 @@ goog.provide('Blockly.Python.logic');
 goog.require('Blockly.Python');
 
 
-Blockly.Python['controls_if'] = function() {
+Blockly.Python['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
-  var argument = Blockly.Python.valueToCode(this, 'IF' + n,
+  var argument = Blockly.Python.valueToCode(block, 'IF' + n,
       Blockly.Python.ORDER_NONE) || 'False';
-  var branch = Blockly.Python.statementToCode(this, 'DO' + n) || '  pass\n';
+  var branch = Blockly.Python.statementToCode(block, 'DO' + n) || '  pass\n';
   var code = 'if ' + argument + ':\n' + branch;
-  for (n = 1; n <= this.elseifCount_; n++) {
-    argument = Blockly.Python.valueToCode(this, 'IF' + n,
+  for (n = 1; n <= block.elseifCount_; n++) {
+    argument = Blockly.Python.valueToCode(block, 'IF' + n,
         Blockly.Python.ORDER_NONE) || 'False';
-    branch = Blockly.Python.statementToCode(this, 'DO' + n) || '  pass\n';
+    branch = Blockly.Python.statementToCode(block, 'DO' + n) || '  pass\n';
     code += 'elif ' + argument + ':\n' + branch;
   }
-  if (this.elseCount_) {
-    branch = Blockly.Python.statementToCode(this, 'ELSE') || '  pass\n';
+  if (block.elseCount_) {
+    branch = Blockly.Python.statementToCode(block, 'ELSE') || '  pass\n';
     code += 'else:\n' + branch;
   }
   return code;
 };
 
-Blockly.Python['logic_compare'] = function() {
+Blockly.Python['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {
     EQ: '==',
@@ -58,51 +58,65 @@ Blockly.Python['logic_compare'] = function() {
     GT: '>',
     GTE: '>='
   };
-  var operator = OPERATORS[this.getTitleValue('OP')];
+  var operator = OPERATORS[block.getTitleValue('OP')];
   var order = Blockly.Python.ORDER_RELATIONAL;
-  var argument0 = Blockly.Python.valueToCode(this, 'A', order) || '0';
-  var argument1 = Blockly.Python.valueToCode(this, 'B', order) || '0';
+  var argument0 = Blockly.Python.valueToCode(block, 'A', order) || '0';
+  var argument1 = Blockly.Python.valueToCode(block, 'B', order) || '0';
   var code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
 
-Blockly.Python['logic_operation'] = function() {
+Blockly.Python['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
-  var operator = (this.getTitleValue('OP') == 'AND') ? 'and' : 'or';
+  var operator = (block.getTitleValue('OP') == 'AND') ? 'and' : 'or';
   var order = (operator == 'and') ? Blockly.Python.ORDER_LOGICAL_AND :
       Blockly.Python.ORDER_LOGICAL_OR;
-  var argument0 = Blockly.Python.valueToCode(this, 'A', order) || 'False';
-  var argument1 = Blockly.Python.valueToCode(this, 'B', order) || 'False';
+  var argument0 = Blockly.Python.valueToCode(block, 'A', order);
+  var argument1 = Blockly.Python.valueToCode(block, 'B', order);
+  if (!argument0 && !argument1) {
+    // If there are no arguments, then the return value is false.
+    argument0 = 'False';
+    argument1 = 'False';
+  } else {
+    // Single missing arguments have no effect on the return value.
+    var defaultArgument = (operator == 'and') ? 'True' : 'False';
+    if (!argument0) {
+      argument0 = defaultArgument;
+    }
+    if (!argument1) {
+      argument1 = defaultArgument;
+    }
+  }
   var code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
 
-Blockly.Python['logic_negate'] = function() {
+Blockly.Python['logic_negate'] = function(block) {
   // Negation.
-  var argument0 = Blockly.Python.valueToCode(this, 'BOOL',
-      Blockly.Python.ORDER_LOGICAL_NOT) || 'False';
+  var argument0 = Blockly.Python.valueToCode(block, 'BOOL',
+      Blockly.Python.ORDER_LOGICAL_NOT) || 'True';
   var code = 'not ' + argument0;
   return [code, Blockly.Python.ORDER_LOGICAL_NOT];
 };
 
-Blockly.Python['logic_boolean'] = function() {
+Blockly.Python['logic_boolean'] = function(block) {
   // Boolean values true and false.
-  var code = (this.getTitleValue('BOOL') == 'TRUE') ? 'True' : 'False';
+  var code = (block.getTitleValue('BOOL') == 'TRUE') ? 'True' : 'False';
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
-Blockly.Python['logic_null'] = function() {
+Blockly.Python['logic_null'] = function(block) {
   // Null data type.
   return ['None', Blockly.Python.ORDER_ATOMIC];
 };
 
-Blockly.Python['logic_ternary'] = function() {
+Blockly.Python['logic_ternary'] = function(block) {
   // Ternary operator.
-  var value_if = Blockly.Python.valueToCode(this, 'IF',
+  var value_if = Blockly.Python.valueToCode(block, 'IF',
       Blockly.Python.ORDER_CONDITIONAL) || 'False';
-  var value_then = Blockly.Python.valueToCode(this, 'THEN',
+  var value_then = Blockly.Python.valueToCode(block, 'THEN',
       Blockly.Python.ORDER_CONDITIONAL) || 'None';
-  var value_else = Blockly.Python.valueToCode(this, 'ELSE',
+  var value_else = Blockly.Python.valueToCode(block, 'ELSE',
       Blockly.Python.ORDER_CONDITIONAL) || 'None';
   var code = value_then + ' if ' + value_if + ' else ' + value_else
   return [code, Blockly.Python.ORDER_CONDITIONAL];
