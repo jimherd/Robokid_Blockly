@@ -157,8 +157,6 @@ Blockly.Msg.CONTROLS_FOR_HELPURL = 'https://code.google.com/p/blockly/wiki/Loops
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable %1 take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.';
 ///block title - Title of [https://code.google.com/p/blockly/wiki/Loops#count_with count with] blocks.
 Blockly.Msg.CONTROLS_FOR_INPUT_WITH = 'count with';
-///variable name - The default name for a [https://code.google.com/p/blockly/wiki/Loops#count_with count with] loop variable.  You can use a word or symbol in algebra for an unknown value or a word meaning 'counter'.
-Blockly.Msg.CONTROLS_FOR_INPUT_VAR = 'x';
 ///block input text - Starting with a (usually lower) number in a range (%1), ending with a (usually higher) number in a range (%2), and counting the iterations by a number of steps (%3).  As in [https://code.google.com/p/blockly/wiki/Loops#count_with https://code.google.com/p/blockly/wiki/Loops#count_with].
 Blockly.Msg.CONTROLS_FOR_INPUT_FROM_TO_BY = 'from %1 to %2 by %3';
 Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -167,7 +165,6 @@ Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://code.google.com/p/blockly/wiki/Loops#for_each for each block';
 ///block text - Title of [https://code.google.com/p/blockly/wiki/Loops#for_each for each block].
 Blockly.Msg.CONTROLS_FOREACH_INPUT_ITEM = 'for each item';
-Blockly.Msg.CONTROLS_FOREACH_INPUT_VAR = Blockly.Msg.CONTROLS_FOR_INPUT_VAR;
 ///block text - Preceding the list that should be iterated over in a [https://code.google.com/p/blockly/wiki/Loops#for_each for each loop].
 Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST = 'in list';
 ///block text - Following the list that should be iterated over in a [https://code.google.com/p/blockly/wiki/Loops#for_each for each loop].  This is empty in most, but not all, languages.
@@ -365,7 +362,7 @@ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = 'item';
 /// - As in: ''change'' [the value of variable] ''item'' '''by''' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
 Blockly.Msg.MATH_CHANGE_INPUT_BY = 'by';
 ///tooltip - This updates the value of the variable by adding to it the following numeric input.\n\nParameters:\n* %1 - the name of the variable whose value should be increased.
-Blockly.Msg.MATH_CHANGE_TOOLTIP = 'Add a number to variable "%1".'
+Blockly.Msg.MATH_CHANGE_TOOLTIP = 'Add a number to variable "%1".';
 
 ///url - Information about how numbers are rounded to the nearest integer
 Blockly.Msg.MATH_ROUND_HELPURL = 'http://en.wikipedia.org/wiki/Rounding';
@@ -503,6 +500,9 @@ Blockly.Msg.TEXT_INDEXOF_INPUT_INTEXT = 'in text';
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = 'find first occurrence of text';
 ///dropdown - See [https://code.google.com/p/blockly/wiki/Text#Finding_text https://code.google.com/p/blockly/wiki/Text#Finding_text].
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = 'find last occurrence of text';
+///block text - Optional text to follow the rightmost block in a [https://code.google.com/p/blockly/wiki/Text#Finding_text https://code.google.com/p/blockly/wiki/Text#Finding_text in text ... find block].
+///This will be the empty string in most languages.
+Blockly.Msg.TEXT_INDEXOF_TAIL = '';
 
 ///url - Information about extracting characters (letters, number, symbols, etc.) from text.
 Blockly.Msg.TEXT_CHARAT_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
@@ -527,18 +527,18 @@ Blockly.Msg.TEXT_SUBSTRING_TOOLTIP = 'Returns a specified portion of the text.';
 Blockly.Msg.TEXT_SUBSTRING_HELPURL = 'http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm';
 ///block text - Precedes a piece of text from which a portion should be extracted.
 Blockly.Msg.TEXT_SUBSTRING_INPUT_IN_TEXT = 'in text';
-///block text - This text between the input specifying the string and the input specifying the part to extract.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
-Blockly.Msg.TEXT_SUBSTRING_INPUT_AT1 = 'get substring from';
-///block text - Comes between the two inputs specifying the start and end of a range, as in 'from 3 '''to''' 8'.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
-Blockly.Msg.TEXT_SUBSTRING_INPUT_AT2 = 'to';
-///dropdown - Indicates that the letter (or number, punctuation character, etc.) with the specified index should be obtained from the preceding piece of text.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
-Blockly.Msg.TEXT_SUBSTRING_FROM_START = 'letter #';
-///block text - Indicates that the letter (or number, punctuation character, etc.) with the specified index from the end of a given piece of text should be obtained.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
-Blockly.Msg.TEXT_SUBSTRING_FROM_END = 'letter # from end';
+///dropdown - Indicates that the following number specifies the position (relative to the start position) of the beginning of the region of text that should be obtained from the preceding piece of text.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START = 'get substring from letter #';
+///dropdown - Indicates that the following number specifies the position (relative to the end position) of the beginning of the region of text that should be obtained from the preceding piece of text.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_END = 'get substring from letter # from end';
 ///block text - Indicates that a region starting with the first letter of the preceding piece of text should be extracted.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
-Blockly.Msg.TEXT_SUBSTRING_FIRST = 'first letter';
-///block text - Indicates that a region ending with the first letter of the preceding piece of text should be extracted.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
-Blockly.Msg.TEXT_SUBSTRING_LAST = 'last letter';
+Blockly.Msg.TEXT_GET_SUBSTRING_START_FIRST = 'get substring from first letter';
+///dropdown - Indicates that the following number specifies the position (relative to the start position) of the end of the region of text that should be obtained from the preceding piece of text.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_START = 'to letter #';
+///dropdown - Indicates that the following number specifies the position (relative to the end position) of the end of the region of text that should be obtained from the preceding piece of text.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].  In most languages, this will be the same as {{msg-blockly|TEXT_GET_SUBLIST_START_FROM_START1}}.
+Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END = 'to letter # from end';
+///block text - Indicates that a region ending with the last letter of the preceding piece of text should be extracted.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST = 'to last letter';
 
 ///url - Information about the case of letters (upper-case and lower-case).
 Blockly.Msg.TEXT_CHANGECASE_HELPURL = 'http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html';
@@ -602,7 +602,7 @@ Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE = 'item';
 Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP = 'Add an item to the list.';
 
 ///url - Information about [https://code.google.com/p/blockly/wiki/Lists#create_list_with creating a list with multiple copies of a single item].
-Blockly.Msg.LISTS_REPEAT_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#create_list_with'
+Blockly.Msg.LISTS_REPEAT_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#create_list_with';
 ///url - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with creating a list with multiple copies of a single item].
 Blockly.Msg.LISTS_REPEAT_TOOLTIP = 'Creates a list consisting of the given value repeated the specified number of times.';
 ///block text - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with https://code.google.com/p/blockly/wiki/Lists#create_list_with].
@@ -620,6 +620,9 @@ Blockly.Msg.LISTS_LENGTH_TOOLTIP = 'Returns the length of a list.';
 ///url - See [https://code.google.com/p/blockly/wiki/Lists#is_empty https://code.google.com/p/blockly/wiki/Lists#is_empty].
 Blockly.Msg.LISTS_IS_EMPTY_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#is_empty';
 ///block text - See [https://code.google.com/p/blockly/wiki/Lists#is_empty https://code.google.com/p/blockly/wiki/Lists#is_empty].
+///Note: If your language (such as Hungarian) puts a suffix after lists
+///[{{msg-blockly|LIST_SUFFIX}}], you must explicitly include it here.
+///If you don't understand this detail, don't worry about it.
 ///\n\nParameters:\n* %1 - the list to test
 Blockly.Msg.LISTS_IS_EMPTY_TITLE = '%1 is empty';
 ///block tooltip - See [https://code.google.com/p/blockly/wiki/Lists#is_empty https://code.google.com/p/blockly/wiki/Lists#is_empty].
@@ -719,15 +722,33 @@ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM = 'Inserts the item randomly i
 /// url
 Blockly.Msg.LISTS_GET_SUBLIST_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist';
 Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
-/// block text - Indicates that a [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist sublist (portion of an entire list) should be retrieved]  This is followed by information where the sublist should start, as in: '''Get sub-list from''' first to #5.
-Blockly.Msg.LISTS_GET_SUBLIST_INPUT_AT1 = 'get sub-list from';
-/// block text - Appears between the start and end of a [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist sub-list (portion of an entire list) that should be retrieved], as in: Get sub-list from first '''to''' #5.
-Blockly.Msg.LISTS_GET_SUBLIST_INPUT_AT2 = 'to';
+/// dropdown - Indicates that an index relative to the front of the list should be used to specify the beginning of the range from which to [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist get a sublist].
+Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START = 'get sub-list from #';
+/// dropdown - Indicates that an index relative to the end of the list should be used to specify the beginning of the range from which to [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist get a sublist].
+Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_END = 'get sub-list from # from end';
+/// dropdown - Indicates that the [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist sublist to extract] should begin with the list's first item.
+Blockly.Msg.LISTS_GET_SUBLIST_START_FIRST = 'get sub-list from first';
+/// dropdown - Indicates that an index relative to the front of the list should be used to specify the end of the range from which to [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist get a sublist].
+Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_START = 'to #';
+/// dropdown - Indicates that an index relative to the end of the list should be used to specify the end of the range from which to [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist get a sublist].
+Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END = 'to # from end';
+/// dropdown - Indicates that the '''last''' item should be [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item accessed in a list].
+Blockly.Msg.LISTS_GET_SUBLIST_END_LAST = 'to last';
+/// dropdown - Indicates that a '''random''' item should be [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item accessed in a list].
+
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist].
 Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
 
 /// default name - A simple, general default name for a variable, preferably short.
 Blockly.Msg.VARIABLES_DEFAULT_NAME = 'item';
+
+/// grammar - Text that follows an ordinal number (a number that indicates
+/// position relative to other numbers).  In most languages, such text appears
+/// before the number, so this should be blank.  An exception is Hungarian.
+/// See [http://blockly-share.appspot.com/static/apps/code/readonly.html?lang=en&xml=%3Cblock%20type%3D%22lists_getIndex%22%20inline%3D%22true%22%20x%3D%2227%22%20y%3D%2232%22%3E%3Cmutation%20statement%3D%22false%22%20at%3D%22true%22%3E%3C%2Fmutation%3E%3Ctitle%20name%3D%22MODE%22%3EGET%3C%2Ftitle%3E%3Ctitle%20name%3D%22WHERE%22%3EFROM_START%3C%2Ftitle%3E%3Cvalue%20name%3D%22VALUE%22%3E%3Cblock%20type%3D%22variables_get%22%3E%3Ctitle%20name%3D%22VAR%22%3Elist%3C%2Ftitle%3E%3C%2Fblock%3E%3C%2Fvalue%3E%3Cvalue%20name%3D%22AT%22%3E%3Cblock%20type%3D%22math_number%22%3E%3Ctitle%20name%3D%22NUM%22%3E5%3C%2Ftitle%3E%3C%2Fblock%3E%3C%2Fvalue%3E%3C%2Fblock%3E this example],
+/// where English uses the prefix "#" before the number instead of having anything
+/// follow it.
+Blockly.Msg.ORDINAL_NUMBER_SUFFIX = '';
 
 // Variables Blocks.
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [http://en.wikipedia.org/wiki/Variable_(computer_science) http://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
