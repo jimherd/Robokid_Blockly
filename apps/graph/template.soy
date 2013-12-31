@@ -6,7 +6,7 @@
  * To regenerate just en.js, run this command:
  * java -jar ../_soy/SoyToJsSrcCompiler.jar --outputPathFormat generated/en.js --srcs ../common.soy,template.soy
  *
- * To regenerate all files, see: trunk/apps/template.soy.
+ * To regenerate all files, see: trunk/apps/common.soy
  */
 
 /**
@@ -26,7 +26,7 @@
       <td>
         <h1>
           <span id="title">
-            <a href="../index.html">{msg meaning="Apps.blocklyMessage" desc="IBID"}Blockly{/msg}</a>
+            <a href="../index.html?lang={$ij.lang}">{msg meaning="Apps.blocklyMessage" desc="IBID"}Blockly{/msg}</a>
             {sp}:{sp}
             {msg meaning="Graph.title" desc="title - Brief title for this graphic calculator application."}
               Graphing Calculator

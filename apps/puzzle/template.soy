@@ -6,7 +6,7 @@
  * To regenerate just en.js, run this command:
  * java -jar ../_soy/SoyToJsSrcCompiler.jar --outputPathFormat generated/en.js --srcs ../common.soy,template.soy
  *
- * To regenerate all files, see: trunk/apps/template.soy.
+ * To regenerate all files, see: trunk/apps/common.soy
  */
 
 /**
@@ -36,7 +36,7 @@
     <span id="Puzzle_country1HelpUrl">
       {msg meaning="Puzzle.country1HelpUrl"
            desc="The URL of a page with basic information about Australia."}
-        http://en.wikipedia.org/wiki/Australia
+        https://en.wikipedia.org/wiki/Australia
       {/msg}
     </span>
     <span id="Puzzle_country2">
@@ -65,7 +65,7 @@
     <span id="Puzzle_country2HelpUrl">
       {msg meaning="Puzzle.country2HelpUrl"
            desc="The URL of a page with basic information about Germany."}
-        http://en.wikipedia.org/wiki/Germany
+        https://en.wikipedia.org/wiki/Germany
       {/msg}
     </span>
     <span id="Puzzle_country3">
@@ -94,7 +94,7 @@
     <span id="Puzzle_country3HelpUrl">
       {msg meaning="Puzzle.country3HelpUrl"
            desc="The URL of a page with basic information about China."}
-        http://en.wikipedia.org/wiki/China
+        https://en.wikipedia.org/wiki/China
       {/msg}
     </span>
     <span id="Puzzle_country4">
@@ -123,7 +123,7 @@
     <span id="Puzzle_country4HelpUrl">
       {msg meaning="Puzzle.country4HelpUrl"
            desc="The URL of a page with basic information about Brazil."}
-        http://en.wikipedia.org/wiki/Brazil
+        https://en.wikipedia.org/wiki/Brazil
       {/msg}
     </span>
     <span id="Puzzle_flag">
@@ -185,7 +185,7 @@
       <td valign="bottom">
         <h1>
           <span id="title">
-            <a href="../index.html">{msg meaning="Apps.blocklyMessage" desc="IBID"}Blockly{/msg}</a>
+            <a href="../index.html?lang={$ij.lang}">{msg meaning="Apps.blocklyMessage" desc="IBID"}Blockly{/msg}</a>
             {sp}:{sp}
             {msg meaning="Puzzle.title" desc="A brief title for page, not including the word for Blockly.  Use the word for a jigsaw puzzle."}
               Puzzle

@@ -54,6 +54,7 @@ BlocklyApps.LANGUAGE_NAME = {
   'hu': 'Magyar',
   'ia': 'Interlingua',
   'id': 'Bahasa Indonesia',
+  'is': 'Íslenska',
   'it': 'Italiano',
   'ja': '日本語',
   'ka': 'ქართული',
@@ -89,8 +90,8 @@ BlocklyApps.LANGUAGE_NAME = {
   'tr': 'Türkçe',
   'uk': 'Українська',
   'vi': 'Tiếng Việt',
-  'zh-hans': '简体字',
-  'zh-hant': '中文',
+  'zh-hans': '簡體中文',
+  'zh-hant': '正體中文',
   'zh-tw': '國語'
 };
 
@@ -104,7 +105,9 @@ BlocklyApps.LANGUAGE_RTL = ['ar', 'fa', 'he', 'mzn', 'ps'];
  */
 BlocklyApps.LANGUAGE_PACK = {
   'ar': 'msg/js/ar.js',
-  'cdo': 'msg/js/zh_tw.js',
+  'ca': 'msg/js/zh_tw.js',
+  'cdo': 'msg/js/zh_hant.js',
+  'da': 'msg/js/da.js',
   'de': 'msg/js/de.js',
   'el': 'msg/js/el.js',
   'es': 'msg/js/es.js',
@@ -113,7 +116,9 @@ BlocklyApps.LANGUAGE_PACK = {
   'frr': 'msg/js/de.js',
   'hu': 'msg/js/hu.js',
   'id': 'msg/js/id.js',
+  'is': 'msg/js/is.js',
   'it': 'msg/js/it.js',
+  'ko': 'msg/js/ko.js',
   'ksh': 'msg/js/de.js',
   'lb': 'msg/js/de.js',
   'nl': 'msg/js/nl.js',
@@ -126,10 +131,11 @@ BlocklyApps.LANGUAGE_PACK = {
   'ro': 'msg/js/ro.js',
   'ru': 'msg/js/ru.js',
   'sv': 'msg/js/sv.js',
+  'tr': 'msg/js/tr.js',
   'uk': 'msg/js/uk.js',
   'vi': 'msg/js/vi.js',
   'zh-hans': 'msg/js/zh-hans.js',
-  'zh-hant': 'msg/js/zh-hans.js',
+  'zh-hant': 'msg/js/zh-hant.js',
   // We used to use zh-tw for zh-hant.  Users may still have URLs.
   'zh-tw': 'msg/js/zh-hant.js',
   'default': 'msg/js/en.js'
