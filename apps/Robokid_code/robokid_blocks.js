@@ -45,19 +45,19 @@ Blockly.Blocks['LEDS_set'] = {
 		var LED_dropdown_D = new Blockly.FieldDropdown([['off','off'], ['on','on'], ['flash','flash'], ['nochange','nochange']]);
 		
 		this.appendDummyInput()
-			.appendTitle("LEDS ");			
+			.appendField("LEDS ");			
 		this.appendDummyInput()	
-			.appendTitle('LED_A:')
-			.appendTitle(LED_dropdown_A, 'LED_A_mode');
+			.appendField('LED_A:')
+			.appendField(LED_dropdown_A, 'LED_A_mode');
 		this.appendDummyInput()	
-			.appendTitle('LED_B:')
-			.appendTitle(LED_dropdown_B, 'LED_B_mode');
+			.appendField('LED_B:')
+			.appendField(LED_dropdown_B, 'LED_B_mode');
 		this.appendDummyInput()	
-			.appendTitle('LED_C:')
-			.appendTitle(LED_dropdown_C, 'LED_C_mode');
+			.appendField('LED_C:')
+			.appendField(LED_dropdown_C, 'LED_C_mode');
 		this.appendDummyInput()	
-			.appendTitle('LED_D:')
-			.appendTitle(LED_dropdown_D, 'LED_D_mode');
+			.appendField('LED_D:')
+			.appendField(LED_dropdown_D, 'LED_D_mode');
 	}
  };
  
@@ -71,13 +71,13 @@ Blockly.Blocks['LEDS_set'] = {
 		this.setTooltip('Set power on each of the two motors as a % of full power');
 		
 		this.appendDummyInput()
-			.appendTitle("Set Speed ");
+			.appendField("Set Speed ");
 		this.appendValueInput('Motor_L')
 			.setCheck('Number')
-			.appendTitle("Left %");
+			.appendField("Left %");
 		this.appendValueInput('Motor_R')
 			.setCheck('Number')
-			.appendTitle("Right %");		
+			.appendField("Right %");		
 	}
 };
 
@@ -94,14 +94,14 @@ Blockly.Blocks['motors'] = {
 		var right_motor = new Blockly.FieldDropdown([['off','off'], ['forward','forward'], ['backward','backward']]);
 		
 		this.appendDummyInput()
-			.appendTitle("Motors ");	
+			.appendField("Motors ");	
 
 		this.appendDummyInput()	
-			.appendTitle('Left Motor:')
-			.appendTitle(left_motor, 'left_motor');
+			.appendField('Left Motor:')
+			.appendField(left_motor, 'left_motor');
 		this.appendDummyInput()	
-			.appendTitle('Right Motor:')
-			.appendTitle(right_motor, 'right_motor');		
+			.appendField('Right Motor:')
+			.appendField(right_motor, 'right_motor');		
 	}
 };
 
@@ -116,11 +116,11 @@ Blockly.Blocks['comment'] = {
 	
 	var textInput = new Blockly.FieldTextInput('Comment here');
 	this.appendDummyInput()	
-		.appendTitle('Comment : ')
-		.appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+		.appendField('Comment : ')
+		.appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
         'media/quote0.png', 12, 12))
-        .appendTitle(new Blockly.FieldTextInput(''), 'TEXT')
-        .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+        .appendField(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
         'media/quote1.png', 12, 12));
   }
 };
@@ -135,11 +135,11 @@ Blockly.Blocks['display'] = {
     this.setTooltip('Ouput a string to the robot display');
 	var textInput = new Blockly.FieldTextInput('Text here');
 	this.appendDummyInput()	
-		.appendTitle('Display : ')
-        .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+		.appendField('Display : ')
+        .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
         'media/quote0.png', 12, 12))
-        .appendTitle(new Blockly.FieldTextInput(''), 'TEXT')
-        .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+        .appendField(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
         'media/quote1.png', 12, 12));
   }
 };
@@ -153,9 +153,9 @@ Blockly.Blocks['wait'] = {
     this.setTooltip('wait a number of tenths of a second');
 	this.appendValueInput('TIME')
 		.setCheck('Number')
-		.appendTitle("Wait ");
+		.appendField("Wait ");
 	this.appendDummyInput()
-		.appendTitle(" \u00D7 0.1 sec ");
+		.appendField(" \u00D7 0.1 sec ");
   }
 };
 
@@ -181,13 +181,13 @@ Blockly.Blocks['read_sensor'] = {
     this.setNextStatement(true);
 	this.setInputsInline(true);	
 	this.appendDummyInput()
-		.appendTitle("Read sensor : ");
+		.appendField("Read sensor : ");
 	this.appendDummyInput()	
-	    .appendTitle(new Blockly.FieldDropdown(OPERATORS), 'SENSOR');
+	    .appendField(new Blockly.FieldDropdown(OPERATORS), 'SENSOR');
 	this.appendDummyInput()
-		.appendTitle(" into variable ");
+		.appendField(" into variable ");
 	this.appendDummyInput() 
-        .appendTitle(new Blockly.FieldVariable(
+        .appendField(new Blockly.FieldVariable(
         Blockly.LANG_MATH_CHANGE_TITLE_ITEM), 'VAR')
 
     // Assign 'this' to a variable for use in the tooltip closure below.
@@ -221,13 +221,13 @@ Blockly.Blocks['read_sysvar'] = {
 	this.setInputsInline(true);
 	
 	this.appendDummyInput()
-		.appendTitle("Read system variable : ");
+		.appendField("Read system variable : ");
 	this.appendDummyInput()	
-	    .appendTitle(new Blockly.FieldDropdown(OPERATORS), 'SYSVAR');
+	    .appendField(new Blockly.FieldDropdown(OPERATORS), 'SYSVAR');
 	this.appendDummyInput()
-		.appendTitle(" into variable ");
+		.appendField(" into variable ");
 	this.appendDummyInput() 
-        .appendTitle(new Blockly.FieldVariable(
+        .appendField(new Blockly.FieldVariable(
         Blockly.LANG_MATH_CHANGE_TITLE_ITEM), 'VAR')
 
     // Assign 'this' to a variable for use in the tooltip closure below.
@@ -256,7 +256,7 @@ Blockly.Blocks['print'] = {
 	this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.appendValueInput('ADD0')
-        .appendTitle('Print to USB connection ');
+        .appendField('Print to USB connection ');
     this.appendValueInput('ADD1');
     this.setMutator(new Blockly.Mutator(['print_create_join_item']));
 //    this.setTooltip(Blockly.LANG_TEXT_JOIN_TOOLTIP_1);
@@ -275,14 +275,14 @@ Blockly.Blocks['print'] = {
     for (var x = 0; x < this.itemCount_; x++) {
       var input = this.appendValueInput('ADD' + x);
       if (x == 0) {
-        input.appendTitle('Print to USB connection ');
+        input.appendField('Print to USB connection ');
       }
     }
     if (this.itemCount_ == 0) {
       this.appendDummyInput('EMPTY')
-          .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+          .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
           'media/quote0.png', 12, 12))
-          .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+          .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
           'media/quote1.png', 12, 12));
     }
   },
@@ -314,7 +314,7 @@ Blockly.Blocks['print'] = {
     while (itemBlock) {
       var input = this.appendValueInput('ADD' + this.itemCount_);
       if (this.itemCount_ == 0) {
-        input.appendTitle('Print to USB connection ');
+        input.appendField('Print to USB connection ');
       }
       // Reconnect any child blocks.
       if (itemBlock.valueConnection_) {
@@ -326,9 +326,9 @@ Blockly.Blocks['print'] = {
     }
     if (this.itemCount_ == 0) {
       this.appendDummyInput('EMPTY')
-          .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+          .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
           'media/quote0.png', 12, 12))
-          .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+          .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
           'media/quote1.png', 12, 12));
     }
   },
@@ -351,7 +351,7 @@ Blockly.Blocks['print_container'] = {
   init: function() {
     this.setColour(Blockly.robokid_colour);
     this.appendDummyInput()
-        .appendTitle('Print');
+        .appendField('Print');
     this.appendStatementInput('STACK');
 //    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_TOOLTIP_1);
     this.contextMenu = false;
@@ -363,7 +363,7 @@ Blockly.Blocks['print_create_join_item'] = {
   init: function() {
     this.setColour(Blockly.robokid_colour);
     this.appendDummyInput()
-        .appendTitle('item');
+        .appendField('item');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
 //    this.setTooltip(Blockly.LANG_TEXT_CREATE_JOIN_ITEM_TOOLTIP);
@@ -379,7 +379,7 @@ Blockly.Blocks['calibrate'] = {
 //	this.setInputsInline(true);		
     this.setTooltip('wait a number of tenths of a second');
 	this.appendDummyInput()
-		.appendTitle("Calibrate the robot movement");
+		.appendField("Calibrate the robot movement");
   }
 };
 
@@ -408,14 +408,14 @@ Blockly.Blocks['play_note'] = {
 	this.setTooltip('Pick note and set duration in units of 1 millisecond');
 	
 	this.appendDummyInput()
-		.appendTitle("Play note : ");
+		.appendField("Play note : ");
 	this.appendDummyInput()	
-	    .appendTitle(new Blockly.FieldDropdown(OPERATORS), 'NOTE');
+	    .appendField(new Blockly.FieldDropdown(OPERATORS), 'NOTE');
 	this.appendValueInput('duration')
 		.setCheck('Number')
-		.appendTitle(' for ');
+		.appendField(' for ');
 	this.appendDummyInput()
-		.appendTitle(" milliseconds");
+		.appendField(" milliseconds");
   }
 };
 
@@ -430,11 +430,11 @@ Blockly.Blocks['codeline'] = {
 	
 	var textInput = new Blockly.FieldTextInput('Code here');
 	this.appendDummyInput()	
-		.appendTitle('Code : ')
-		.appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+		.appendField('Code : ')
+		.appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
         'media/quote0.png', 12, 12))
-        .appendTitle(new Blockly.FieldTextInput(''), 'TEXT')
-        .appendTitle(new Blockly.FieldImage(Blockly.pathToBlockly +
+        .appendField(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
         'media/quote1.png', 12, 12));
   }
 };
