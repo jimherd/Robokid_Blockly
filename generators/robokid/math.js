@@ -41,11 +41,11 @@ Blockly.Robokid['math_arithmetic'] = function(block) {
 //Blockly.Robokid.math_arithmetic = function() {
   // Basic arithmetic operators, and power.
   var OPERATORS = {
-      ADD: ['+', Blockly.Robokid.ORDER_ADDITIVE],
-      MINUS: ['-', Blockly.Robokid.ORDER_ADDITIVE],
-      MULTIPLY: ['*', Blockly.Robokid.ORDER_MULTIPLICATIVE],
-      DIVIDE: ['/', Blockly.Robokid.ORDER_MULTIPLICATIVE],
-      POWER: ['**', Blockly.Robokid.ORDER_EXPONENTIATION]
+      'ADD': ['+', Blockly.Robokid.ORDER_ADDITIVE],
+      'MINUS': ['-', Blockly.Robokid.ORDER_ADDITIVE],
+      'MULTIPLY': ['*', Blockly.Robokid.ORDER_MULTIPLICATIVE],
+      'DIVIDE': ['/', Blockly.Robokid.ORDER_MULTIPLICATIVE],
+      'POWER': ['**', Blockly.Robokid.ORDER_EXPONENTIATION]
   }; 
   var tuple = OPERATORS[block.getTitleValue('OP')];
 //  var mode = block.getTitleValue('OP');

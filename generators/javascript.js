@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -181,7 +182,6 @@ Blockly.JavaScript.quote_ = function(string) {
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The JavaScript code created for this block.
  * @return {string} JavaScript code with comments and subsequent blocks added.
- * @this {Blockly.CodeGenerator}
  * @private
  */
 Blockly.JavaScript.scrub_ = function(block, code) {

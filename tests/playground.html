@@ -40,16 +40,30 @@
 <script type="text/javascript" src="../blocks/colour.js"></script>
 <script type="text/javascript" src="../blocks/variables.js"></script>
 <script type="text/javascript" src="../blocks/procedures.js"></script>
+<!-- Load the Google Drive SDK Realtime libraries. -->
+<script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
 <script type="text/javascript">
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var block = null;
 
+function enableRealtimeSpecificUi() {
+  var realtimeDiv = document.getElementById('realtime');
+  realtimeDiv.display = 'block';
+}
+
 function start() {
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blocklyDiv'),
-                 {'rtl': rtl, path: '../', toolbox: toolbox});
+          {rtl: rtl, path: '../', toolbox: toolbox, realtime: false,
+           realtimeOptions:
+             {clientId: 'YOUR CLIENT ID GOES HERE',
+              chatbox: {elementId: 'chatbox'},
+              collabElementId: 'collaborators'}});
+  if (Blockly.Realtime.isEnabled()) {
+    enableRealtimeSpecificUi();
+  }
 }
 
 function toXml() {
@@ -80,7 +94,7 @@ function airstrike(n) {
   }
   for (var x = 0; x < n; x++) {
     var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
-    var block = new Blockly.Block(Blockly.mainWorkspace, prototype);
+    var block = Blockly.Block.obtain(Blockly.mainWorkspace, prototype);
     block.initSvg();
     block.getSvgRoot().setAttribute('transform', 'translate(' +
         Math.round(Math.random() * 450 + 40) + ', ' +
@@ -108,9 +122,26 @@ h1 {
   height: 95%;
   width: 70%;
 }
+#collaborators {
+  float: right;
+  width: 30px;
+  margin-left: 10px;
+}
+#collaborators > img {
+  margin-right: 5px;
+  height: 30px;
+  padding-bottom: 5px;
+  width: 30px;
+  border-radius: 3px;
+}
+#importExport {
+  font-family: monospace;
+};
 </style>
 </head>
 <body onload="start()">
+
+  <div id="collaborators"></div>
 
   <div id="blocklyDiv"></div>
 
@@ -315,7 +346,29 @@ h1 {
     Stress test with an <input type="button" value="Airstrike!" onclick="airstrike(100)">
   </p>
 
-  </form>
+  <!-- Realtime setup buttons. -->
 
+  <div id="realtime" style="display: none">
+
+    <p>Test realtime collaboration by opening
+      <a target="_blank" href="#" onmouseover="this.href = window.location.href">
+        this link</a> in a separate browser window or tab and they will be
+      synchronized.  You can even share the link with a friend!.</p>
+
+    <br>
+    <br>
+
+    <!-- Undo and redo buttons. -->
+    <!-- TODO: Uncomment this when undo/redo are fixed. -->
+    <!--
+      <button id="undoButton" disabled>Undo</button>
+      <button id="redoButton" disabled>Redo</button>
+      <br />
+    -->
+
+    <!-- Text area that will be used for our collaborative chat box. -->
+    <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
+
+  </div>
 </body>
 </html>

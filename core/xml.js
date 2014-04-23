@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Editor
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +36,10 @@ goog.provide('Blockly.Xml');
  * @return {!Element} XML document.
  */
 Blockly.Xml.workspaceToDom = function(workspace) {
-  var width = Blockly.svgSize().width;
+  var width;  // Not used in LTR.
+  if (Blockly.RTL) {
+    width = workspace.getMetrics().viewWidth;
+  }
   var xml = goog.dom.createDom('xml');
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
@@ -57,6 +61,7 @@ Blockly.Xml.workspaceToDom = function(workspace) {
 Blockly.Xml.blockToDom_ = function(block) {
   var element = goog.dom.createDom('block');
   element.setAttribute('type', block.type);
+  element.setAttribute('id', block.id);
   if (block.mutationToDom) {
     // Custom data for an advanced block.
     var mutation = block.mutationToDom();
@@ -209,10 +214,13 @@ Blockly.Xml.textToDom = function(text) {
  * @param {!Element} xml XML DOM.
  */
 Blockly.Xml.domToWorkspace = function(workspace, xml) {
-  var width = Blockly.svgSize().width;
+  var width
+  if (Blockly.RTL) {
+    width = workspace.getMetrics().viewWidth;
+  }
   for (var x = 0, xmlChild; xmlChild = xml.childNodes[x]; x++) {
     if (xmlChild.nodeName.toLowerCase() == 'block') {
-      var block = Blockly.Xml.domToBlock_(workspace, xmlChild);
+      var block = Blockly.Xml.domToBlock(workspace, xmlChild);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
       var blockY = parseInt(xmlChild.getAttribute('y'), 10);
       if (!isNaN(blockX) && !isNaN(blockY)) {
@@ -223,23 +231,45 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
 };
 
 /**
- * Decode an XML block tag and create a block (and possibly sub-blocks) on the
+ * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
- * Throws an error if the block cannot be created, for example, if the block
- * type is not specified, that type has not been defined, or an non-existent
- * input is provided.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xmlBlock XML block element.
+ * @param {boolean=} opt_reuseBlock Optional arg indicating whether to
+ *     reinitialize an existing block.
  * @return {!Blockly.Block} The root block created.
  * @private
  */
-Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
+Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
+  var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
   if (!prototypeName) {
     throw 'Block type unspecified: \n' + xmlBlock.outerHTML;
   }
-  var block = new Blockly.Block(workspace, prototypeName);
-  block.initSvg();
+  var id = xmlBlock.getAttribute('id');
+  if (opt_reuseBlock && id) {
+    block = Blockly.Block.getById(id, workspace);
+    // TODO: The following is for debugging.  It should never actually happen.
+    if (!block) {
+      throw 'Couldn\'t get Block with id: ' + id;
+    }
+    var parentBlock = block.getParent();
+    // If we've already filled this block then we will dispose of it and then
+    // re-fill it.
+    if (block.workspace) {
+      block.dispose(true, false, true);
+    }
+    block.fill(workspace, prototypeName);
+    block.parent_ = parentBlock;
+  } else {
+    block = Blockly.Block.obtain(workspace, prototypeName);
+//    if (id) {
+//      block.id = parseInt(id, 10);
+//    }
+  }
+  if (!block.svg_) {
+    block.initSvg();
+  }
 
   var inline = xmlBlock.getAttribute('inline');
   if (inline) {
@@ -291,7 +321,11 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
         block.setCommentText(xmlChild.textContent);
         var visible = xmlChild.getAttribute('pinned');
         if (visible) {
-          block.comment.setVisible(visible == 'true');
+          // Give the renderer a millisecond to render and position the block
+          // before positioning the comment bubble.
+          setTimeout(function() {
+            block.comment.setVisible(visible == 'true');
+          }, 1);
         }
         var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
         var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
@@ -313,7 +347,8 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
         }
         if (firstRealGrandchild &&
             firstRealGrandchild.nodeName.toLowerCase() == 'block') {
-          blockChild = Blockly.Xml.domToBlock_(workspace, firstRealGrandchild);
+          blockChild = Blockly.Xml.domToBlock(workspace, firstRealGrandchild,
+              opt_reuseBlock);
           if (blockChild.outputConnection) {
             input.connection.connect(blockChild.outputConnection);
           } else if (blockChild.previousConnection) {
@@ -332,7 +367,8 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
             // This could happen if there is more than one XML 'next' tag.
             throw 'Next statement is already connected.';
           }
-          blockChild = Blockly.Xml.domToBlock_(workspace, firstRealGrandchild);
+          blockChild = Blockly.Xml.domToBlock(workspace, firstRealGrandchild,
+              opt_reuseBlock);
           if (!blockChild.previousConnection) {
             throw 'Next block does not have previous statement.';
           }
@@ -344,6 +380,10 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
     }
   }
 
+  var collapsed = xmlBlock.getAttribute('collapsed');
+  if (collapsed) {
+    block.setCollapsed(collapsed == 'true');
+  }
   var next = block.nextConnection && block.nextConnection.targetBlock();
   if (next) {
     // Next block in a stack needs to square off its corners.
@@ -351,10 +391,6 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
     next.render();
   } else {
     block.render();
-  }
-  var collapsed = xmlBlock.getAttribute('collapsed');
-  if (collapsed) {
-    block.setCollapsed(collapsed == 'true');
   }
   return block;
 };

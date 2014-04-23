@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Editor
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +55,7 @@ Blockly.Generator.prototype.workspaceToCode = function() {
   var blocks = Blockly.mainWorkspace.getTopBlocks(true);
   for (var x = 0, block; block = blocks[x]; x++) {
     var line = this.blockToCode(block);
-    if (line instanceof Array) {
+    if (goog.isArray(line)) {
       // Value blocks return tuples of code and operator order.
       // Top-level blocks don't care about operator order.
       line = line[0];
@@ -138,7 +139,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   // The current prefered method of accessing the block is through the second
   // argument to func.call, which becomes the first parameter to the generator.
   var code = func.call(block, block);
-  if (code instanceof Array) {
+  if (goog.isArray(code)) {
     // Value blocks return tuples of code and operator order.
     return [this.scrub_(block, code[0]), code[1]];
   } else {
@@ -168,7 +169,7 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order) {
     // Disabled block.
     return '';
   }
-  if (!(tuple instanceof Array)) {
+  if (!goog.isArray(tuple)) {
     // Value blocks must return code and order of operations info.
     // Statement blocks must only return code.
     throw 'Expecting tuple from value block "' + targetBlock.type + '".';
@@ -210,10 +211,16 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
     throw 'Expecting code from statement block "' + targetBlock.type + '".';
   }
   if (code) {
-    code = this.prefixLines(/** @type {string} */ (code), '  ');
+    code = this.prefixLines(/** @type {string} */ (code), this.INDENT);
   }
   return code;
 };
+
+/**
+ * The method of indenting.  Defaults to two spaces, but language generators
+ * may override this to increase indent or change to tabs.
+ */
+Blockly.Generator.prototype.INDENT = '  ';
 
 /**
  * Add one or more words to the list of reserved words for this language.
@@ -246,7 +253,7 @@ Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
  * The code gets output when Blockly.Generator.finish() is called.
  *
  * @param {string} desiredName The desired name of the function (e.g., isPrime).
- * @param {string} code A list of Python statements.
+ * @param {!Array.<string>} code A list of Python statements.
  * @return {string} The actual name of the new function.  This may differ
  *     from desiredName if the former has already been taken by the user.
  * @private

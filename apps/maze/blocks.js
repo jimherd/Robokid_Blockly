@@ -2,7 +2,7 @@
  * Blockly Apps: Maze Blocks
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,11 +49,9 @@ Blockly.Blocks['maze_turn'] = {
     var DIRECTIONS =
         [[BlocklyApps.getMsg('Maze_turnLeft'), 'turnLeft'],
          [BlocklyApps.getMsg('Maze_turnRight'), 'turnRight']];
-    if (Maze.addArrows) {
-      // Append arrows to direction messages.
-      DIRECTIONS[0][0] += ' \u27F2';
-      DIRECTIONS[1][0] += ' \u27F3';
-    }
+    // Append arrows to direction messages.
+    DIRECTIONS[0][0] += ' \u21BA';
+    DIRECTIONS[1][0] += ' \u21BB';
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
     this.setColour(290);
     this.appendDummyInput()
@@ -77,11 +75,9 @@ Blockly.Blocks['maze_if'] = {
         [[BlocklyApps.getMsg('Maze_pathAhead'), 'isPathForward'],
          [BlocklyApps.getMsg('Maze_pathLeft'), 'isPathLeft'],
          [BlocklyApps.getMsg('Maze_pathRight'), 'isPathRight']];
-    if (Maze.addArrows) {
-      // Append arrows to direction messages.
-      DIRECTIONS[1][0] += ' \u27F2';
-      DIRECTIONS[2][0] += ' \u27F3';
-    }
+    // Append arrows to direction messages.
+    DIRECTIONS[1][0] += ' \u21BA';
+    DIRECTIONS[2][0] += ' \u21BB';
     this.setColour(210);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(DIRECTIONS), 'DIR');
@@ -110,11 +106,9 @@ Blockly.Blocks['maze_ifElse'] = {
         [[BlocklyApps.getMsg('Maze_pathAhead'), 'isPathForward'],
          [BlocklyApps.getMsg('Maze_pathLeft'), 'isPathLeft'],
          [BlocklyApps.getMsg('Maze_pathRight'), 'isPathRight']];
-    if (Maze.addArrows) {
-      // Append arrows to direction messages.
-      DIRECTIONS[1][0] += ' \u27F2';
-      DIRECTIONS[2][0] += ' \u27F3';
-    }
+    // Append arrows to direction messages.
+    DIRECTIONS[1][0] += ' \u21BA';
+    DIRECTIONS[2][0] += ' \u21BB';
     this.setColour(210);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(DIRECTIONS), 'DIR');
@@ -140,7 +134,7 @@ Blockly.JavaScript['maze_ifElse'] = function(block) {
 };
 
 Blockly.Blocks['maze_forever'] = {
-  // Do forever loop.
+  // Block for forever loop.
   init: function() {
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Repeat');
     this.setColour(120);
@@ -155,7 +149,7 @@ Blockly.Blocks['maze_forever'] = {
 };
 
 Blockly.JavaScript['maze_forever'] = function(block) {
-  // Generate JavaScript for do forever loop.
+  // Generate JavaScript for forever loop.
   var branch = Blockly.JavaScript.statementToCode(block, 'DO');
   if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
     branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,

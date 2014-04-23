@@ -54,12 +54,12 @@
 Blockly.Robokid['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {
-    EQ: '==',
-    NEQ: '!=',
-    LT: '<',
-    LTE: '<=',
-    GT: '>',
-    GTE: '>='
+    'EQ': '==',
+    'NEQ': '!=',
+    'LT': '<',
+    'LTE': '<=',
+    'GT': '>',
+    'GTE': '>='
   };
   var operator = OPERATORS[block.getTitleValue('OP')];
   var order = Blockly.Robokid.ORDER_RELATIONAL;

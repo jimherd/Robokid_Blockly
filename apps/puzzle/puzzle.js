@@ -2,7 +2,7 @@
  * Blockly Apps: Puzzle
  *
  * Copyright 2013 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +29,13 @@
 var Puzzle = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = [
-  'af', 'ar', 'be-tarask', 'br', 'ca', 'cdo', 'cs', 'da', 'de', 'el', 'en',
-  'es', 'eu', 'fa', 'fi', 'fo', 'fr', 'frr', 'gl', 'hak', 'he', 'hu', 'ia',
-  'is', 'it', 'ja', 'ka', 'km', 'ko', 'ksh', 'ky', 'la', 'lb', 'lt', 'lv', 'mk',
-  'ml', 'mr', 'ms', 'mzn', 'nb', 'nl', 'oc', 'pa', 'pl', 'pms', 'ps', 'pt-br',
-  'ro', 'ru', 'sk', 'sv', 'sw', 'th', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
+BlocklyApps.LANGUAGES =
+    ['ace', 'af', 'ar', 'be-tarask', 'br', 'ca', 'cdo', 'cs', 'da', 'de', 'el',
+     'en', 'es', 'eu', 'fa', 'fi', 'fo', 'fr', 'frr', 'gl', 'hak', 'he', 'hi',
+     'hu', 'ia', 'is', 'it', 'ja', 'ka', 'km', 'ko', 'ksh', 'ky', 'la', 'lb',
+     'lt', 'lv', 'mk', 'ml', 'mr', 'ms', 'mzn', 'nb', 'nl', 'oc', 'pa', 'pl',
+     'pms', 'ps', 'pt-br', 'ro', 'ru', 'si', 'sk', 'sv', 'sw', 'th', 'tr', 'uk',
+     'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +
@@ -47,12 +48,6 @@ Puzzle.init = function() {
   BlocklyApps.init();
 
   var rtl = BlocklyApps.isRtl();
-  Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
-       rtl: rtl,
-       scrollbars: false,
-       trashcan: false});
-
   var blocklyDiv = document.getElementById('blockly');
   var onresize = function(e) {
     blocklyDiv.style.width = (window.innerWidth - 20) + 'px';
@@ -61,13 +56,24 @@ Puzzle.init = function() {
   };
   onresize();
   window.addEventListener('resize', onresize);
-  Blockly.fireUiEvent(window, 'resize');
+
+  Blockly.inject(document.getElementById('blockly'),
+      {path: '../../',
+       rtl: rtl,
+       scrollbars: false,
+       trashcan: false});
 
   // Add the blocks.
-  if (window.sessionStorage.loadOnceBlocks) {
-    var text = window.sessionStorage.loadOnceBlocks;
+  try {
+    var loadOnce = window.sessionStorage.loadOnceBlocks;
+  } catch (e) {
+    // Firefox sometimes throws a SecurityError when accessing sessionStorage.
+    // Restarting Firefox fixes this, so it looks like a bug.
+    var loadOnce = null;
+  }
+  if (loadOnce) {
     delete window.sessionStorage.loadOnceBlocks;
-    var xml = Blockly.Xml.textToDom(text);
+    var xml = Blockly.Xml.textToDom(loadOnce);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   } else {
     // Create one of every block.
@@ -76,15 +82,15 @@ Puzzle.init = function() {
     var blocksCities = [];
     var i = 1;
     while (BlocklyApps.getMsgOrNull('Puzzle_country' + i)) {
-      var block = new Blockly.Block(Blockly.mainWorkspace, 'country');
+      var block = Blockly.Block.obtain(Blockly.mainWorkspace, 'country');
       block.populate(i);
       blocksCountries.push(block);
-      var block = new Blockly.Block(Blockly.mainWorkspace, 'flag');
+      var block = Blockly.Block.obtain(Blockly.mainWorkspace, 'flag');
       block.populate(i);
       blocksFlags.push(block);
       var j = 1;
       while (BlocklyApps.getMsgOrNull('Puzzle_country' + i + 'City' + j)) {
-        var block = new Blockly.Block(Blockly.mainWorkspace, 'city');
+        var block = Blockly.Block.obtain(Blockly.mainWorkspace, 'city');
         block.populate(i, j);
         blocksCities.push(block);
         j++;
@@ -144,16 +150,16 @@ Puzzle.init = function() {
     Puzzle.showHelp(false);
     /**
      * HACK:
-     * Chrome (v28) displays a broken image tag on any image that is also
-     * shown in the help dialog.  Selecting the block fixes the problem.
+     * Chrome (v34) displays a broken image tag on any image that is also
+     * shown in the help dialog.  Resetting the image fixes the problem.
      * If Chrome stops corrupting the Australian flag, delete this entire hack.
      */
     if (goog.userAgent.WEBKIT) {
-      var blocks = Blockly.mainWorkspace.getAllBlocks();
-      for (var i = 0, block; block = blocks[i]; i++) {
-        block.select();
+      for (var i = 0, block; block = blocksFlags[i]; i++) {
+        var img = block.getInput('IMG').fieldRow[0];
+        var src = img.getValue();
+        img.setValue(src);
       }
-      Blockly.selected.unselect();
     }
   }
 };

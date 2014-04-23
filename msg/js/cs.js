@@ -7,7 +7,9 @@ goog.provide('Blockly.Msg.cs');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Přidat komentář";
+Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Změna hodnoty:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Skrýt bloky";
 Blockly.Msg.COLLAPSE_BLOCK = "Skrýt blok";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "barva 1";
@@ -254,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Vrátí arctangens čísla.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Vrátí kosinus úhlu ve stupních.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Vrátí sinus úhlu ve stupních.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Vrátí tangens úhlu ve stupních.";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "Nová proměnná...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nový název proměnné:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -277,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Zvýraznit definici funkce";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Je-li hodnota pravda, pak vrátí druhou hodnotu.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Varování: Tento blok může být použit pouze uvnitř definici funkce.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "vstupní jméno:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "vstupy";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Odstranit komentář";
 Blockly.Msg.RENAME_VARIABLE = "Přejmenovat proměnné...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Přejmenujte všechny proměnné '%1':";

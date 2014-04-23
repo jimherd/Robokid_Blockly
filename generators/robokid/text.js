@@ -131,9 +131,9 @@ Blockly.Robokid.text_charAt = function(block) {
 Blockly.Robokid.text_changeCase = function(block) {
   // Change capitalization.
   var OPERATORS = {
-    UPPERCASE: '.toUpperCase()',
-    LOWERCASE: '.toLowerCase()',
-    TITLECASE: null
+    'UPPERCASE': '.toUpperCase()',
+    'LOWERCASE': '.toLowerCase()',
+    'TITLECASE': null
   };
   var operator = OPERATORS[block.getTitleValue('CASE')];
   var argument0 = Blockly.Robokid.valueToCode(block, 'TEXT',
@@ -145,9 +145,9 @@ Blockly.Robokid.text_changeCase = function(block) {
 Blockly.Robokid.text_trim = function(block) {
   // Trim spaces.
   var OPERATORS = {
-    LEFT: '.trimLeft()',
-    RIGHT: '.trimRight()',
-    BOTH: '.trim()'
+    'LEFT': '.trimLeft()',
+    'RIGHT': '.trimRight()',
+    'BOTH': '.trim()'
   };
   var operator = OPERATORS[block.getTitleValue('MODE')];
   var argument0 = Blockly.Robokid.valueToCode(block, 'TEXT',

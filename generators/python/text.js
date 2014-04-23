@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -201,9 +202,9 @@ Blockly.Python['text_getSubstring'] = function(block) {
 Blockly.Python['text_changeCase'] = function(block) {
   // Change capitalization.
   var OPERATORS = {
-    UPPERCASE: '.upper()',
-    LOWERCASE: '.lower()',
-    TITLECASE: '.title()'
+    'UPPERCASE': '.upper()',
+    'LOWERCASE': '.lower()',
+    'TITLECASE': '.title()'
   };
   var operator = OPERATORS[block.getFieldValue('CASE')];
   var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
@@ -215,9 +216,9 @@ Blockly.Python['text_changeCase'] = function(block) {
 Blockly.Python['text_trim'] = function(block) {
   // Trim spaces.
   var OPERATORS = {
-    LEFT: '.lstrip()',
-    RIGHT: '.rstrip()',
-    BOTH: '.strip()'
+    'LEFT': '.lstrip()',
+    'RIGHT': '.rstrip()',
+    'BOTH': '.strip()'
   };
   var operator = OPERATORS[block.getFieldValue('MODE')];
   var argument0 = Blockly.Python.valueToCode(block, 'TEXT',

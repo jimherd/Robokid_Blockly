@@ -2,7 +2,7 @@
  * Blockly Apps: Turtle Graphics Blocks
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,9 @@ Blockly.Blocks['draw_turn'] = {
     var DIRECTIONS =
         [[BlocklyApps.getMsg('Turtle_turnRight'), 'turnRight'],
          [BlocklyApps.getMsg('Turtle_turnLeft'), 'turnLeft']];
+    // Append arrows to direction messages.
+    DIRECTIONS[0][0] += ' \u21BB';
+    DIRECTIONS[1][0] += ' \u21BA';
     this.setColour(160);
     this.appendValueInput('VALUE')
         .setCheck('Number')

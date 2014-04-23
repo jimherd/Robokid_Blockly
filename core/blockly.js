@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Editor
  *
  * Copyright 2011 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +40,7 @@ goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Procedures');
+goog.require('Blockly.Realtime');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.Workspace');
@@ -46,8 +48,8 @@ goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 
 // Closure dependencies.
-goog.require('goog.dom');
 goog.require('goog.color');
+goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.string');
 goog.require('goog.ui.ColorPicker');
@@ -189,7 +191,7 @@ Blockly.DRAG_RADIUS = 5;
  * Maximum misalignment between connections for them to snap together.
  * @const
  */
-Blockly.SNAP_RADIUS = 15;
+Blockly.SNAP_RADIUS = 20;
 
 /**
  * Delay in ms between trigger and bumping unconnected block out of alignment.
@@ -218,7 +220,7 @@ Blockly.clipboard_ = null;
 
 /**
  * Returns the dimensions of the current SVG image.
- * @return {!Object} Contains width, height, top and left properties.
+ * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function() {
   return {width: Blockly.svg.cachedWidth_,
@@ -226,8 +228,8 @@ Blockly.svgSize = function() {
 };
 
 /**
- * Size the SVG image to completely fill its container.  Record both
- * the height/width and the absolute position of the SVG image.
+ * Size the SVG image to completely fill its container.
+ * Record the height/width of the SVG image.
  */
 Blockly.svgResize = function() {
   var svg = Blockly.svg;
@@ -263,11 +265,9 @@ Blockly.onMouseDown_ = function(e) {
     // Clicking on the document clears the selection.
     Blockly.selected.unselect();
   }
-  if (Blockly.isRightButton(e)) {
+  if (e.target == Blockly.svg && Blockly.isRightButton(e)) {
     // Right-click.
-    if (Blockly.ContextMenu) {
-      Blockly.showContextMenu_(Blockly.mouseToSvg(e));
-    }
+    Blockly.showContextMenu_(e);
   } else if ((Blockly.readOnly || isTargetSvg) &&
              Blockly.mainWorkspace.scrollbar) {
     // If the workspace is editable, only allow dragging when gripping empty
@@ -284,7 +284,7 @@ Blockly.onMouseDown_ = function(e) {
 };
 
 /**
- * Handle a mouse-up on SVG drawing surface.
+ * Handle a mouse-up anywhere on the page.
  * @param {!Event} e Mouse up event.
  * @private
  */
@@ -394,10 +394,10 @@ Blockly.copy_ = function(block) {
 
 /**
  * Show the context menu for the workspace.
- * @param {!Object} xy Coordinates of mouse click, contains x and y properties.
+ * @param {!Event} e Mouse event.
  * @private
  */
-Blockly.showContextMenu_ = function(xy) {
+Blockly.showContextMenu_ = function(e) {
   if (Blockly.readOnly) {
     return;
   }
@@ -436,13 +436,7 @@ Blockly.showContextMenu_ = function(xy) {
     options.push(expandOption);
   }
 
-  // Option to get help.
-  var helpOption = {enabled: false};
-  helpOption.text = Blockly.Msg.HELP;
-  helpOption.callback = function() {};
-  options.push(helpOption);
-
-  Blockly.ContextMenu.show(xy, options);
+  Blockly.ContextMenu.show(e, options);
 };
 
 /**
@@ -451,7 +445,7 @@ Blockly.showContextMenu_ = function(xy) {
  * @private
  */
 Blockly.onContextMenu_ = function(e) {
-  if (!Blockly.isTargetInput_(e) && Blockly.ContextMenu) {
+  if (!Blockly.isTargetInput_(e)) {
     // When focused on an HTML text input widget, don't cancel the context menu.
     e.preventDefault();
   }
@@ -462,9 +456,7 @@ Blockly.onContextMenu_ = function(e) {
  * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
  */
 Blockly.hideChaff = function(opt_allowToolbox) {
-  Blockly.Tooltip && Blockly.Tooltip.hide();
-  Blockly.ContextMenu && Blockly.ContextMenu.hide();
-  Blockly.FieldDropdown && Blockly.FieldDropdown.hide();
+  Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   if (!opt_allowToolbox &&
       Blockly.Toolbox.flyout_ && Blockly.Toolbox.flyout_.autoClose) {
@@ -483,7 +475,11 @@ Blockly.removeAllRanges = function() {
     if (sel && sel.removeAllRanges) {
       sel.removeAllRanges();
       window.setTimeout(function() {
-          window.getSelection().removeAllRanges();
+          try {
+            window.getSelection().removeAllRanges();
+          } catch (e) {
+            // MSIE throws 'error 800a025e' here.
+          }
         }, 0);
     }
   }
@@ -523,11 +519,21 @@ Blockly.loadAudio_ = function(filenames, name) {
       break;
     }
   }
-  // To force the browser to load the sound, play it, but at nearly zero volume.
   if (sound && sound.play) {
-    sound.volume = 0.01;
-    sound.play();
     Blockly.SOUNDS_[name] = sound;
+  }
+};
+
+/**
+ * Preload all the audio files so that they play quickly when asked for.
+ * @private
+ */
+Blockly.preloadAudio_ = function() {
+  for (var name in Blockly.SOUNDS_) {
+    var sound = Blockly.SOUNDS_[name];
+    sound.volume = .01;
+    sound.play();
+    sound.pause();
   }
 };
 
@@ -665,6 +671,22 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
   Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
   Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
                                                        translation);
+};
+
+/**
+ * Execute a command.  Generally, a command is the result of a user action
+ * e.g., a click, drag or context menu selection.  Calling the cmdThunk function
+ * through doCommand() allows us to capture information that can be used for
+ * capabilities like undo (which is supported by the realtime collaboration
+ * feature).
+ * @param {function()} cmdThunk A function representing the command execution.
+ */
+Blockly.doCommand = function(cmdThunk) {
+  if (Blockly.Realtime.isEnabled) {
+    Blockly.Realtime.doCommand(cmdThunk);
+  } else {
+    cmdThunk();
+  }
 };
 
 /**

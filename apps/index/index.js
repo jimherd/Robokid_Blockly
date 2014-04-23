@@ -2,7 +2,7 @@
  * Blockly Apps: Index
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,12 @@
 var BlocklyAppsIndex = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = [
-  'ar', 'az', 'br', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fr',
-  'gl', 'he', 'hi', 'hu', 'ia', 'is', 'it', 'ja', 'ko', 'lv', 'mk', 'ms', 'nl',
-  'pl', 'pms', 'pt-br', 'ro', 'ru', 'sk', 'sr', 'sv', 'sw', 'th', 'tr',
-  'uk', 'vi', 'zh-hans', 'zh-hant'];
+BlocklyApps.LANGUAGES =
+    ['ace', 'ar', 'az', 'be-tarask', 'br', 'ca', 'cs', 'da', 'de', 'el', 'en',
+     'es', 'eu', 'fa', 'fr', 'gl', 'he', 'hi', 'hrx', 'hu', 'ia', 'is', 'it',
+     'ja', 'ko', 'lv', 'mg', 'mk', 'ms', 'nb', 'nl', 'pl', 'pms', 'pt-br', 'ro',
+     'ru', 'sco', 'sk', 'sr', 'sv', 'sw', 'th', 'tr', 'uk', 'vi', 'zh-hans',
+     'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 // Relative directory "index/" needed because index.html is in parent directory.

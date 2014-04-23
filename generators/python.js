@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -163,7 +164,6 @@ Blockly.Python.quote_ = function(string) {
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The Python code created for this block.
  * @return {string} Python code with comments and subsequent blocks added.
- * @this {Blockly.CodeGenerator}
  * @private
  */
 Blockly.Python.scrub_ = function(block, code) {

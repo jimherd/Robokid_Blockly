@@ -7,7 +7,9 @@ goog.provide('Blockly.Msg.az');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Şərh əlavə et";
+Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Qiyməti dəyiş:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blokları yığ";
 Blockly.Msg.COLLAPSE_BLOCK = "Bloku yığ";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "rəng 1";
@@ -254,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Ədədin arctanqensini qaytarır.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Dərəcənin kosinusunu qaytarır (radianın yox).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Dərəcənin sinusunu qaytar (radianın yox).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Dərəcənin tangensini qaytar (radianın yox).";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "Yeni dəyişən...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Yeni dəyişənin adı:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -277,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Funksiyanın təyinatını vurğula";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Əgər bir dəyər \"doğru\"-dursa onda ikinci dəyəri qaytar.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Xəbərdarlıq: Bu blok ancaq bir funksiyanın təyinatı daxilində işlədilə bilər.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "Giriş adı:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "girişlər";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Şərhi sil";
 Blockly.Msg.RENAME_VARIABLE = "Dəyişənin adını dəyiş...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Bütün '%1' dəyişənlərinin adını buna dəyiş:";

@@ -7,7 +7,9 @@ goog.provide('Blockly.Msg.fi');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Lisää kommentti";
+Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Muuta arvoa:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Sulje lohkot";
 Blockly.Msg.COLLAPSE_BLOCK = "Sulje lohko";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "väri 1";
@@ -254,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Palauttaa luvun arkustangentin.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Palauttaa asteluvun (ei radiaanin) kosinin.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Palauttaa asteluvun (ei radiaanin) sinin.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Palauttaa asteluvun (ei radiaanin) tangentin.";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "Uusi muuttuja...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Uuden muuttujan nimi:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -277,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Korosta funktion määritelmä";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Jos arvo on tosi, palauta toinen arvo.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Varoitus: tätä lohkoa voi käyttää vain funktion määrityksessä.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "syötteen nimi:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "syötteet";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Poista kommentti";
 Blockly.Msg.RENAME_VARIABLE = "Nimeä uudelleen muuttuja...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Nimeä uudelleen kaikki '%1' muuttujaa:";

@@ -2,7 +2,7 @@
  * Blockly Apps: Block Factory
  *
  * Copyright 2013 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ function updateFunc(type, code) {
   }
   eval(code);
   // Create the preview block.
-  previewBlock = new Blockly.Block(Blockly.mainWorkspace, type);
+  previewBlock = Blockly.Block.obtain(Blockly.mainWorkspace, type);
   previewBlock.initSvg();
   previewBlock.render();
   previewBlock.setMovable(false);

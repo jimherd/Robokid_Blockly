@@ -7,7 +7,9 @@ goog.provide('Blockly.Msg.is');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Skrifa skýringu";
+Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Breyta gildi:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Loka kubbum";
 Blockly.Msg.COLLAPSE_BLOCK = "Loka kubbi";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "litur 1";
@@ -254,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Skilar arkartangensi tölu.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Skila kósínusi horns gefnu í gráðum.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Skila sínusi horns gefnu í gráðum.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Skila tangensi horns gefnu í gráðum.";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "Ný breyta...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Heiti nýrrar breytu:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -277,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Sýna skilgreiningu falls";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Ef gildi er satt, skal skila öðru gildi.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Aðvörun: Þennan kubb má aðeins nota í skilgreiningu falls.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "heiti inntaks:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inntök";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Fjarlægja skýringu";
 Blockly.Msg.RENAME_VARIABLE = "Endurnefna breytu...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Endurnefna allar '%1' breyturnar:";

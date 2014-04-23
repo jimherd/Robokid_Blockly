@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,6 +82,14 @@ Blockly.Msg.DISABLE_BLOCK = 'Disable Block';
 Blockly.Msg.ENABLE_BLOCK = 'Enable Block';
 /// context menu - Provide helpful information about the selected block.\n{{Identical|Help}}
 Blockly.Msg.HELP = 'Help';
+
+// Realtime collaboration.
+/// collaboration instruction - Tell the user that they can talk with other users.
+Blockly.Msg.CHAT = 'Chat with your collaborator by typing in this box!';
+/// authorization instruction - Ask the user to authorize this app so it can be saved and shared by them.
+Blockly.Msg.AUTH = 'Please authorize this app to enable your work to be saved and to allow it to be shared by you.';
+/// First person singular - objective case
+Blockly.Msg.ME = 'Me';
 
 // Variable renaming.
 /// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.
@@ -1061,11 +1070,15 @@ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = 'Run the user-defined function "%1" 
 /// (referred to by the simpler term "inputs") to the function.  See
 /// [[Translating:Blockly#function_definitions]].
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = 'inputs';
+/// tooltip
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = 'Add, remove, or reorder inputs to this function.';
 /// block text - This text appears on a block in a window that appears when the user clicks
 /// on the plus sign or star on a function definition block].  It appears on the block for
 /// adding an individual parameter (referred to by the simpler term "inputs") to the function.
 /// See [[Translating:Blockly#function_definitions]].
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = 'input name:';
+/// tooltip
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = 'Add an input to the function.';
 
 /// context menu - This appears on the context menu for function calls.  Selecting
 /// it causes the corresponding function definition to be highlighted (as shown at

@@ -7,7 +7,9 @@ goog.provide('Blockly.Msg.id');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Tambahkan sebuah comment";
+Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ubah nilai:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Tutup blok";
 Blockly.Msg.COLLAPSE_BLOCK = "Tutup blok";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "Warna 1";
@@ -254,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Kembalikan atan dari angka.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Kembalikan cos dari derajat (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Kembalikan sinus dari derajat (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Kembalikan tangen dari derajat (tidak radian).";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "Pembolehubah baru...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nama pembolehubah baru:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -277,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Sorot definisi fungsi";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Jika nilai yang benar, kemudian kembalikan nilai kedua.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Peringatan: Blok ini dapat digunakan hanya dalam definisi fungsi.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "masukan Nama:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "input";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Hapus komentar";
 Blockly.Msg.RENAME_VARIABLE = "namai ulang variabel...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Ubah nama semua variabel '%1' menjadi:";

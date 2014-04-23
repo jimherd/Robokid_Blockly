@@ -7,7 +7,9 @@ goog.provide('Blockly.Msg.ms');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Berikan Komen";
+Blockly.Msg.AUTH = "Sila benarkan aplikasi ini untuk membolehkan hasil kerja anda disimpan, malah dikongsikan oleh anda.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ubah nilai:";
+Blockly.Msg.CHAT = "Bersembang dengan rakan kerjasama anda dengan menaip di dalam petak ini!";
 Blockly.Msg.COLLAPSE_ALL = "Lipat Blok²";
 Blockly.Msg.COLLAPSE_BLOCK = "Lipat Blok";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "warna 1";
@@ -254,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Kembalikan beberapa nombor arctangent.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Kembalikan darjah kosinus (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Kembalikan darjah sine (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Kembalikan darjah tangen (bukan radian).";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "Pembolehubah baru...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nama pembolehubah baru:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -277,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Serlahkan definisi fungsi";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "If a value is true, then return a second value.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Amaran: Blok ini hanya boleh digunakan dalam fungsi definisi.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "Nama input:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Tambah satu input pada fungsi.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "Input-input";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Tambah, alih keluar atau susun semula input pada fungsi ini.";
 Blockly.Msg.REMOVE_COMMENT = "Padamkan Komen";
 Blockly.Msg.RENAME_VARIABLE = "Tukar nama pembolehubah...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Tukar nama semua pembolehubah '%1' kepada:";
@@ -339,7 +344,7 @@ Blockly.Msg.TEXT_TEXT_HELPURL = "https://ms.wikipedia.org/wiki/Rentetan";
 Blockly.Msg.TEXT_TEXT_TOOLTIP = "Huruf, perkataan, atau baris teks.";
 Blockly.Msg.TEXT_TRIM_HELPURL = "https://code.google.com/p/blockly/wiki/Text#Trimming_%28removing%29_spaces";  // untranslated
 Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "mengurangkan kawasan dari kedua-dua belah";
-Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "mengurangkan kawasan dari sebelah kiri";
+Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "mengurangkan ruang dari sebelah kiri";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "mengurangkan kawasan dari sisi kanan";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Kembali salinan teks dengan ruang yang dikeluarkan daripada satu atau hujung kedua belah.";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "Perkara";

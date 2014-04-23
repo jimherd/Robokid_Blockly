@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,12 +52,12 @@ Blockly.JavaScript['controls_if'] = function(block) {
 Blockly.JavaScript['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {
-    EQ: '==',
-    NEQ: '!=',
-    LT: '<',
-    LTE: '<=',
-    GT: '>',
-    GTE: '>='
+    'EQ': '==',
+    'NEQ': '!=',
+    'LT': '<',
+    'LTE': '<=',
+    'GT': '>',
+    'GTE': '>='
   };
   var operator = OPERATORS[block.getFieldValue('OP')];
   var order = (operator == '==' || operator == '!=') ?

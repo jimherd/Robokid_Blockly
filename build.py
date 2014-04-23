@@ -2,7 +2,7 @@
 # Compresses the core Blockly files into a single JavaScript file.
 #
 # Copyright 2012 Google Inc.
-# http://blockly.googlecode.com/
+# https://blockly.googlecode.com/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -284,6 +284,28 @@ class Gen_compressed(threading.Thread):
       code = HEADER + '\n' + json_data['compiledCode']
       code = code.replace(remove, '')
 
+      # Trim down Google's Apache licences.
+      LICENSE = re.compile("""/\\*
+
+ [\w ]+
+
+ (Copyright \\d+ Google Inc.)
+ https://blockly.googlecode.com/
+
+ Licensed under the Apache License, Version 2.0 \(the "License"\);
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+\\*/""")
+      code = re.sub(LICENSE, r"\n// \1  Apache License 2.0", code)
+
       stats = json_data['statistics']
       original_b = stats['originalSize']
       compressed_b = stats['compressedSize']
@@ -336,6 +358,7 @@ class Gen_langfiles(threading.Thread):
                       ['en.json', 'qqq.json', 'synonyms.json']]):
       try:
         subprocess.check_call([
+            'python',
             os.path.join('i18n', 'js_to_json.py'),
             '--input_file', 'msg/messages.js',
             '--output_dir', 'msg/json/',
@@ -352,6 +375,7 @@ class Gen_langfiles(threading.Thread):
     try:
       # Use create_messages.py to create .js files from .json files.
       cmd = [
+          'python',
           os.path.join('i18n', 'create_messages.py'),
           '--source_lang_file', os.path.join('msg', 'json', 'en.json'),
           '--source_synonym_file', os.path.join('msg', 'json', 'synonyms.json'),

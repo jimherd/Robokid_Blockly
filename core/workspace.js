@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Editor
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -172,6 +173,9 @@ Blockly.Workspace.prototype.getBubbleCanvas = function() {
  */
 Blockly.Workspace.prototype.addTopBlock = function(block) {
   this.topBlocks_.push(block);
+  if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
+    Blockly.Realtime.addTopBlock(block);
+  }
   this.fireChangeEvent();
 };
 
@@ -190,6 +194,9 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
   }
   if (!found) {
     throw 'Block not present in workspace\'s list of top-most blocks.';
+  }
+  if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
+    Blockly.Realtime.removeTopBlock(block);
   }
   this.fireChangeEvent();
 };
@@ -224,7 +231,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
 Blockly.Workspace.prototype.getAllBlocks = function() {
   var blocks = this.getTopBlocks(false);
   for (var x = 0; x < blocks.length; x++) {
-    blocks = blocks.concat(blocks[x].getChildren());
+    blocks.push.apply(blocks, blocks[x].getChildren());
   }
   return blocks;
 };
@@ -307,8 +314,9 @@ Blockly.Workspace.prototype.highlightBlock = function(id) {
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }
-  // Restore the monitor for user activity.
-  this.traceOn(true);
+  // Restore the monitor for user activity after the selection event has fired.
+  var thisWorkspace = this;
+  setTimeout(function() {thisWorkspace.traceOn(true);}, 1);
 };
 
 /**
@@ -339,7 +347,7 @@ Blockly.Workspace.prototype.paste = function(xmlBlock) {
       this.remainingCapacity()) {
     return;
   }
-  var block = Blockly.Xml.domToBlock_(this, xmlBlock);
+  var block = Blockly.Xml.domToBlock(this, xmlBlock);
   // Move the duplicate to original position.
   var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
   var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
