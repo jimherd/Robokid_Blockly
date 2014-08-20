@@ -2,7 +2,7 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.pt-br');
+goog.provide('Blockly.Msg.pt.br');
 
 goog.require('Blockly.Msg');
 
@@ -61,7 +61,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE = "repita %1 vezes";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT = "repita";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = "vezes";
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = "Faça algumas instruções várias vezes.";
-Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Repeat";  // untranslated
+Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Loops#repeat";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "repita até";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "repita enquanto";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Enquanto um valor é falso, então faça algumas instruções.";
@@ -156,7 +156,7 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = "Retorna verdadeiro se a primeira entrad
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT = "Retorna verdadeiro se a primeira entrada for menor que a segunda entrada.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = "Retorna verdadeiro se a primeira entrada for menor ou igual à segunda entrada.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ = "Retorna verdadeiro se ambas as entradas forem diferentes.";
-Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://code.google.com/p/blockly/wiki/Not";  // untranslated
+Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://en.wikipedia.org/wiki/Negation";  // untranslated
 Blockly.Msg.LOGIC_NEGATE_TITLE = "não %1";
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = "Retorna verdadeiro se a entrada for falsa.  Retorna falsa se a entrada for verdadeira.";
 Blockly.Msg.LOGIC_NULL = "nulo";
@@ -260,12 +260,14 @@ Blockly.Msg.ME = "Eu";
 Blockly.Msg.NEW_VARIABLE = "Nova variável...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nome da nova variável:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "com:";
 Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = "";  // untranslated
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://pt.wikipedia.org/wiki/Sub-rotina";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Executa a função definida pelo usuário \"%1\".";
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://pt.wikipedia.org/wiki/Sub-rotina";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Executa a função definida pelo usuário \"%1\" e usa seu retorno.";
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "com:";
 Blockly.Msg.PROCEDURES_CREATE_DO = "Criar \"%1\"";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";  // untranslated
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";  // untranslated
@@ -280,9 +282,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Destacar definição da função";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Se um valor é verdadeiro, então retorna um valor.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Atenção: Este bloco só pode ser utilizado dentro da definição de uma função.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nome da entrada:";
-Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Adicione uma entrada para esta função";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Adiciona uma entrada para esta função";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "entradas";
-Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Adicione, remova, ou reordene as entradas para esta função.";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Adiciona, remove, ou reordena as entradas para esta função.";
 Blockly.Msg.REMOVE_COMMENT = "Remover Comentário";
 Blockly.Msg.RENAME_VARIABLE = "Renomear variável...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Renomear todas as variáveis '%1' para:";

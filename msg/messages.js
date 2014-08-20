@@ -155,7 +155,7 @@ Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#repeat https://code.google.com/p/blockly/wiki/Loops#repeat].
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
 /// url - Describes 'while loops' in computer programs; consider using the translation of [https://en.wikipedia.org/wiki/While_loop https://en.wikipedia.org/wiki/While_loop], if present, or [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow].
-Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'https://code.google.com/p/blockly/wiki/Repeat';
+Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'https://code.google.com/p/blockly/wiki/Loops#repeat';
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 /// dropdown - Specifies that a loop should [https://code.google.com/p/blockly/wiki/Loops#Repeat_while repeat while] the following condition is true.
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = 'repeat while';
@@ -263,7 +263,7 @@ Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR = 'Return true if at least one of the inp
 Blockly.Msg.LOGIC_OPERATION_OR = 'or';
 
 /// url - Information about logical negation.  The translation of [https://en.wikipedia.org/wiki/Logical_negation https://en.wikipedia.org/wiki/Logical_negation] is recommended if it exists in the target language.
-Blockly.Msg.LOGIC_NEGATE_HELPURL = 'https://code.google.com/p/blockly/wiki/Not';
+Blockly.Msg.LOGIC_NEGATE_HELPURL = 'https://en.wikipedia.org/wiki/Negation';
 /// block text - This is a unary operator that returns ''false'' when the input is ''true'', and ''true'' when the input is ''false''.
 /// \n\nParameters:\n* %1 - the input (which should be either the value "true" or "false")
 Blockly.Msg.LOGIC_NEGATE_TITLE = 'not %1';
@@ -1011,28 +1011,30 @@ Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 // Procedures Blocks.
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
-/// block text - This precedes the name of the procedure when defining it.  See
+/// block text - This precedes the name of the function when defining it.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
-/// procedure definition].
+/// function definition].
 Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'to';
 /// default name - This acts as a placeholder for the name of a function on a
 /// function definition block, as shown on
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block].
 /// The user will replace it with the function's name.
 Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
-/// block text - This precedes the list of parameters to a function.  See
-/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#6ot5y5 this sample
+/// block text - This precedes the list of parameters on a function's defiition block.  See
+/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
 /// function with parameters].
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = 'with:';
+/// block text - This precedes the list of parameters on a function's caller block.  See
+/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
+/// function with parameters].
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = 'with:';
 /// block text - This appears next to the function's "body", the blocks that should be
 /// run when the function is called, as shown in
-/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
-/// procedure definition].
-
+/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
+/// function definition].
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = '';
 /// tooltip
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = 'Creates a function with no output.';
-
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that have return values.
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
@@ -1046,6 +1048,8 @@ Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 Blockly.Msg.PROCEDURES_DEFRETURN_RETURN = 'return';
 /// tooltip
 Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP = 'Creates a function with an output.';
+/// Label for a checkbox that controls if statements are allowed in a function.
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = 'allow statements';
 
 /// alert - The user has created a function with two parameters that have the same name.  Every parameter must have a different name.
 Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = 'Warning: This function has duplicate parameters.';

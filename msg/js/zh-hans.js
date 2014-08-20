@@ -2,7 +2,7 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.zh-hans');
+goog.provide('Blockly.Msg.zh.hans');
 
 goog.require('Blockly.Msg');
 
@@ -61,7 +61,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE = "重复 %1 次";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT = "重复";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = "次";
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = "多次执行一些语句。";
-Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Repeat";  // untranslated
+Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Loops#repeat";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "重复直到";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "重复当";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "只要值为假，执行一些语句。";
@@ -156,7 +156,7 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = "如果第一个输入结果大于或等
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT = "如果第一个输入结果比第二个小，则返回真。";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = "如果第一个输入结果小于或等于第二个输入结果，则返回真。";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ = "如果两个输入结果不相等，则返回真。";
-Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://code.google.com/p/blockly/wiki/Not";  // untranslated
+Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://en.wikipedia.org/wiki/Negation";  // untranslated
 Blockly.Msg.LOGIC_NEGATE_TITLE = "并非%1";
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = "如果输入结果为假，则返回真；如果输入结果为真，则返回假。";
 Blockly.Msg.LOGIC_NULL = "空";
@@ -260,12 +260,14 @@ Blockly.Msg.ME = "我";
 Blockly.Msg.NEW_VARIABLE = "新变量...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "新变量的名称：";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "空白";
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "允许声明";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "与：";
 Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = "空白";
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://zh.wikipedia.org/wiki/子程序";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "运行用户定义的函数“%1”。";
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://zh.wikipedia.org/wiki/子程序";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "运行用户定义的函数“%1”，并使用它的输出值。";
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "与：";
 Blockly.Msg.PROCEDURES_CREATE_DO = "创建“%1”";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "空白";
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://zh.wikipedia.org/wiki/子程序";
@@ -350,8 +352,8 @@ Blockly.Msg.TEXT_TRIM_TOOLTIP = "复制这段文字的同时删除两端多余�
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "项";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "创建“设定%1”";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://code.google.com/p/blockly/wiki/Variables#Get";  // untranslated
-Blockly.Msg.VARIABLES_GET_TAIL = "空白";
-Blockly.Msg.VARIABLES_GET_TITLE = "空白";
+Blockly.Msg.VARIABLES_GET_TAIL = "";
+Blockly.Msg.VARIABLES_GET_TITLE = "";
 Blockly.Msg.VARIABLES_GET_TOOLTIP = "返回此变量的值。";
 Blockly.Msg.VARIABLES_SET_CREATE_GET = "创建“获得%1”";
 Blockly.Msg.VARIABLES_SET_HELPURL = "http://code.google.com/p/blockly/wiki/Variables#Set";

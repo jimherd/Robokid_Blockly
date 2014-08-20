@@ -32,6 +32,7 @@ goog.provide('Blockly.Field');
 // goog.require('Blockly.Block');
 goog.require('Blockly.BlockSvg');
 goog.require('goog.asserts');
+goog.require('goog.userAgent');
 
 
 /**
@@ -146,6 +147,7 @@ Blockly.Field.prototype.isVisible = function() {
 Blockly.Field.prototype.setVisible = function(visible) {
   this.visible_ = visible;
   this.getRootElement().style.display = visible ? 'block' : 'none';
+  this.render_();
 };
 
 /**
@@ -258,7 +260,12 @@ Blockly.Field.prototype.setValue = function(text) {
  * @private
  */
 Blockly.Field.prototype.onMouseUp_ = function(e) {
-  if (Blockly.isRightButton(e)) {
+  if ((goog.userAgent.IPHONE || goog.userAgent.IPAD) &&
+      e.layerX !== 0 && e.layerY !== 0) {
+    // iOS spawns a bogus event on the next touch after a 'prompt()' edit.
+    // Unlike the real events, these have a layerX and layerY set.
+    return;
+  } else if (Blockly.isRightButton(e)) {
     // Right-click.
     return;
   } else if (Blockly.Block.dragMode_ == 2) {

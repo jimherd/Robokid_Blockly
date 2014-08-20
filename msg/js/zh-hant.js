@@ -2,7 +2,7 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.zh-hant');
+goog.provide('Blockly.Msg.zh.hant');
 
 goog.require('Blockly.Msg');
 
@@ -61,7 +61,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE = "重複 %1 次";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT = "重複";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = "次數";
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = "多次執行一些語句";
-Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Repeat";  // untranslated
+Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Loops#repeat";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "重複 直到";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "重複 當";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "當值為否時，執行一些語句";
@@ -156,7 +156,7 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = "如果第一個輸入大於或等於第
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT = "如果第一個輸入小於第二個輸入，返回 真。";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = "如果第一個輸入是小於或等於第二個輸入，返回 真。";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ = "如果這兩個輸入區塊內容不相等，返回 真。";
-Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://code.google.com/p/blockly/wiki/Not";  // untranslated
+Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://en.wikipedia.org/wiki/Negation";  // untranslated
 Blockly.Msg.LOGIC_NEGATE_TITLE = "非 %1";
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = "如果輸入的值是 否，則返回 真。如果輸入的值是 真 返回 否。";
 Blockly.Msg.LOGIC_NULL = "空";
@@ -260,12 +260,14 @@ Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "新變量...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "新變量名稱:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "與：";
 Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = "呼叫";
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "執行使用者定義的函數 '%1'。";
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "執行使用者定義的函數 '%1' 並使用它的回傳值";
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "與：";
 Blockly.Msg.PROCEDURES_CREATE_DO = "建立 '%1'";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";  // untranslated
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";  // untranslated

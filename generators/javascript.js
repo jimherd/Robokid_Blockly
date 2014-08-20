@@ -100,14 +100,6 @@ Blockly.JavaScript.ORDER_COMMA = 17;         // ,
 Blockly.JavaScript.ORDER_NONE = 99;          // (...)
 
 /**
- * Arbitrary code to inject into locations that risk causing infinite loops.
- * Any instances of '%1' will be replaced by the block ID that failed.
- * E.g. '  checkTimeout(%1);\n'
- * @type ?string
- */
-Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-
-/**
  * Initialise the database of variable names.
  */
 Blockly.JavaScript.init = function() {
@@ -185,17 +177,13 @@ Blockly.JavaScript.quote_ = function(string) {
  * @private
  */
 Blockly.JavaScript.scrub_ = function(block, code) {
-  if (code === null) {
-    // Block has handled code generation itself.
-    return '';
-  }
   var commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      commentCode += this.prefixLines(comment, '// ') + '\n';
+      commentCode += Blockly.JavaScript.prefixLines(comment, '// ') + '\n';
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
@@ -203,15 +191,15 @@ Blockly.JavaScript.scrub_ = function(block, code) {
       if (block.inputList[x].type == Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
-          var comment = this.allNestedComments(childBlock);
+          var comment = Blockly.JavaScript.allNestedComments(childBlock);
           if (comment) {
-            commentCode += this.prefixLines(comment, '// ');
+            commentCode += Blockly.JavaScript.prefixLines(comment, '// ');
           }
         }
       }
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = this.blockToCode(nextBlock);
+  var nextCode = Blockly.JavaScript.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
